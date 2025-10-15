@@ -8,8 +8,10 @@ Date:
 ## Resources
 <!-- Where can I find relevant information? -->
 
-## Plan and Hypothesis
+## Plan
 <!-- What do I want to do? -->
+
+## Hypothesis
 <!-- What do I think is going to happen? -->
 
 ## Experiment
