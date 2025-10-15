@@ -22,9 +22,9 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
 |      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
 |      |        | 2025-10-15 | ast, passes          | How can an node in an AST be split into two nodes, as in currying for example? |
-|      |        | 2025-10-15 | usability, syntax    | How can currying be implemented for function abstraction? |
-|      |        | 2025-10-15 | usability, syntax    | How can currying be implemented for function application? |
-|      |        | 2025-10-15 | usability            | How can the Monaco editor be deployed onto a static github page? |
+|      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
+|      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function application? |
+|      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
 |      |        | 2025-10-15 | vm, lowering         | What is a simple set of linear instructions which can be used for programming? |
 |      |        | 2025-10-15 | vm, evaluation       | How can an evaluator using a program counter on simple instructions be implemented? |
 |      |        | 2025-10-15 | vm, evaluation       | How can stack frames be implemented? |
