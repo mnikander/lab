@@ -52,12 +52,12 @@ Unit tests are fast and easy to write.
 The REPL could be really useful.
 Trying this out was definitely worth it!
 
-## Next Steps
+## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+Read more about unit tests in Deno, to get faster and check things such as exceptions.
 Figure out how to use the linter and what I can do with it.
-I could try out `deno bench` for benchmarking.
 
 ---
 **Copyright (c) 2025 Marco Nikander**
