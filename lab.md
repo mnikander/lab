@@ -18,3 +18,6 @@
 ## Next Steps
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
+
+---
+**Copyright (c) 2025 Marco Nikander**

@@ -10,6 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
 |      |        | 2025-10-15 | typescript, deno     | How can deno be used to prototype a function and a test in typescript? |
 |      |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 |      |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
@@ -66,3 +67,6 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+
+---
+**Copyright (c) 2025 Marco Nikander**
