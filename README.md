@@ -65,8 +65,8 @@ The tables below collect those questions.
 ## Resolved
 
 | Num  | Parent | Created    | Tags                 | Question |
-| 0001 |        | 2025-10-15 | typescript, deno     | How can Deno be used to prototype a function and a test in typescript? |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0001 |        | 2025-10-15 | typescript, deno     | How can Deno be used to prototype a function and a test in typescript? |
 
 
 ---
