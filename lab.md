@@ -1,6 +1,10 @@
 # Question
 <!-- What am I figuring out? -->
 
+
+
+Date: 
+
 ## Resources
 <!-- Where can I find relevant information? -->
 
