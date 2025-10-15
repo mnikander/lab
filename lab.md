@@ -2,7 +2,7 @@
 <!-- What am I figuring out? -->
 
 ## Resources
-<!-- Where can I find the information? -->
+<!-- Where can I find relevant information? -->
 
 ## Plan and Hypothesis
 <!-- What do I want to do? -->
