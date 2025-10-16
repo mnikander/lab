@@ -10,6 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0002 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
 |      |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 |      |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
@@ -22,7 +23,6 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
 |      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
 |      |        | 2025-10-16 | ast                  | Which simple AST representations are useful for analysis, optimization, and lowering prototypes? |
-|      |        | 2025-10-15 | ast, passes          | How can a node in an AST be split into two nodes, for currying? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function application? |
 |      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
