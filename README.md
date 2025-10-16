@@ -21,7 +21,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | wasm                 | How can WebAssembly code be written and tested? |
 |      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
 |      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
-|      |        | 2025-10-15 | ast, passes          | How can an node in an AST be split into two nodes, as in currying for example? |
+|      |        | 2025-10-15 | ast, passes          | How can a node in an AST be split into two nodes, for currying? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function application? |
 |      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
@@ -35,7 +35,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | vm, lowering         | How can lambdas be transformed into linear code with an argument, a call/jump, and a return? |
 |      |        | 2025-10-15 | vm, memory           | How can a closure capture a variable on the stack? |
 |      |        | 2025-10-15 | vm, memory           | How can a closure copy a captured variable into its own storage? |
-|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment?|
+|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
 |      |        | 2025-10-15 | vm, memory           | How can a box, ie a unique pointer, be implemented? |
 |      |        | 2025-10-15 | vm, memory           | How can generation counters be used to detect dangling references into heap memory? |
 |      |        | 2025-10-15 | memory               | How can cons cells be implemented? |
