@@ -21,6 +21,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | wasm                 | How can WebAssembly code be written and tested? |
 |      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
 |      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
+|      |        | 2025-10-16 | ast                  | Which simple AST representations are useful for analysis, optimization, and lowering prototypes? |
 |      |        | 2025-10-15 | ast, passes          | How can a node in an AST be split into two nodes, for currying? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function application? |
