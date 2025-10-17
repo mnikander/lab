@@ -45,6 +45,12 @@ Created the this whole project as the very first question.
 ## Findings
 <!-- What did I learn? -->
 
+- doing a coding exercise after work _is_ viable and practical
+- it's important to keep an eye on the time though, so I don't lose sleep over it
+- exercises during the week are best on the order of 60-90 minutes, so the questions should be really small
+- it's fun to try out new things in this quick and easy context, without having to think/worry about a larger codebase
+- this could be a really good way to try out a wider variety of things, outside of languages and compilers as well
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
