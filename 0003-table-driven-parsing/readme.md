@@ -3,8 +3,6 @@
 
 How can the language of balanced parentheses be verified by a table-driven parser?
 
-Note that this prototype was created several weeks ago, and was transferred into this repository retrospectively.
-
 Date: 2025-10-05 (transferred into this repository on 2025-10-17)
 
 ## Resources
