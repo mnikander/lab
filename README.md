@@ -10,19 +10,17 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0004 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
-|      |        | 2025-10-15 | typescript, deno     | How can a package be imported in a deno project? |
+| 0004 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
+|      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
+|      |        | 2025-10-15 | memory               | How can cons cells be implemented? |
+|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
+|      |        | 2025-10-15 | vm, memory           | How can generation counters be used to detect dangling references into heap memory? |
 |      |        | 2025-10-15 | typescript           | How does `match`, from the `ts-pattern` package, work? |
 |      |        | 2025-10-15 | typescript           | How can the `Result` type from the `neverthrow` package be used to chain computations? |
 |      |        | 2025-10-15 | racket               | How can a function and a test be written in Racket? |
 |      |        | 2025-10-15 | racket               | How can an S-expression be transformed in Racket? |
 |      |        | 2025-10-15 | wasm                 | How can WebAssembly code be written and tested? |
-|      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
-|      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
-|      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
-|      |        | 2025-10-15 | ast, ANF             | How can nested blocks be unrolled into let-bindings in an AST which is in ANF? |
-|      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
 |      |        | 2025-10-15 | vm, lowering         | What is a simple set of linear instructions which can be used for programming? |
 |      |        | 2025-10-15 | vm, evaluation       | How can an evaluator using a program counter on simple instructions be implemented? |
 |      |        | 2025-10-15 | vm, evaluation       | How can stack frames be implemented? |
@@ -33,10 +31,11 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | vm, lowering         | How can lambdas be transformed into linear code with an argument, a call/jump, and a return? |
 |      |        | 2025-10-15 | vm, memory           | How can a closure capture a variable on the stack? |
 |      |        | 2025-10-15 | vm, memory           | How can a closure copy a captured variable into its own storage? |
-|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
 |      |        | 2025-10-15 | vm, memory           | How can a box, ie a unique pointer, be implemented? |
-|      |        | 2025-10-15 | vm, memory           | How can generation counters be used to detect dangling references into heap memory? |
-|      |        | 2025-10-15 | memory               | How can cons cells be implemented? |
+|      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
+|      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
+|      |        | 2025-10-15 | ast, ANF             | How can nested blocks be unrolled into let-bindings in an AST which is in ANF? |
+|      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
 |      |        | 2025-10-15 | memory               | What is an 'upvalue', as in the Lua interpreter, and how can it be used? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for stack-values? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for heap-values? |
@@ -64,6 +63,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+|      |  0004  | 2025-10-15 | typescript, deno     | ~~How can a package be imported in a deno project?~~ |
 |      |  0004  | 2025-10-15 | syntax, ast          | ~~How can currying be implemented for function application?~~ |
 |      |  0004  | 2025-10-16 | ast                  | ~~Which simple AST representations are useful for analysis, optimization, and lowering prototypes?~~ |
 | 0003 |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
