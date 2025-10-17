@@ -20,9 +20,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | wasm                 | How can WebAssembly code be written and tested? |
 |      |        | 2025-10-15 | lexing               | How can tokenisation be done using flex? |
 |      |        | 2025-10-15 | parsing              | How can parsing be done using Bison? |
-|      |        | 2025-10-16 | ast                  | Which simple AST representations are useful for analysis, optimization, and lowering prototypes? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
-|      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function application? |
 |      |        | 2025-10-15 | ast, ANF             | How can nested blocks be unrolled into let-bindings in an AST which is in ANF? |
 |      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
 |      |        | 2025-10-15 | vm, lowering         | What is a simple set of linear instructions which can be used for programming? |
@@ -66,6 +64,8 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+|      |  0004  | 2025-10-15 | syntax, ast          | ~~How can currying be implemented for function application?~~ |
+|      |  0004  | 2025-10-16 | ast                  | ~~Which simple AST representations are useful for analysis, optimization, and lowering prototypes?~~ |
 | 0003 |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
 | 0002 |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 | 0001 |        | 2025-10-15 | typescript, deno     | How can Deno be used to prototype a function and a test in typescript? |
