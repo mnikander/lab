@@ -10,7 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0002 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
+| 0004 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
 |      |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 |      |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
