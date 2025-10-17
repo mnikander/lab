@@ -12,8 +12,6 @@ The tables below collect those questions.
 | ---  | ---    | ---        | ---                  | ---      |
 | 0004 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
-|      |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
-|      |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
 |      |        | 2025-10-15 | typescript, deno     | How can a package be imported in a deno project? |
 |      |        | 2025-10-15 | typescript           | How does `match`, from the `ts-pattern` package, work? |
 |      |        | 2025-10-15 | typescript           | How can the `Result` type from the `neverthrow` package be used to chain computations? |
@@ -68,6 +66,8 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0003 |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
+| 0002 |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 | 0001 |        | 2025-10-15 | typescript, deno     | How can Deno be used to prototype a function and a test in typescript? |
 
 
