@@ -41,6 +41,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for heap-values? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for references? |
 |      |        | 2025-10-15 | memory, ownership    | What are move semantics really? How can move semantics be implemented? |
+|      |        | 2025-10-18 | control-flow         | How can recursion be implemented for anonymous functions, using 'fix'? |
 |      |        | 2025-10-15 | control-flow         | How can a tail-call be detected? |
 |      |        | 2025-10-15 | control-flow         | How can the tail-call optimization be implemented? |
 |      |        | 2025-10-15 | control-flow         | Can 'cycle' be used to implement map? |
