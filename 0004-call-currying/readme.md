@@ -41,16 +41,17 @@ I suspect that keeping track of the shrinking argument list, and perhaps curryin
 <!-- What did I learn? -->
 
 - I have to pay very close attention to which argument goes where
-- keeping the parent node and expanding into the subtree works well, you don't have to insert above
+- keeping the parent node and expanding into the subtree works well, you don't have to insert above the current node
 - storing the arguments as a forward list works well
-- The argument list reminds me a lot of a cons-cell, especially if you don't fill in the value directly, but hold a pointer to the value and a pointer to the tail -- I bet the creators of Lisp exactly exactly this
-- the top node needs the last entry from the list of arguments, which requires traversing the list of arguments to the end
+- The argument list reminds me a lot of a cons-cell, especially if you don't put the value into the argument list node directly, but instead hold a pointer to the value in `first` and a pointer to the tail in `second` -- I bet the creators of Lisp noticed exactly this, early on
+- The top function call node needs the last entry from the list of arguments, which requires traversing the list of arguments to the end. That's a little annoying from the standpoint of code simplicity and runtime performance of this pass -- a reverse list would be nice.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - try test cases where the arguments are nested expressions as well, to make sure those work
+- implement currying for function abstraction as well
 
 ---
 **Copyright (c) 2025 Marco Nikander**
