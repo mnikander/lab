@@ -36,10 +36,10 @@ Date: 2025-10-25
 | label |
 | jump |
 | branch |
-| further arithmetic and logical operations |
 | lambda / closure |
 | call |
 | return |
+| further arithmetic and logical operations |
 | heap alloc, free, load, store |
 | scope begin, end |
 | tail call |
@@ -57,11 +57,14 @@ Especially for environments, there will probably be a lot of design decisions to
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-Open questions / notes regarding `match`: 
-Perhaps match doesn't work with side-effects, and I really should use returns, and assign the match result to the return register.
-If I do that, then I need a way to encode the special case of exit, i.e. when there is no parent stack frame, where the result can be written.
-Maybe I need to figure out a special type to encode the program return value as a destination, which is not a register.
-Or I need a special entry frame, to which the result is written, but where the evaluator does nothing except take the result value and return it.
+- implemented `Add`, `Const`, and `Exit` instructions
+- wrote a few unit tests
+- used ts-pattern package, but had a hard time stepping through the code with a debugger
+- fixed several bugs
+- implemented control flow via switch-case instead of match
+- used type assertion functions to simplify error reporting
+- implemented `Label` and `Jump` without any issues, use a linear search to find the jump target label
+- implemented conditional `Branch` without any issues
 
 ## Findings
 <!-- What did I learn? -->

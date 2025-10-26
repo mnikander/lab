@@ -1,6 +1,6 @@
 // Copyright (c) 2025 Marco Nikander
 
-export type Instruction = Add | Const| Label | Jump | Exit;
+export type Instruction = Add | Const| Label | Jump | Branch | Exit;
 export type Register    = number;
 export type RawValue    = boolean | number;
 export type Value       = { tag: 'Value', value: RawValue };
@@ -8,6 +8,7 @@ export type Const       = { tag: 'Const', target: Register, constant: RawValue }
 export type Add         = { tag: 'Add', target: Register, left: Register, right: Register };
 export type Jump        = { tag: 'Jump', label: string };
 export type Label       = { tag: 'Label', label: string };
+export type Branch      = { tag: 'Branch', condition: Register, label: string };
 export type Exit        = { tag: 'Exit', result: Register };
 type Frame              = { register: (undefined | Value)[] };
 
@@ -34,7 +35,15 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
                 pc++;
                 break;
             case 'Jump':
-                pc = instructions.findIndex((i: Instruction) => {return i.tag === 'Label' && i.label === instruc.label;});
+                pc = find_label(instructions, instruc.label);
+                break;
+            case 'Branch':
+                if (assert_boolean(top.register[instruc.condition])) {
+                    pc = find_label(instructions, instruc.label);
+                }
+                else {
+                    pc++;
+                }
                 break;
             case 'Exit':
                 return assert_defined(top.register[instruc.result]).value;
@@ -43,6 +52,15 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
         }
     }
     throw Error(`Reached end of instructions without an 'Exit' command`);
+}
+
+function assert_boolean(value: undefined | Value): boolean {
+    if (value === undefined || typeof value.value !== 'boolean') {
+        throw Error('Expected value to contain a boolean');
+    }
+    else {
+        return value.value;
+    }
 }
 
 function assert_number(value: undefined | Value): number {
@@ -61,4 +79,8 @@ function assert_defined<T> (value: undefined | T): T {
     else {
         return value;
     }
+}
+
+function find_label(instructions: readonly Instruction[], label: string): number {
+    return instructions.findIndex((i: Instruction) => {return i.tag === 'Label' && i.label === label;});;
 }
