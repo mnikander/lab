@@ -28,7 +28,7 @@ Date: 2025-10-25
 |Initial set |
 | --- |
 | load constant |
-| add, mul |
+| add |
 | exit / return |
 
 | Possible later additions |
@@ -65,6 +65,18 @@ Or I need a special entry frame, to which the result is written, but where the e
 
 ## Findings
 <!-- What did I learn? -->
+
+### Pattern-Matching can be tricky to use
+
+Not all of the instructions have a target register, for example `call`, `jump`, `scope begin`, `exit`.
+This means an assignment such as `register[target] = match ...` is not an option.
+To do this purely functionally, the entire program state, consisting of the program counter and stack, would have to be assigned via the `match`.
+
+Another note: stepping through the code with a debugger does not seem to work very well.
+The entire match expression is one expression, so the debugger does not step through the individual clauses.
+Maybe there is a way to do this and I just don't know how, yet.
+
+A switch-case is more tedious to write, does not have exhaustiveness checking, but it plays nice with mutable state and the debugger.
 
 ### Input TypeScript objects directly to avoid parsing
 I can avoid the need to tokenize and parse the code by representing it directly as TypeScript objects.
@@ -104,7 +116,7 @@ frame.register[target(line)] = { tag: 'Value', value: left(line).value    + righ
 frame.register[target(line)] = { tag: 'Value', value: valueOf(left(line)) + valueOf(right(line)) };  // tuples with more helper functions
 ```
 During the writing of the tuple example, several mistakes/typos were made.
-That illustrated just how error-prone the index-based approach is, so the 1st, 3rd, or 4th option are much better choices.
+That alone illustrates just how error-prone the index-based approach is, so the 1st, 3rd, or 4th option are much better choices.
 
 Hybrid options are also possible, but they are quite verbose to use, and may have an incosistent style, so it's better to commit to one or the other.
 ```typescript
