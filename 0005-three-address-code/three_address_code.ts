@@ -18,7 +18,8 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
     const top: undefined | Frame = stack[stack.length - 1];
     if (top === undefined) throw Error('Bug: no valid stack frame');
 
-    for (const instr of instructions) {
+    for (let pc: number = 0; pc < instructions.length; pc++) {
+        const instr: Instruction = instructions[pc];
         match(instr)
             .with({ tag: 'Const' }, ({ target, constant }) => {
                 top.register[target] = { tag: 'Value', value: constant };
