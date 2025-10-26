@@ -16,7 +16,7 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
 
     let stack: Frame[] = [ {register: []} ];
     const top: undefined | Frame = stack[stack.length - 1];
-    let pc: number = 0
+    let pc: number = 0;
 
     while (pc < instructions.length) {
         if (top === undefined) throw Error('Bug: no valid stack frame');
@@ -82,5 +82,5 @@ function assert_defined<T> (value: undefined | T): T {
 }
 
 function find_label(instructions: readonly Instruction[], label: string): number {
-    return instructions.findIndex((i: Instruction) => {return i.tag === 'Label' && i.label === label;});;
+    return instructions.findIndex((i: Instruction) => { return i.tag === 'Label' && i.label === label; });
 }
