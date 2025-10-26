@@ -12,7 +12,6 @@ type Frame              = { register: (undefined | Value)[] };
 export function evaluate(instructions: readonly Instruction[]): RawValue {
 
     let stack: Frame[] = [ {register: []} ];
-    let exit: undefined | Value = undefined;
     const top: undefined | Frame = stack[stack.length - 1];
     
     for (let pc: number = 0; pc < instructions.length; pc++) {
@@ -27,13 +26,12 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
                 top.register[instruc.target] = { tag: 'Value', value: assert_number(top.register[instruc.left]) + assert_number(top.register[instruc.right]) };
                 break;
             case 'Exit':
-                exit = assert_defined(top.register[instruc.result]);
-                break;
+                return assert_defined(top.register[instruc.result]).value;
             default:
                 throw Error(`Unhandled instruction type '${(instruc as Instruction).tag}'`);
         }
     }
-    return assert_defined(exit).value;
+    throw Error(`Reached end of instructions without an 'Exit' command`);
 }
 
 function assert_number(value: undefined | Value): number {
