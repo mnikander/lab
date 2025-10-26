@@ -111,8 +111,13 @@ Hybrid options are also possible, but they are quite verbose to use, and may hav
 type Add = [ {tag: 'Add'}, Register, Register, Register];
 ```
 
+Another possiblity could be to input the code in the array representation, and then translate it directly to the object notation for analysis and evaluation.
+That's a straight-forward 1:1 translation which is easy to implement.
+
 Overall, it's probably easiest to just use the TypeScript objects.
 Even if it comes at the expense of some verbosity, it does introduce a lot of clarity, is simple to use, and does not require any extra functions.
+It the more compact representation is desired, then inputing arrays and doing the 1:1 translation to objects, is a good option.
+Either way, analysis and evaluation will work on the object-based representation of 3-address code.
 
 ### Exiting vs. Returning
 
@@ -124,7 +129,7 @@ Inside the interpreter, there is not really a specific register into which the r
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- create a function for write-access to registers, which enforces that each register is only assigned to once (single assignment)
 
 ---
 **Copyright (c) 2025 Marco Nikander**
