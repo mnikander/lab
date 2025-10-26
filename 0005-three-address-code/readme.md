@@ -35,7 +35,7 @@ Date: 2025-10-25
 | --- |
 | label |
 | jump |
-| conditional jump |
+| branch |
 | further arithmetic and logical operations |
 | lambda / closure |
 | call |
@@ -141,7 +141,8 @@ Inside the interpreter, there is not really a specific register into which the r
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-- create a function for write-access to registers, which enforces that each register is only assigned to once (single assignment)
-
+- Create a function for write-access to registers, which enforces that each register is only assigned to once (single assignment).
+- Add a validate pass which ensures that each label is unique.
+- Jump uses a linear search through all instructions, to find a label. That is simple but slow if used repeatedly. Performance could be improved by resolving all jump targets to fixed instruction numbers once, before evaluation.
 ---
 **Copyright (c) 2025 Marco Nikander**

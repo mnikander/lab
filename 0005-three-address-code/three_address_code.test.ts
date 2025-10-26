@@ -28,3 +28,30 @@ describe('arithmetic operations', () => {
         expect(evaluate(input)).toBe(3);
     });
 });
+
+describe('labels and jump', () => {
+    it('must skip over labels as if they are a "no-op"', () => {
+        const input: Instruction[] = [
+            { tag: 'Const', target: 0, constant: 1 },
+            { tag: 'Label', label: 'First'},
+            { tag: 'Const', target: 1, constant: 2 },
+            { tag: 'Label', label: 'Second'},
+            { tag: 'Add',   target: 2, left: 0, right: 1 },
+            { tag: 'Label', label: 'Third'},
+            { tag: 'Exit',  result: 2 },
+        ];
+        expect(evaluate(input)).toBe(3);
+    });
+
+    it('must execute the correct line of code after an unconditional jump ', () => {
+        const input: Instruction[] = [
+            { tag: 'Jump',  label: 'Second'},
+            { tag: 'Label', label: 'First'},
+            { tag: 'Const', target: 1, constant: 1 },
+            { tag: 'Label', label: 'Second'},
+            { tag: 'Const', target: 1, constant: 2 },
+            { tag: 'Exit',  result: 1 },
+        ];
+        expect(evaluate(input)).toBe(2);
+    });
+});
