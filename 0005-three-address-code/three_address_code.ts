@@ -1,7 +1,5 @@
 // Copyright (c) 2025 Marco Nikander
 
-import { match } from "jsr:@gabriel/ts-pattern";
-
 export type Instruction = Add | Const | Exit;
 export type Register    = number;
 export type RawValue    = boolean | number;
@@ -16,43 +14,42 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
     let stack: Frame[] = [ {register: []} ];
     let exit: undefined | Value = undefined;
     const top: undefined | Frame = stack[stack.length - 1];
-    if (top === undefined) throw Error('Bug: no valid stack frame');
-
+    
     for (let pc: number = 0; pc < instructions.length; pc++) {
-        const instr: Instruction = instructions[pc];
-        match(instr)
-            .with({ tag: 'Const' }, ({ target, constant }) => {
-                top.register[target] = { tag: 'Value', value: constant };
-            })
-            .with({ tag: 'Add' }, ({ target, left, right }) => {
-                if (top.register[left] === undefined
-                || top.register[right] === undefined
-                || typeof top.register[left].value !== 'number'
-                || typeof top.register[right].value !== 'number') {
-                    throw new Error('Add expects numeric operands');
-                }
-                else {
-                    top.register[target] = { tag: 'Value', value: top.register[left].value + top.register[right].value };
-                }
-            })
-            .with({ tag: 'Exit' }, ({ result }) => {
-                if(top.register[result] === undefined) {
-                    throw Error('Result register is undefined');
-                }
-                exit = top.register[result];
-            })
-            .exhaustive();
+        if (top === undefined) throw Error('Bug: no valid stack frame');
+        const instruc: Instruction = instructions[pc];
+
+        switch (instruc.tag) {
+            case 'Const':
+                top.register[instruc.target] = { tag: 'Value', value: instruc.constant };
+                break;
+            case 'Add':
+                top.register[instruc.target] = { tag: 'Value', value: assert_number(top.register[instruc.left]) + assert_number(top.register[instruc.right]) };
+                break;
+            case 'Exit':
+                exit = assert_defined(top.register[instruc.result]);
+                break;
+            default:
+                throw Error(`Unhandled instruction type '${(instruc as Instruction).tag}'`);
+        }
     }
+    return assert_defined(exit).value;
+}
 
-    // TODO: Why is this hack necessary to satisfy the type checker? 
-    exit = exit as undefined | Value;
-    // Without it, the type checker narrows the type of 'exit' to undefined. It doesn't see the possible assignment in the match.
-    // Perhaps match doesn't work with side-effects, and I really should use returns within match. See notes in README.
-
-    if (exit === undefined) {
-        throw Error('Reached end of program without an exit instruction');
+function assert_number(value: undefined | Value): number {
+    if (value === undefined || typeof value.value !== 'number') {
+        throw Error('Expected value to contain a number');
     }
     else {
-        return exit.value;
+        return value.value;
+    }
+}
+
+function assert_defined<T> (value: undefined | T): T {
+    if (value === undefined) {
+        throw Error('Expected a defined value');
+    }
+    else {
+        return value;
     }
 }
