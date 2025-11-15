@@ -17,6 +17,17 @@ describe('constants and exit', () => {
     });
 });
 
+describe('copying of registers', () => {
+    it('must copy a constant', () => {
+        const input: Instruction[] = [
+            { tag: 'Const', target: 0, constant: 42 },
+            { tag: 'Copy',  target: 1, source: 0 },
+            { tag: 'Exit',  result: 1 },
+        ];
+        expect(evaluate(input)).toBe(42);
+    });
+});
+
 describe('arithmetic operations', () => {
     it('must evaluate integer addition', () => {
         const input: Instruction[] = [

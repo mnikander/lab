@@ -2,11 +2,12 @@
 
 import { assert_boolean, assert_number, assert_defined } from './type_assertions.ts'
 
-export type Instruction = Add | Const| Label | Jump | Branch | Exit;
+export type Instruction = Add | Const | Copy | Label | Jump | Branch | Exit;
 export type Register    = number;
 export type RawValue    = boolean | number;
 export type Value       = { tag: 'Value', value: RawValue };
 export type Const       = { tag: 'Const', target: Register, constant: RawValue };
+export type Copy        = { tag: 'Copy', target: Register, source: Register };
 export type Add         = { tag: 'Add', target: Register, left: Register, right: Register };
 export type Jump        = { tag: 'Jump', label: string };
 export type Label       = { tag: 'Label', label: string };
@@ -27,6 +28,10 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
         switch (instruc.tag) {
             case 'Const':
                 top.register[instruc.target] = { tag: 'Value', value: instruc.constant };
+                pc++;
+                break;
+            case 'Copy':
+                top.register[instruc.target] = top.register[instruc.source];
                 pc++;
                 break;
             case 'Add':
