@@ -1,5 +1,7 @@
 // Copyright (c) 2025 Marco Nikander
 
+import { assert_boolean, assert_number, assert_defined } from './type_assertions.ts'
+
 export type Instruction = Add | Const| Label | Jump | Branch | Exit;
 export type Register    = number;
 export type RawValue    = boolean | number;
@@ -52,33 +54,6 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
         }
     }
     throw Error(`Reached end of instructions without an 'Exit' command`);
-}
-
-function assert_boolean(value: undefined | Value): boolean {
-    if (value === undefined || typeof value.value !== 'boolean') {
-        throw Error('Expected value to contain a boolean');
-    }
-    else {
-        return value.value;
-    }
-}
-
-function assert_number(value: undefined | Value): number {
-    if (value === undefined || typeof value.value !== 'number') {
-        throw Error('Expected value to contain a number');
-    }
-    else {
-        return value.value;
-    }
-}
-
-function assert_defined<T> (value: undefined | T): T {
-    if (value === undefined) {
-        throw Error('Expected a defined value');
-    }
-    else {
-        return value;
-    }
 }
 
 function find_label(instructions: readonly Instruction[], label: string): number {
