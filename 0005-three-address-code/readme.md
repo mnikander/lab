@@ -44,8 +44,6 @@ Date: 2025-10-25
 | scope begin, end |
 | tail call |
 
-
-
 ## Hypothesis
 <!-- What do I think is going to happen? -->
 
@@ -63,7 +61,7 @@ Especially for environments, there will probably be a lot of design decisions to
 - fixed several bugs
 - implemented control flow via switch-case instead of match
 - used type assertion functions to simplify error reporting
-- implemented `Label` and `Jump` without any issues, use a linear search to find the jump target label
+- implemented `Label` and `Jump` without any issues, use a linear search to find the jump target label (simple but slow)
 - implemented conditional `Branch` without any issues
 
 ## Findings
