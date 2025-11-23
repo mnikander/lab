@@ -100,3 +100,29 @@ describe('labels, jump, and branch', () => {
         expect(evaluate(input)).toBe(6);
     });
 });
+
+describe('function call', () => {
+    it('must support calling the identity function', () => {
+        const input: Instruction[] = [
+            { tag: 'Const',    target: 0, constant: 0 },
+            { tag: 'Const',    target: 1, constant: 42 },
+            { tag: 'Call',     label: 'identity', target: 2, arguments: [1] },
+            { tag: 'Exit',     result: 2 },
+            { tag: 'Function', label: 'identity', parameters: ['a'] },
+            { tag: 'Return',   result: 0 }, // return register (i.e. argument) 0
+        ];
+        expect(evaluate(input)).toBe(42);
+    });
+
+    it('must support calling a binary function', () => {
+        const input: Instruction[] = [
+            { tag: 'Const',    target: 0, constant: 10 },
+            { tag: 'Const',    target: 1, constant: 20 },
+            { tag: 'Call',     label: 'first', target: 2, arguments: [0, 1] },
+            { tag: 'Exit',     result: 2 },
+            { tag: 'Function', label: 'first', parameters: ['a', 'b'] },
+            { tag: 'Return',   result: 0 }, // return register (i.e. argument) 0
+        ];
+        expect(evaluate(input)).toBe(10);
+    });
+});

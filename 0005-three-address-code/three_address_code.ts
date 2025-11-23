@@ -2,7 +2,7 @@
 
 import { assert_boolean, assert_number, assert_defined } from './type_assertions.ts'
 
-export type Instruction = Add | Const | Copy | Label | Jump | Branch | Exit;
+export type Instruction = Add | Const | Copy | Label | Jump | Branch | Function | Call | Return | Exit;
 export type Register    = number;
 export type RawValue    = boolean | number;
 export type Value       = { tag: 'Value', value: RawValue };
@@ -12,12 +12,15 @@ export type Add         = { tag: 'Add', target: Register, left: Register, right:
 export type Jump        = { tag: 'Jump', label: string };
 export type Label       = { tag: 'Label', label: string };
 export type Branch      = { tag: 'Branch', condition: Register, label: string };
+export type Function    = { tag: 'Function', label: string, parameters: string[] };
+export type Call        = { tag: 'Call', label: string, target: Register, arguments: Register[] };
+export type Return      = { tag: 'Return', result: Register };
 export type Exit        = { tag: 'Exit', result: Register };
-type Frame              = { register: (undefined | Value)[] };
+type Frame              = { registers: (undefined | Value)[], target: undefined | Register, return_pc: undefined | number };
 
 export function evaluate(instructions: readonly Instruction[]): RawValue {
 
-    let stack: Frame[] = [ {register: []} ];
+    let stack: Frame[] = [ {registers: [], target: undefined, return_pc: undefined} ];
     let pc: number = 0;
 
     while (pc < instructions.length) {
@@ -51,6 +54,22 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
                     pc++;
                 }
                 break;
+            case 'Function':
+                throw Error(`Encountered unexpected function body of '${instruc.label}'.`)
+            case 'Call':
+                // TODO: add arity check when calling a function
+                stack.push(
+                    { registers: instruc.arguments.map((reg) => {return top(stack).registers[reg];}),
+                      target: instruc.target,
+                      return_pc: pc + 1 }
+                    );
+                pc = find_label(instructions, instruc.label) + 1;
+                break;
+            case 'Return':
+                peek(stack).registers[assert_defined(top(stack).target)] = top(stack).registers[instruc.result];
+                pc = assert_defined(top(stack).return_pc);
+                stack.pop();
+                break;
             case 'Exit':
                 return assert_defined(top(stack).registers[instruc.result]).value;
             default:
@@ -61,7 +80,7 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
 }
 
 function find_label(instructions: readonly Instruction[], label: string): number {
-    return instructions.findIndex((i: Instruction) => { return i.tag === 'Label' && i.label === label; });
+    return instructions.findIndex((i: Instruction) => { return (i.tag === 'Label' || i.tag === 'Function') && i.label === label; });
 }
 
 function top(stack: Frame[]): Frame {
