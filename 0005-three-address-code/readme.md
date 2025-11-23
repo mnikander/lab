@@ -137,7 +137,7 @@ Even if it comes at the expense of some verbosity, it does introduce a lot of cl
 It the more compact representation is desired, then inputing arrays and doing the 1:1 translation to objects, is a good option.
 Either way, analysis and evaluation will work on the object-based representation of 3-address code.
 
-### Function, Call, and Return
+### Many ways to implement Function, Call, and Return
 
 There are huge number of ways in which a call stack can be designed, from assembly-style calling conventions to stack frames as objects.
 This implementation outlines just one possibility for stack frames as objects.
@@ -179,5 +179,6 @@ Inside the interpreter, there is not really a specific register into which the r
 - Validate the 3-address code for validity, i.e. no inline function definitions
 - Closures
 - Heap memory (alloc, free, load, store)
+
 ---
 **Copyright (c) 2025 Marco Nikander**
