@@ -25,13 +25,13 @@ Date: 2025-10-25
 
 ### Instruction set
 
-|Initial set |
+| Constants and Addition |
 | --- |
 | load constant |
 | add |
 | exit / return |
 
-| Possible later additions |
+| Control flow and functions |
 | --- |
 | label |
 | jump |
@@ -39,6 +39,9 @@ Date: 2025-10-25
 | lambda / closure |
 | call |
 | return |
+
+| Possible later additions |
+| --- |
 | further arithmetic and logical operations |
 | heap alloc, free, load, store |
 | scope begin, end |
@@ -63,6 +66,8 @@ Especially for environments, there will probably be a lot of design decisions to
 - used type assertion functions to simplify error reporting
 - implemented `Label` and `Jump` without any issues, use a linear search to find the jump target label (simple but slow)
 - implemented conditional `Branch` without any issues
+- implemented `Copy` i.e. 'mov'
+- added stack frames and implemented `Function`, `Call`, and `Return`
 
 ## Findings
 <!-- What did I learn? -->
@@ -132,6 +137,30 @@ Even if it comes at the expense of some verbosity, it does introduce a lot of cl
 It the more compact representation is desired, then inputing arrays and doing the 1:1 translation to objects, is a good option.
 Either way, analysis and evaluation will work on the object-based representation of 3-address code.
 
+### Function, Call, and Return
+
+There are huge number of ways in which a call stack can be designed, from assembly-style calling conventions to stack frames as objects.
+This implementation outlines just one possibility for stack frames as objects.
+Getting an initial implementation working proved tricky.
+
+### Type Assertions are extremely useful
+
+Sometimes we know that a type can be narrowed, based off of knowledge which is not directly encoded in the type system.
+In such cases, _asserting_ that a type can be narrowed, can be extremely useful for keeping TypeScript code compact and simple.
+For example:
+
+```typescript
+export function assert_defined<T> (value: undefined | T): T {
+    if (value === undefined) {
+        throw Error('Expected a defined value');
+    }
+    else {
+        return value;
+    }
+}
+```
+For some use-cases, this can be much simpler than using type-guards.
+
 ### Exiting vs. Returning
 
 Is the exit at the end of the program, really the same thing as a normal function return?
@@ -142,8 +171,13 @@ Inside the interpreter, there is not really a specific register into which the r
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+- Create a repository dedicated to 3-address code
 - Create a function for write-access to registers, which enforces that each register is only assigned to once (single assignment).
 - Add a validate pass which ensures that each label is unique.
 - Jump uses a linear search through all instructions, to find a label. That is simple but slow if used repeatedly. Performance could be improved by resolving all jump targets to fixed instruction numbers once, before evaluation.
+- Check arity when calling a function
+- Validate the 3-address code for validity, i.e. no inline function definitions
+- Closures
+- Heap memory (alloc, free, load, store)
 ---
 **Copyright (c) 2025 Marco Nikander**
