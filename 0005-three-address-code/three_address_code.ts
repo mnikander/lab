@@ -6,21 +6,21 @@ export type Instruction = Add | Const | Copy | Label | Jump | Branch | Function 
 export type Register    = number;
 export type RawValue    = boolean | number;
 export type Value       = { tag: 'Value', value: RawValue };
-export type Const       = { tag: 'Const', target: Register, constant: RawValue };
-export type Copy        = { tag: 'Copy', target: Register, source: Register };
-export type Add         = { tag: 'Add', target: Register, left: Register, right: Register };
+export type Const       = { tag: 'Const', destination: Register, constant: RawValue };
+export type Copy        = { tag: 'Copy', destination: Register, source: Register };
+export type Add         = { tag: 'Add', destination: Register, left: Register, right: Register };
 export type Jump        = { tag: 'Jump', label: string };
 export type Label       = { tag: 'Label', label: string };
 export type Branch      = { tag: 'Branch', condition: Register, label: string };
 export type Function    = { tag: 'Function', label: string, parameters: string[] };
-export type Call        = { tag: 'Call', label: string, target: Register, arguments: Register[] };
+export type Call        = { tag: 'Call', label: string, destination: Register, arguments: Register[] };
 export type Return      = { tag: 'Return', result: Register };
 export type Exit        = { tag: 'Exit', result: Register };
-type Frame              = { registers: (undefined | Value)[], target: undefined | Register, return_pc: undefined | number };
+type Frame              = { registers: (undefined | Value)[], destination: undefined | Register, return_pc: undefined | number };
 
 export function evaluate(instructions: readonly Instruction[]): RawValue {
 
-    let stack: Frame[] = [ {registers: [], target: undefined, return_pc: undefined} ];
+    let stack: Frame[] = [ {registers: [], destination: undefined, return_pc: undefined} ];
     let pc: number = 0;
 
     while (pc < instructions.length) {
@@ -29,15 +29,15 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
 
         switch (instruc.tag) {
             case 'Const':
-                top(stack).registers[instruc.target] = { tag: 'Value', value: instruc.constant };
+                top(stack).registers[instruc.destination] = { tag: 'Value', value: instruc.constant };
                 pc++;
                 break;
             case 'Copy':
-                top(stack).registers[instruc.target] = top(stack).registers[instruc.source];
+                top(stack).registers[instruc.destination] = top(stack).registers[instruc.source];
                 pc++;
                 break;
             case 'Add':
-                top(stack).registers[instruc.target] = { tag: 'Value', value: assert_number(top(stack).registers[instruc.left]) + assert_number(top(stack).registers[instruc.right]) };
+                top(stack).registers[instruc.destination] = { tag: 'Value', value: assert_number(top(stack).registers[instruc.left]) + assert_number(top(stack).registers[instruc.right]) };
                 pc++;
                 break;
             case 'Label':
@@ -60,13 +60,13 @@ export function evaluate(instructions: readonly Instruction[]): RawValue {
                 // TODO: add arity check when calling a function
                 stack.push(
                     { registers: instruc.arguments.map((reg) => {return top(stack).registers[reg];}),
-                      target: instruc.target,
+                      destination: instruc.destination,
                       return_pc: pc + 1 }
                     );
                 pc = find_label(instructions, instruc.label) + 1;
                 break;
             case 'Return':
-                peek(stack).registers[assert_defined(top(stack).target)] = top(stack).registers[instruc.result];
+                peek(stack).registers[assert_defined(top(stack).destination)] = top(stack).registers[instruc.result];
                 pc = assert_defined(top(stack).return_pc);
                 stack.pop();
                 break;

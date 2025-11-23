@@ -10,7 +10,7 @@ describe('constants and exit', () => {
 
     it('must evaluate a constant', () => {
         const input: Instruction[] = [
-            { tag: 'Const', target: 0, constant: 42 },
+            { tag: 'Const', destination: 0, constant: 42 },
             { tag: 'Exit',  result: 0 },
         ];
         expect(evaluate(input)).toBe(42);
@@ -20,8 +20,8 @@ describe('constants and exit', () => {
 describe('copying of registers', () => {
     it('must copy a constant', () => {
         const input: Instruction[] = [
-            { tag: 'Const', target: 0, constant: 42 },
-            { tag: 'Copy',  target: 1, source: 0 },
+            { tag: 'Const', destination: 0, constant: 42 },
+            { tag: 'Copy',  destination: 1, source: 0 },
             { tag: 'Exit',  result: 1 },
         ];
         expect(evaluate(input)).toBe(42);
@@ -31,9 +31,9 @@ describe('copying of registers', () => {
 describe('arithmetic operations', () => {
     it('must evaluate integer addition', () => {
         const input: Instruction[] = [
-            { tag: 'Const', target: 0, constant: 1 },
-            { tag: 'Const', target: 1, constant: 2 },
-            { tag: 'Add',   target: 2, left: 0, right: 1 },
+            { tag: 'Const', destination: 0, constant: 1 },
+            { tag: 'Const', destination: 1, constant: 2 },
+            { tag: 'Add',   destination: 2, left: 0, right: 1 },
             { tag: 'Exit',  result: 2 },
         ];
         expect(evaluate(input)).toBe(3);
@@ -43,11 +43,11 @@ describe('arithmetic operations', () => {
 describe('labels, jump, and branch', () => {
     it('must skip over labels as if they are a "no-op"', () => {
         const input: Instruction[] = [
-            { tag: 'Const', target: 0, constant: 1 },
+            { tag: 'Const', destination: 0, constant: 1 },
             { tag: 'Label', label: 'First'},
-            { tag: 'Const', target: 1, constant: 2 },
+            { tag: 'Const', destination: 1, constant: 2 },
             { tag: 'Label', label: 'Second'},
-            { tag: 'Add',   target: 2, left: 0, right: 1 },
+            { tag: 'Add',   destination: 2, left: 0, right: 1 },
             { tag: 'Label', label: 'Third'},
             { tag: 'Exit',  result: 2 },
         ];
@@ -58,9 +58,9 @@ describe('labels, jump, and branch', () => {
         const input: Instruction[] = [
             { tag: 'Jump',  label: 'Second'},
             { tag: 'Label', label: 'First'},
-            { tag: 'Const', target: 1, constant: 1 },
+            { tag: 'Const', destination: 1, constant: 1 },
             { tag: 'Label', label: 'Second'},
-            { tag: 'Const', target: 1, constant: 2 },
+            { tag: 'Const', destination: 1, constant: 2 },
             { tag: 'Exit',  result: 1 },
         ];
         expect(evaluate(input)).toBe(2);
@@ -68,15 +68,15 @@ describe('labels, jump, and branch', () => {
 
     it('must not branch when condition is false', () => {
         const input: Instruction[] = [
-            { tag: 'Const',  target: 0, constant: false },
-            { tag: 'Const',  target: 1, constant: 1 },
-            { tag: 'Const',  target: 2, constant: 2 },
-            { tag: 'Const',  target: 3, constant: 4 },
+            { tag: 'Const',  destination: 0, constant: false },
+            { tag: 'Const',  destination: 1, constant: 1 },
+            { tag: 'Const',  destination: 2, constant: 2 },
+            { tag: 'Const',  destination: 3, constant: 4 },
             { tag: 'Branch', condition: 0, label: 'Else' },
-            { tag: 'Add',    target: 4, left: 1, right: 2 },
+            { tag: 'Add',    destination: 4, left: 1, right: 2 },
             { tag: 'Jump',   label: 'End' },
             { tag: 'Label',  label: 'Else' },
-            { tag: 'Add',    target: 4, left: 2, right: 3 },
+            { tag: 'Add',    destination: 4, left: 2, right: 3 },
             { tag: 'Label',  label: 'End'},
             { tag: 'Exit',   result: 4 },
         ];
@@ -85,15 +85,15 @@ describe('labels, jump, and branch', () => {
 
     it('must branch when condition is true', () => {
         const input: Instruction[] = [
-            { tag: 'Const',  target: 0, constant: true },
-            { tag: 'Const',  target: 1, constant: 1 },
-            { tag: 'Const',  target: 2, constant: 2 },
-            { tag: 'Const',  target: 3, constant: 4 },
+            { tag: 'Const',  destination: 0, constant: true },
+            { tag: 'Const',  destination: 1, constant: 1 },
+            { tag: 'Const',  destination: 2, constant: 2 },
+            { tag: 'Const',  destination: 3, constant: 4 },
             { tag: 'Branch', condition: 0, label: 'Else' },
-            { tag: 'Add',    target: 4, left: 1, right: 2 },
+            { tag: 'Add',    destination: 4, left: 1, right: 2 },
             { tag: 'Jump',   label: 'End' },
             { tag: 'Label',  label: 'Else' },
-            { tag: 'Add',    target: 4, left: 2, right: 3 },
+            { tag: 'Add',    destination: 4, left: 2, right: 3 },
             { tag: 'Label',  label: 'End'},
             { tag: 'Exit',   result: 4 },
         ];
@@ -104,9 +104,9 @@ describe('labels, jump, and branch', () => {
 describe('function call', () => {
     it('must support calling the identity function', () => {
         const input: Instruction[] = [
-            { tag: 'Const',    target: 0, constant: 0 },
-            { tag: 'Const',    target: 1, constant: 42 },
-            { tag: 'Call',     label: 'identity', target: 2, arguments: [1] },
+            { tag: 'Const',    destination: 0, constant: 0 },
+            { tag: 'Const',    destination: 1, constant: 42 },
+            { tag: 'Call',     label: 'identity', destination: 2, arguments: [1] },
             { tag: 'Exit',     result: 2 },
             { tag: 'Function', label: 'identity', parameters: ['a'] },
             { tag: 'Return',   result: 0 }, // return register (i.e. argument) 0
@@ -116,9 +116,9 @@ describe('function call', () => {
 
     it('must support calling a binary function', () => {
         const input: Instruction[] = [
-            { tag: 'Const',    target: 0, constant: 10 },
-            { tag: 'Const',    target: 1, constant: 20 },
-            { tag: 'Call',     label: 'first', target: 2, arguments: [0, 1] },
+            { tag: 'Const',    destination: 0, constant: 10 },
+            { tag: 'Const',    destination: 1, constant: 20 },
+            { tag: 'Call',     label: 'first', destination: 2, arguments: [0, 1] },
             { tag: 'Exit',     result: 2 },
             { tag: 'Function', label: 'first', parameters: ['a', 'b'] },
             { tag: 'Return',   result: 0 }, // return register (i.e. argument) 0
