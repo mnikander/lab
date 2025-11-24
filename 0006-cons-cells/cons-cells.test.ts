@@ -1,6 +1,31 @@
 import { describe, it } from "jsr:@std/testing/bdd";
 import { expect } from "jsr:@std/expect";
-import { nil, first, rest, cons, Cons, atom } from "./cons-cells.ts";
+import { nil, Nil, first, rest, cons, Cons, atom, Atom, symbol, Symbol } from "./cons-cells.ts";
+
+describe('must allow initialization of', () => {
+    it('nil', () => {
+        const s: Nil = nil;
+        expect(s.tag).toEqual('Nil');
+    });
+    
+    it('booleans', () => {
+        const s: Atom = atom(true);
+        expect(s.tag).toEqual('Atom');
+        expect(s.value).toEqual(true);
+    });
+    
+    it('integers', () => {
+        const s: Atom = atom(1);
+        expect(s.tag).toEqual('Atom');
+        expect(s.value).toEqual(1);
+    });
+
+    it('symbols', () => {
+        const s: Symbol = symbol('x');
+        expect(s.tag).toEqual('Symbol');
+        expect(s.name).toEqual('x');
+    });
+});
 
 describe('must support the construction and access of a pair of', () => {
     it('booleans', () => {

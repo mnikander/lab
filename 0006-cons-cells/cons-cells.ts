@@ -1,15 +1,26 @@
 // Copyright (c) 2025 Marco Nikander
 
-export type Value = Nil | Atom | Cons;
-export type Nil   = { tag: 'Nil' };
-export type Atom  = { tag: 'Atom', value: boolean | number };
-export type Cons  = { tag: 'Cons', left: Value, right: Value };
+export type Value  = Nil | Atom | Symbol | Cons;
+export type Nil    = { tag: 'Nil' };
+export type Atom   = { tag: 'Atom', value: boolean | number };
+export type Symbol = { tag: 'Symbol', name: string };
+export type Cons   = { tag: 'Cons', left: Value, right: Value };
+
+// nil
 
 export const nil: Nil = { tag: 'Nil' };
+
+// atoms
 
 export function atom(value: boolean | number): Atom {
     return { tag: 'Atom', value: value };
 }
+
+export function symbol(name: string): Symbol {
+    return { tag: 'Symbol', name: name };
+}
+
+// cons cells
 
 export function cons(left: Value, right: Value): Cons {
     return { tag: 'Cons', left: left, right: right };
