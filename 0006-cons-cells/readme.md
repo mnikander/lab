@@ -1,7 +1,8 @@
 # Question
 <!-- What am I figuring out? -->
 
-How can cons cells be implemented?
+1. How can cons cells be implemented?
+2. How can map, filter, and reduce be implemented for cons-cells?
 
 Date: 2025-11-24
 
@@ -26,7 +27,8 @@ Date: 2025-11-24
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-
+- started with a naive implementation for cons cells
+- when testing the `first` and `rest` functions on lists I ran into type-checking errors which led me to create tagged types for everything, including values
 
 ## Findings
 <!-- What did I learn? -->
