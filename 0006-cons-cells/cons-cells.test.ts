@@ -1,6 +1,6 @@
 import { describe, it } from "jsr:@std/testing/bdd";
 import { expect } from "jsr:@std/expect";
-import { nil, Nil, first, rest, cons, Cons, atom, Atom, symbol, Symbol } from "./cons-cells.ts";
+import { nil, Nil, first, rest, cons, Cons, value, Value, symbol, Symbol } from "./cons-cells.ts";
 
 describe('must allow initialization of', () => {
     it('nil', () => {
@@ -9,14 +9,14 @@ describe('must allow initialization of', () => {
     });
     
     it('booleans', () => {
-        const s: Atom = atom(true);
-        expect(s.tag).toEqual('Atom');
+        const s: Value = value(true);
+        expect(s.tag).toEqual('Value');
         expect(s.value).toEqual(true);
     });
     
     it('integers', () => {
-        const s: Atom = atom(1);
-        expect(s.tag).toEqual('Atom');
+        const s: Value = value(1);
+        expect(s.tag).toEqual('Value');
         expect(s.value).toEqual(1);
     });
 
@@ -29,15 +29,15 @@ describe('must allow initialization of', () => {
 
 describe('must support the construction and access of a pair of', () => {
     it('booleans', () => {
-        const pair: Cons = cons(atom(false), atom(true));
-        expect(first(pair)).toEqual(atom(false));
-        expect(rest(pair)).toEqual(atom(true));
+        const pair: Cons = cons(value(false), value(true));
+        expect(first(pair)).toEqual(value(false));
+        expect(rest(pair)).toEqual(value(true));
     });
 
     it('integers', () => {
-        const pair: Cons = cons(atom(1), atom(2));
-        expect(first(pair)).toEqual(atom(1));
-        expect(rest(pair)).toEqual(atom(2));
+        const pair: Cons = cons(value(1), value(2));
+        expect(first(pair)).toEqual(value(1));
+        expect(rest(pair)).toEqual(value(2));
     });
 
     it('nil', () => {
@@ -47,26 +47,26 @@ describe('must support the construction and access of a pair of', () => {
     });
 
     it('integer and nil', () => {
-        const pair: Cons = cons(atom(42), nil);
-        expect(first(pair)).toEqual(atom(42));
+        const pair: Cons = cons(value(42), nil);
+        expect(first(pair)).toEqual(value(42));
         expect(rest(pair)).toEqual(nil);
     });
 });
 
 describe('must support the construction and access of', () => {
     it('a list of integers', () => {
-        const list: Cons = cons(atom(1), cons(atom(2), cons(atom(3), nil)));
-        expect(first(list)).toEqual(atom(1));
-        expect(first(rest(list))).toEqual(atom(2));
-        expect(first(rest(rest(list)))).toEqual(atom(3));
+        const list: Cons = cons(value(1), cons(value(2), cons(value(3), nil)));
+        expect(first(list)).toEqual(value(1));
+        expect(first(rest(list))).toEqual(value(2));
+        expect(first(rest(rest(list)))).toEqual(value(3));
         expect(rest(rest(rest(list)))).toEqual(nil);
     });
 
     it('a tree of integers', () => {
-        const list: Cons = cons(cons(atom(1), atom(2)), cons(atom(3), nil));
-        expect(first(first(list))).toEqual(atom(1));
-        expect(rest(first(list))).toEqual(atom(2));
-        expect(first(rest(list))).toEqual(atom(3));
+        const list: Cons = cons(cons(value(1), value(2)), cons(value(3), nil));
+        expect(first(first(list))).toEqual(value(1));
+        expect(rest(first(list))).toEqual(value(2));
+        expect(first(rest(list))).toEqual(value(3));
         expect(rest(rest(list))).toEqual(nil);
     });
 });
