@@ -179,6 +179,7 @@ Inside the interpreter, there is not really a specific register into which the r
 - Validate the 3-address code for validity, i.e. no inline function definitions
 - Closures
 - Heap memory (alloc, free, load, store)
+- Pointers to stack and heap memory
 
 ---
 **Copyright (c) 2025 Marco Nikander**

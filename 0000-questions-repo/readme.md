@@ -41,6 +41,10 @@ I suspect that for larger questions, strong interest in the topic will be especi
 
 Set up the repo and template as described.
 Created the this whole project as the very first question.
+Tried several smaller questions (0001 - 0004) and then a much larger question (0005).
+Got a little stuck in 0005 with the implementation of function calls for 3-address code.
+At the same time, external circumstances halted development work for several weeks.
+That froze this project entirely.
 
 ## Findings
 <!-- What did I learn? -->
@@ -50,6 +54,8 @@ Created the this whole project as the very first question.
 - exercises during the week are best on the order of 60-90 minutes, so the questions should be really small
 - it's fun to try out new things in this quick and easy context, without having to think/worry about a larger codebase
 - this could be a really good way to try out a wider variety of things, outside of languages and compilers as well
+- large questions bring a greater risk of getting stuck
+- usually only one question is in progress at a time, so having one large question open for a long time, effectively suppresses small questions -> it would be wise to move large questions into another repo sooner so small experiments can continue here, one at a time
 
 ## Future Work
 <!-- Are there follow-up questions? -->
