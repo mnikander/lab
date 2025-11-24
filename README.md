@@ -11,10 +11,10 @@ The tables below collect those questions.
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
-| 0005 |        | 2025-10-25 | vm                   | How can an **evaluator for 3-address code** be implemented? |
-|      |        | 2025-10-15 | vm, lowering         | What is a simple set of **linear instructions** which can be used for programming? |
-|      |        | 2025-10-15 | vm, evaluation       | How can an **evaluator using a program counter** on simple instructions be implemented? |
-|      |        | 2025-10-15 | vm, evaluation       | How can **stack frames** be implemented? |
+|      |        | 2025-10-15 | memory               | How can cons cells be implemented? |
+|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
+|      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **heap memory with generation counters**? |
+|      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **stack frames with generation counters**? |
 |      |        | 2025-10-15 | vm, lowering         | How does the transformation from **blocks to linear code** work, with jumps and returns? |
 |      |        | 2025-10-15 | vm, lowering         | How does the transformation from **if-then-else expressions to linear code** with jumps? |
 |      |        | 2025-10-15 | vm, lowering         | How do you store the **environment in stack locals**? |
@@ -23,11 +23,7 @@ The tables below collect those questions.
 |      |        | 2025-10-15 | typescript           | How does `match`, from the `ts-pattern` package, work? |
 |      |        | 2025-10-15 | typescript           | How can the `Result` type from the `neverthrow` package be used to chain computations? |
 |      |        | 2025-10-15 | syntax, ast          | How can currying be implemented for function abstraction? |
-|      |        | 2025-10-15 | memory               | How can cons cells be implemented? |
 |      |        | 2025-10-15 | vm, memory           | How can a closure copy a captured variable into its own storage? |
-|      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
-|      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **stack frames with generation counters**? |
-|      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **heap memory with generation counters**? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for stack-values? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for heap-values? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for references? |
@@ -63,6 +59,10 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0005 |        | 2025-10-25 | vm                   | How can an **evaluator for 3-address code** be implemented? |
+|      |  0005  | 2025-10-15 | vm, lowering         | ~~What is a simple set of **linear instructions** which can be used for programming?~~ |
+|      |  0005  | 2025-10-15 | vm, evaluation       | ~~How can an **evaluator using a program counter** on simple instructions be implemented?~~ |
+|      |  0005  | 2025-10-15 | vm, evaluation       | ~~How can **stack frames** be implemented?~~ |
 | 0004 |        | 2025-10-15 | ast, passes          | How can a function call node in an AST be split into two nodes, for currying? |
 |      |  0004  | 2025-10-15 | typescript, deno     | ~~How can a package be imported in a deno project?~~ |
 |      |  0004  | 2025-10-15 | syntax, ast          | ~~How can currying be implemented for function application?~~ |
