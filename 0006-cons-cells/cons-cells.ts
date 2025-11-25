@@ -34,7 +34,7 @@ export function rest(cons: Expr): Expr {
     return assert_cons(cons, 'rest').right;
 }
 
-function assert_cons(v: Expr, name: string): Cons {
-    if (v.tag !== 'Cons') throw Error(`'${name}' expects 'x' to be a Cons-Cell, got ${v.tag} instead.`);
-    else return v;
+function assert_cons(expr: Expr, name: string): Cons {
+    if (expr.tag !== 'Cons') throw Error(`'${name}' expects a Cons-cell, got ${expr.tag} instead.`);
+    else return expr;
 }
