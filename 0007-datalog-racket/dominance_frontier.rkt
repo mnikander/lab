@@ -20,7 +20,7 @@ ancestors(L, R, Descendent) :- predecessor(L, Descendent), predecessor(R, Descen
 
 split(X, Y)   :- edge(P, X), edge(P, Y), X != Y.
 
-cousins(X, Y) :- 
+parallel(X, Y) :- 
     edge(O, L), 
     edge(O, R),
     predecessor(O, X), 
@@ -30,4 +30,4 @@ cousins(X, Y) :-
     L != R,
     X != Y.
 
-cousins(X, Y)?
+parallel(X, Y)?

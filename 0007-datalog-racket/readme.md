@@ -41,6 +41,9 @@ So I presume this won't be possible in Datalog.
 Detecting a Split, which is more than one node above, is also pretty tricky.
 This is because as soon as you start using the predecessor relation to detect a split, you have to ensure that it's not a linear chain of nodes, but that the parent is in fact the only common ancestor.
 
+How do I encode that 'parallel' nodes in a DAG are not joined already?
+
+
 ## Findings
 <!-- What did I learn? -->
 
