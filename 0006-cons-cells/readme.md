@@ -2,7 +2,7 @@
 <!-- What am I figuring out? -->
 
 1. How can cons cells be implemented?
-2. How can map, filter, and reduce be implemented for cons-cells?
+2. ~~How can map, filter, and reduce be implemented for cons-cells?~~
 
 Date: 2025-11-24
 
@@ -16,7 +16,7 @@ Date: 2025-11-24
 
 1. implement basic cons-cells
 2. implement construction and access
-3. prototype map, filter, and reduce on those cons-cells
+3. ~~prototype map, filter, and reduce on those cons-cells~~
 
 ## Hypothesis
 <!-- What do I think is going to happen? -->
@@ -39,7 +39,7 @@ Date: 2025-11-24
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- implement map, filter, reduce for cons-cells
 
 ---
 **Copyright (c) 2025 Marco Nikander**

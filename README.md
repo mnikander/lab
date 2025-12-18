@@ -11,7 +11,6 @@ The tables below collect those questions.
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
-| 0006 |        | 2025-10-15 | memory               | How can cons cells be implemented? |
 |      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
 |      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **heap memory with generation counters**? |
 |      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **stack frames with generation counters**? |
@@ -59,6 +58,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0006 |        | 2025-10-15 | memory               | How can cons cells be implemented? |
 | 0005 |        | 2025-10-25 | vm                   | How can an **evaluator for 3-address code** be implemented? |
 |      |  0005  | 2025-10-15 | vm, lowering         | ~~What is a simple set of **linear instructions** which can be used for programming?~~ |
 |      |  0005  | 2025-10-15 | vm, evaluation       | ~~How can an **evaluator using a program counter** on simple instructions be implemented?~~ |
