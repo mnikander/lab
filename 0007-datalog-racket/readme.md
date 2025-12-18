@@ -32,7 +32,14 @@ Date: 2025-12-18
 1. tried installing Souffle on Ubuntu by adding it to sources, but it couldn't install the dependency 'libffi7'
 2. installed a Racket package instead: `raco pkg install datalog`
 3. wrote an example for reachability and executed it with `racket ./reachability.rkt`
-4. 
+4. Started working on the CFG dominance example.
+
+I think the monotonicity of Datalog may make it impossible to check whether or not there is exactly one edge coming into a particular node.
+Discovering one incoming edge and then discovering a second incoming edge would first confirm and then violate that rule, which breaks monotonicity.
+So I presume this won't be possible in Datalog.
+
+Detecting a Split, which is more than one node above, is also pretty tricky.
+This is because as soon as you start using the predecessor relation to detect a split, you have to ensure that it's not a linear chain of nodes, but that the parent is in fact the only common ancestor.
 
 ## Findings
 <!-- What did I learn? -->
