@@ -17,12 +17,6 @@
 %              v
 %             end
 %
-% Suppose we have a variable which is defined in Blocks B, C, and E.
-% Which blocks see which definition?
-% For clarity, the definition from each block is named phonetically:
-%     - definition in block B: 'bravo'
-%     - definition in block C: 'charlie'
-%     - definition in block E: 'echo'
 
 edge(start, a).
 edge(a, b).
@@ -34,35 +28,33 @@ edge(d, e).
 edge(e, a).
 edge(e, end).
 
-% block start
-empty(start).
+% Suppose we have a single variable 'k' which is defined in Blocks B, C, and E.
+% These definitions thus override each other.
+% Which block sees which definition?
+% Definitions of 'k' for every block, with explicit predicate to mark when 'k' is NOT defined / overriden.
+% For clarity, the definition of 'k' from each block is named phonetically:
+%     - definition in block B: 'bravo'
+%     - definition in block C: 'charlie'
+%     - definition in block E: 'echo'
 
-% block a
-empty(a).
-
-% block b
+nothing(start).
+nothing(a).
 define(b, bravo).
-
-% block c
 define(c, charlie).
-
-% block d
-empty(d).
-
-% block e
+nothing(d).
 define(e, echo).
+nothing(end).
 
-% block end
-empty(end).
-
+% type predicates
 block(X) :- edge(X, O).
 block(X) :- edge(O, X).
 var(X)   :- define(O, X).
 
+% project forward from the point of definition through any blocks which don't have overriding definitions
 available(X, D) :- block(X), var(D), define(X, D).
-available(Y, D) :- available(X, D), edge(X, Y), empty(Y).
+available(Y, D) :- available(X, D), edge(X, Y), nothing(Y).
 
-% Test Cases:                    % EXPECTATION:
+% Test Cases:                % EXPECTATION:
 available(start, bravo)?     %
 available(start, charlie)?   %
 available(start, echo)?      %
