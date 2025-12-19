@@ -34,42 +34,64 @@ edge(d, e).
 edge(e, a).
 edge(e, end).
 
-% in block b
-undefine(charlie, b).
-undefine(echo, b).
-define(bravo, b).
+% block b
+undefine(b, charlie).
+undefine(b, echo).
+define(b, bravo).
 
-% in block c
-undefine(bravo, c).
-undefine(echo, c).
-define(charlie, c).
+% block c
+undefine(c, bravo).
+undefine(c, echo).
+define(c, charlie).
 
-% in block e
-undefine(bravo, e).
-undefine(charlie, e).
-define(echo, e).
+% block e
+undefine(e, bravo).
+undefine(e, charlie).
+define(e, echo).
 
-% these two relations express which definitions can and cannot flow along a particular edge
-% 'flow', as defined here, only works when there is exactly one 'undefine' in the entire graph
-flow(D, X, Y) :- edge(X, Y), undefine(D, U), U != Y.
-stop(D, X, Y) :- edge(X, Y), undefine(D, Y).
+stop(X, Y, D) :- edge(X, Y), undefine(Y, D).
 
-% let's try pushing a value
-push(D, X, Y) :- define(D, X), flow(D, X, Y).
-push(D, X, Z) :- push(D, X, Y), flow(D, Y, Z).
+node(X) :- edge(X, O).
+node(X) :- edge(O, X).
+var(X)  :- define(O, X).
+var(X)  :- undefine(O, X).
 
-% do I have to define 'pull' in terms of 'stop'?
-% that's going to be tricky without stratified negation
-% I might be able to work around it with equality and inequality and an extra indirection
+% If I really wanted to trace what is availble where, and don't have negation,
+% then I would have to change what the nodes encode. Instead of having some
+% nodes encode "you shall not pass", I would have to explicitly encode in most
+% nodes that "you are allowed to pass". 
 
-cannot_pull(D, X, Y) :- edge(X, Y), stop(D, X, Y).
+% assuming there is only a single definition, I can use some tricks:
+defined_elsewhere(X, D) :- node(X), var(D), define(O, D), O != X.
 
-%flow(D, X, b)?
-%stop(D, X, b)?
-cannot_pull(D, X, Y)?
+not_available(X, D) :- node(X), var(D), X = start.
+not_available(X, D) :- undefine(X, D).
+not_available(Y, D) :- not_available(X, D), edge(X, Y), defined_elsewhere(Y, D).
 
-% An interesting note is that there can be an arbitrary number of incoming
-% edges, but if you only have (1) an unconditional jump and (2) a binary branch
-% instruction, then there are exactly 1 or 2 edges leading out of a block.
-% This could be of enourmous significance in terms of what you can and cannot
-% test, depending on the direction in which you traverse the CFG.
+% The problem with that 3rd definition is that as soon as one incoming branch
+% exists where the variable is not defined, for example a branch from 'start'
+% then the variable gets labeled as 'not availble', even if another incoming
+% edge defines it.
+
+% Test Cases:                    % EXPECTATION:
+not_available(start, bravo)?     % true
+not_available(start, charlie)?   % true
+not_available(start, echo)?      % true
+not_available(a, bravo)?         % true
+not_available(a, charlie)?       % true
+not_available(a, echo)?          %        <-- this one causes trouble
+not_available(b, bravo)?         %
+not_available(b, charlie)?       % true
+not_available(b, echo)?          % true
+not_available(c, bravo)?         % true
+not_available(c, charlie)?       %
+not_available(c, echo)?          % true
+not_available(d, bravo)?         % true
+not_available(d, charlie)?       % true
+not_available(d, echo)?          %
+not_available(e, bravo)?         % true
+not_available(e, charlie)?       % true
+not_available(e, echo)?          %
+not_available(end, bravo)?       % true
+not_available(end, charlie)?     % true
+not_available(end, echo)?        %
