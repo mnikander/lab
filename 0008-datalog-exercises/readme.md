@@ -46,11 +46,16 @@ I hope I can get through those two tutorials and their examples in one or two da
 - in the Transitive Closure exercise, I implemented a check for cyclic graphs, 
 - couldn't find a way to implement a check for acyclic graphs, without access to stratified negation
 - checking for a strict ordering of the graph may be an approch to showing it's also acyclic, but I don't know how to implement that yet
+- implemented same generation exercise
+    - learned how to extract the list of nodes
+    - learned a trick to recurse to a common shared node with exactly equal count
+    - learned that sometimes you need to wrap a rule in order to apply a filtering predicate
+    - extended the implementation to find all nodes on the other side of a split
 
 ## Findings
 <!-- What did I learn? -->
 
-
+- sometimes it is helpful to wrap an implementation in a new rule, to be able to apply filters properly
 
 ## Future Work
 <!-- Are there follow-up questions? -->
