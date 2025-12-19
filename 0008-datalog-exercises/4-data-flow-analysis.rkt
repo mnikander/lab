@@ -46,16 +46,12 @@ path(X, Z) :- edge(X, Y), path(Y, Z).
 flow(D, X, Y) :- edge(X, Y), undefine(D, U), U != Y.
 stop(D, X, Y) :- edge(X, Y), undefine(D, Y).
 
-carries(D, X, Y) :- define(D, X), flow(D, X, Y).                   % Carries_1
-carries(D, X, Z) :- define(D, X), flow(D, X, Y), carries(D, Y, Z). % Carries_2
-%       d2 b4 b3          d2  b4       d2 b4 b1          d2 b1 b3  
-% the last condition in Carries_2 fails because the Carries_1 requires d2 to be defined in b1, which is false
-
-variable(D, BLK) :- define(D, BLK).
-variable(D, BLK) :- edge(PRED, BLK), define(D, PRED), undefine(D, U), U != BLK.
+% let's try pushing a value
+push(D, X, Y) :- define(D, X), flow(D, X, Y).
+push(D, X, Z) :- push(D, X, Y), flow(D, Y, Z).
 
 %path(X, b3)?
-%variable(D, B)?
 flow(D, X, Y)?
 stop(D, X, Y)?
-carries(D, X, Y)?
+
+push(D, X, Y)?
