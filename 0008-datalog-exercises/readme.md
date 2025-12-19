@@ -8,6 +8,7 @@ Date: 2025-12-19
 ## Resources
 <!-- Where can I find relevant information? -->
 
+- [Racket Datalog module language](https://docs.racket-lang.org/datalog/datalog.html)
 - [Racket Datalog tutorial](https://docs.racket-lang.org/datalog/Tutorial.html)
 - [Souffle tutorial with exercises](https://souffle-lang.github.io/tutorial)
 - [Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens)
@@ -40,7 +41,11 @@ I hope I can get through those two tutorials and their examples in one or two da
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-
+- implemented modus ponens and modus tollens easily
+- went through the Racket Datalog tutorial
+- in the Transitive Closure exercise, I implemented a check for cyclic graphs, 
+- couldn't find a way to implement a check for acyclic graphs, without access to stratified negation
+- checking for a strict ordering of the graph may be an approch to showing it's also acyclic, but I don't know how to implement that yet
 
 ## Findings
 <!-- What did I learn? -->
