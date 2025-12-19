@@ -36,13 +36,8 @@ define(d1, b2).
 undefine(d1, b4).
 define(d2, b4).
 
-%path(X, X) :- edge(X, Y). % path length 0, the node itself
-path(X, Y) :- edge(X, Y).
-path(X, Z) :- edge(X, Y), path(Y, Z).
-
-% I think most of these things only work when there is exactly one define/undefine in the entire graph:
-
 % these two relations express which definitions can and cannot flow along a particular edge
+% I think they only work when there is exactly one undefine in the entire graph
 flow(D, X, Y) :- edge(X, Y), undefine(D, U), U != Y.
 stop(D, X, Y) :- edge(X, Y), undefine(D, Y).
 
@@ -50,7 +45,6 @@ stop(D, X, Y) :- edge(X, Y), undefine(D, Y).
 push(D, X, Y) :- define(D, X), flow(D, X, Y).
 push(D, X, Z) :- push(D, X, Y), flow(D, Y, Z).
 
-%path(X, b3)?
 flow(D, X, Y)?
 stop(D, X, Y)?
 
