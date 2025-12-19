@@ -51,6 +51,8 @@ I hope I can get through those two tutorials and their examples in one or two da
     - learned a trick to recurse to a common shared node with exactly equal count
     - learned that sometimes you need to wrap a rule in order to apply a filtering predicate
     - extended the implementation to find all nodes on the other side of a split
+- worked on Data Flow Analysis exercise
+    - wrote down the control flow graph for the exercise, it took a while to create the ASCII art by hand
 
 ## Findings
 <!-- What did I learn? -->
