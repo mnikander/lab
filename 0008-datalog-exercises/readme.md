@@ -1,0 +1,57 @@
+# Question
+<!-- What am I figuring out? -->
+
+How can I solve logic problems using Datalog?
+
+Date: 2025-12-19
+
+## Resources
+<!-- Where can I find relevant information? -->
+
+- [Racket Datalog tutorial](https://docs.racket-lang.org/datalog/Tutorial.html)
+- [Souffle tutorial with exercises](https://souffle-lang.github.io/tutorial)
+- [Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens)
+- [Modus tollens](https://en.wikipedia.org/wiki/Modus_tollens)
+
+## Plan
+<!-- What do I want to do? -->
+
+Go through the Souffle tutorial using Datalog in Racket.
+If a feature is not availble in Racket-Datalog, then I can either install Souffle, or just skip over that feature.
+
+0. do [Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) and [Modus tollens](https://en.wikipedia.org/wiki/Modus_tollens)
+1. go through the [Racket Datalog tutorial](https://docs.racket-lang.org/datalog/Tutorial.html) and type in the example
+2. do exercise [Transitive Closure](https://souffle-lang.github.io/tutorial#transitive-closure) -- i.e. 'reachable'
+3. do exercise [Same generation](https://souffle-lang.github.io/tutorial#same-generation-example)
+4. do exercise [Data-flow analysis](https://souffle-lang.github.io/tutorial#data-flow-analysis-example)
+5. work through [Arithmetic expressions](https://souffle-lang.github.io/tutorial#arithmetic-expressions)
+6. work through [Aggregation](https://souffle-lang.github.io/tutorial#aggregation)
+7. work through [Records](https://souffle-lang.github.io/tutorial#records)
+8. look at [Components](https://souffle-lang.github.io/tutorial#records)
+9. Skim [Performance and profiling facilities](https://souffle-lang.github.io/tutorial#records)
+
+## Hypothesis
+<!-- What do I think is going to happen? -->
+
+I am going to do the exercises and learn something, probably quite a lot.
+I hope I can get through those two tutorials and their examples in one or two days.
+
+## Experiment
+<!-- What did I do? -->
+<!-- How do you run the code? -->
+
+
+
+## Findings
+<!-- What did I learn? -->
+
+
+
+## Future Work
+<!-- Are there follow-up questions? -->
+<!-- Can I create a concrete ticket/issue from this? -->
+
+
+
+---
+**Copyright (c) 2025 Marco Nikander**
