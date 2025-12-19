@@ -43,17 +43,22 @@ This is because as soon as you start using the predecessor relation to detect a 
 
 How do I encode that 'parallel' nodes in a DAG are not joined already?
 
+Encoding this is non-trivial.
+I going to learn more about Datalog before trying to solve this.
 
 ## Findings
 <!-- What did I learn? -->
 
-
+- Using Datalog via Racket is fast and easy.
+- There could be big benefits to writing an interpreter in Racket. I might be able to pass the AST or IR into a Datalog program to do type-checking or other static analysis, and then returning to the execution in Racket. That could be a _really_ effective workflow.
+- Logic programming is very different from the programming I've done in the past. It might be a good idea to familiarize myself with common techniques before I attempt to solve the more complicated problems.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- Find a good introduction to Datalog, a blogpost, tutorial, or short book
+- Do a number of practice problems / exercises to learn Datalog and common patterns
 
 ---
 **Copyright (c) 2025 Marco Nikander**
