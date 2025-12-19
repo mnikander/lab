@@ -1,40 +1,43 @@
 #lang datalog
 
 % We are given the following control flow graph (CFG) with basic blocks
-% { start, B1, B2, B3, B4, end }:
+% { start, A, B, C, D, end }:
 %
 %      start
 %        |
-%        V
-%        B1 <-----+
+%        v
+%        A <------+
 %      /    \     |
-%     V      V    |
-%    B2      B3   |
+%     v      v    |
+%     B      C    |
 %     \      /    |
 %      V    V     |
-%        B4 ------+
+%        D -------+
 %        |
-%        V
+%        v
 %       end
 %
-% Suppose we have a variable 'D' which is defined in Blocks B2 and B4.
+% Suppose we have a variable which is defined in Blocks B and D.
 % Which blocks see which definition?
+% For clarity, the definition from each block is named phonetically:
+%     - definition in block B: 'bravo'
+%     - definition in block D: 'delta'
 
-edge(start, b1).
-edge(b1, b2).
-edge(b1, b3).
-edge(b2, b4).
-edge(b3, b4).
-edge(b4, b1).
-edge(b4, end).
+edge(start, a).
+edge(a, b).
+edge(a, c).
+edge(b, d).
+edge(c, d).
+edge(d, a).
+edge(d, end).
 
-% in block b2
-undefine(d2, b2).
-define(d1, b2).
+% in block b
+undefine(delta, b).
+define(bravo, b).
 
-% in block b4
-undefine(d1, b4).
-define(d2, b4).
+% in block d
+undefine(bravo, d).
+define(delta, d).
 
 % these two relations express which definitions can and cannot flow along a particular edge
 % I think they only work when there is exactly one undefine in the entire graph
