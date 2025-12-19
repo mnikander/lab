@@ -40,7 +40,6 @@ undefine(bravo, d).
 define(delta, d).
 
 % these two relations express which definitions can and cannot flow along a particular edge
-% I think they only work when there is exactly one undefine in the entire graph
 flow(D, X, Y) :- edge(X, Y), undefine(D, U), U != Y.
 stop(D, X, Y) :- edge(X, Y), undefine(D, Y).
 
@@ -52,3 +51,8 @@ flow(D, X, Y)?
 stop(D, X, Y)?
 
 push(D, X, Y)?
+
+% I think this approach, and the 'flow' predicate, only works when there is
+% exactly one undefine of each variable in the entire graph. That allows me to
+% say: 'hey, there must be one undefine somewhere, but not here at this node.'
+% to decide the ability to flow.
