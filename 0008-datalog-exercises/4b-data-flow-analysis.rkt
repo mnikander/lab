@@ -41,32 +41,23 @@ empty(start).
 empty(a).
 
 % block b
-undefine(b, charlie).
-undefine(b, echo).
 define(b, bravo).
 
 % block c
-undefine(c, bravo).
-undefine(c, echo).
 define(c, charlie).
 
 % block d
 empty(d).
 
 % block e
-undefine(e, bravo).
-undefine(e, charlie).
 define(e, echo).
 
 % block end
 empty(end).
 
-stop(X, Y, D) :- edge(X, Y), undefine(Y, D).
-
 block(X) :- edge(X, O).
 block(X) :- edge(O, X).
 var(X)   :- define(O, X).
-var(X)   :- undefine(O, X).
 
 available(X, D) :- block(X), var(D), define(X, D).
 available(Y, D) :- available(X, D), edge(X, Y), empty(Y).
@@ -77,7 +68,7 @@ available(start, charlie)?   %
 available(start, echo)?      %
 available(a, bravo)?         %
 available(a, charlie)?       %
-available(a, echo)?          % true       <-- this one always caused trouble
+available(a, echo)?          % true
 available(b, bravo)?         % true
 available(b, charlie)?       %
 available(b, echo)?          %
