@@ -26,6 +26,12 @@ same_generation_impl(X, Y) :- parent(P, X), same_generation_impl(P, Q), parent(Q
 % interestingly, I need to wrap the whole thing to apply the X!=Y condition properly
 same_generation(X, Y) :- same_generation_impl(X, Y), X != Y.
 
+common_ancestor_impl(X, X) :- person(X).
+common_ancestor_impl(X, Y) :- parent(P, X), common_ancestor_impl(P, Q), parent(Q, Y).
+common_ancestor_impl(X, Y) :- parent(P, X), common_ancestor_impl(P, Y), P != X, P != Y, X != Y.
+common_ancestor(X, Y)      :- common_ancestor_impl(X, Y), X != Y.
+
 %person(X)?
 %sibling(A, B)?
-same_generation(X, Y)?
+%same_generation(X, Y)?
+common_ancestor(X, Y)?
