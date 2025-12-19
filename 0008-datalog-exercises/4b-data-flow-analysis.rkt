@@ -34,6 +34,12 @@ edge(d, e).
 edge(e, a).
 edge(e, end).
 
+% block start
+empty(start).
+
+% block a
+empty(a).
+
 % block b
 undefine(b, charlie).
 undefine(b, echo).
@@ -44,54 +50,46 @@ undefine(c, bravo).
 undefine(c, echo).
 define(c, charlie).
 
+% block d
+empty(d).
+
 % block e
 undefine(e, bravo).
 undefine(e, charlie).
 define(e, echo).
 
+% block end
+empty(end).
+
 stop(X, Y, D) :- edge(X, Y), undefine(Y, D).
 
-node(X) :- edge(X, O).
-node(X) :- edge(O, X).
-var(X)  :- define(O, X).
-var(X)  :- undefine(O, X).
+block(X) :- edge(X, O).
+block(X) :- edge(O, X).
+var(X)   :- define(O, X).
+var(X)   :- undefine(O, X).
 
-% If I really wanted to trace what is availble where, and don't have negation,
-% then I would have to change what the nodes encode. Instead of having some
-% nodes encode "you shall not pass", I would have to explicitly encode in most
-% nodes that "you are allowed to pass". 
-
-% assuming there is only a single definition, I can use some tricks:
-defined_elsewhere(X, D) :- node(X), var(D), define(O, D), O != X.
-
-not_available(X, D) :- node(X), var(D), X = start.
-not_available(X, D) :- undefine(X, D).
-not_available(Y, D) :- not_available(X, D), edge(X, Y), defined_elsewhere(Y, D).
-
-% The problem with that 3rd definition is that as soon as one incoming branch
-% exists where the variable is not defined, for example a branch from 'start'
-% then the variable gets labeled as 'not availble', even if another incoming
-% edge defines it.
+available(X, D) :- block(X), var(D), define(X, D).
+available(Y, D) :- available(X, D), edge(X, Y), empty(Y).
 
 % Test Cases:                    % EXPECTATION:
-not_available(start, bravo)?     % true
-not_available(start, charlie)?   % true
-not_available(start, echo)?      % true
-not_available(a, bravo)?         % true
-not_available(a, charlie)?       % true
-not_available(a, echo)?          %        <-- this one causes trouble
-not_available(b, bravo)?         %
-not_available(b, charlie)?       % true
-not_available(b, echo)?          % true
-not_available(c, bravo)?         % true
-not_available(c, charlie)?       %
-not_available(c, echo)?          % true
-not_available(d, bravo)?         % true
-not_available(d, charlie)?       % true
-not_available(d, echo)?          %
-not_available(e, bravo)?         % true
-not_available(e, charlie)?       % true
-not_available(e, echo)?          %
-not_available(end, bravo)?       % true
-not_available(end, charlie)?     % true
-not_available(end, echo)?        %
+available(start, bravo)?     %
+available(start, charlie)?   %
+available(start, echo)?      %
+available(a, bravo)?         %
+available(a, charlie)?       %
+available(a, echo)?          % true       <-- this one always caused trouble
+available(b, bravo)?         % true
+available(b, charlie)?       %
+available(b, echo)?          %
+available(c, bravo)?         %
+available(c, charlie)?       % true
+available(c, echo)?          %
+available(d, bravo)?         %
+available(d, charlie)?       %
+available(d, echo)?          % true
+available(e, bravo)?         %
+available(e, charlie)?       %
+available(e, echo)?          % true
+available(end, bravo)?       %
+available(end, charlie)?     %
+available(end, echo)?        % true
