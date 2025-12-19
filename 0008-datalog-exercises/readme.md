@@ -46,18 +46,34 @@ I hope I can get through those two tutorials and their examples in one or two da
 - in the Transitive Closure exercise, I implemented a check for cyclic graphs, 
 - couldn't find a way to implement a check for acyclic graphs, without access to stratified negation
 - checking for a strict ordering of the graph may be an approch to showing it's also acyclic, but I don't know how to implement that yet
-- implemented same generation exercise
-    - learned how to extract the list of nodes
-    - learned a trick to recurse to a common shared node with exactly equal count
-    - learned that sometimes you need to wrap a rule in order to apply a filtering predicate
-    - extended the implementation to find all nodes on the other side of a split
-- worked on Data Flow Analysis exercise
-    - wrote down the control flow graph for the exercise, it took a while to create the ASCII art by hand
+
+### Exercise: Same Generation
+- learned how to extract the list of nodes
+- learned a trick to recurse to a common shared node with exactly equal count
+- learned that sometimes you need to wrap a rule in order to apply a filtering predicate
+- extended the implementation to find all nodes on the other side of a split
+
+### Exercise: Data Flow Analysis
+- wrote down the control flow graph for the exercise, it took a while to create the ASCII art by hand
+- An interesting note is that there can be an arbitrary number of incoming edges, but if you only have (1) an unconditional jump and (2) a binary branch instruction, then there are exactly 1 or 2 edges leading out of a block. This could be of enourmous significance in terms of what you can and cannot test, depending on the direction in which you traverse the CFG.
+
 
 ## Findings
 <!-- What did I learn? -->
 
 - sometimes it is helpful to wrap an implementation in a new rule, to be able to apply filters properly
+
+### List of nodes / type predicates
+You can list all the entities which take part in a relation, using a simple rule with a free variable (essentially a wildcard):
+```datalog
+edge(a, b).
+edge(a, c).
+edge(b, d).
+node(X) :- edge(X, O).
+node(X) :- edge(O, X).
+node(X)?                % list all nodes
+node(a)?                % only true if 'a' is a node
+```
 
 ## Future Work
 <!-- Are there follow-up questions? -->
