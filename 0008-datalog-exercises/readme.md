@@ -20,7 +20,7 @@ Date: 2025-12-19
 Go through the Souffle tutorial using Datalog in Racket.
 If a feature is not availble in Racket-Datalog, then I can either install Souffle, or just skip over that feature.
 
-0. do [Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) and [Modus tollens](https://en.wikipedia.org/wiki/Modus_tollens)
+0. do [modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) and [modus tollens](https://en.wikipedia.org/wiki/Modus_tollens)
 1. go through the [Racket Datalog tutorial](https://docs.racket-lang.org/datalog/Tutorial.html) and type in the example
 2. do exercise [Transitive Closure](https://souffle-lang.github.io/tutorial#transitive-closure) -- i.e. 'reachable'
 3. do exercise [Same generation](https://souffle-lang.github.io/tutorial#same-generation-example)
@@ -42,8 +42,10 @@ I hope I can get through those two tutorials and their examples in one or two da
 <!-- How do you run the code? -->
 
 - implemented modus ponens and modus tollens easily
-- went through the Racket Datalog tutorial
-- in the Transitive Closure exercise, I implemented a check for cyclic graphs, 
+- went through the Racket Datalog tutorial in about an hour
+
+### Exercise: Transitive Closure
+- implemented a check for cyclic graphs
 - couldn't find a way to implement a check for acyclic graphs, without access to stratified negation
 - checking for a strict ordering of the graph may be an approch to showing it's also acyclic, but I don't know how to implement that yet
 
