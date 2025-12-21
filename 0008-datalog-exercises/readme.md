@@ -77,6 +77,49 @@ node(X)?                % list all nodes
 node(a)?                % only true if 'a' is a node
 ```
 
+### Retraction and Stratification
+
+Racket-Datalog allows 'retraction' of facts, i.e. you can delete a fact from the database.
+The following snippet:
+
+```datalog
+% assert facts
+node(1).
+node(2).
+
+% query
+node(X)?  
+
+% retract facts
+node(2)~
+
+% query again
+node(X)?
+```
+
+Produces this output: 
+```
+node(1)
+node(2)
+node(1)
+```
+This shows that:
+1. the first query is computed on the original database
+2. the retraction is applied to the database
+3. the second query is computed on the modified database
+
+I might be able to use this to hack in stratifiction, i.e. 'stratified negation'.
+I could either (A) just append retrations to the Datalog file or (B) modify the lists used to create the Datalog instance in the first place.
+The second option is especially attractive if I can create the database directly from lists in Racket.
+Possible workflow: compute a query, use the result to manipulate the list used to create the database, recreate a database, and then run the next query on the modified database.
+This workflow might allow me to do static analysis effectively.
+
+### Path encoding via integers?
+You may be able to encode things such as paths taken, by using integers.
+Those integers could be powers of two, added together, so it's like a bitmask which nodes were taken.
+That could have very bad implications on the runtime though, because then you are exhaustively searching for permutations of paths and their sums.
+You'd have to try to construct it in a way that keeps unnecessary searching to a minimum.
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
