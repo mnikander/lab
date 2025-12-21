@@ -3,8 +3,12 @@
 node(1).
 node(2).
 node(3).
-edge(1, 2).
 
-foo(X) :- edge(A, B), X :- *(A, B).
+even(2).
+
+foo(X) :-   node(X),
+            node(A),
+            even(A),
+            X :- add1(A).
 
 foo(X)?
