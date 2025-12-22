@@ -11,6 +11,7 @@ The tables below collect those questions.
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
 | 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
+|      |        | 2025-12-22 | datalog, types       | How can a type checker for strict explicit typing be implemented in Datalog? |
 |      |        | 2025-10-15 | vm, memory           | How can heap allocation be simulated within a garbage-collected runtime environment? |
 |      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **heap memory with generation counters**? |
 |      |        | 2025-10-15 | vm, memory           | How can you detect dangling references into **stack frames with generation counters**? |

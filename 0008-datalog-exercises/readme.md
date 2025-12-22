@@ -130,6 +130,7 @@ You'd have to try to construct it in a way that keeps unnecessary searching to a
 - learn to embed Racket-Datalog inside of Racket programs, so I can do stratification
 - try computing SSA dominance-frontiers in a control flow graph to practice the algorithm (requires stratified negation)
 - try out Souffle or Dataflow for the extra features they have
+- try implementing a naive or semi-naive Datalog engine from scratch, as described [here](https://kmicinski.com/cis700-f23/projects/2)
 
 ---
 **Copyright (c) 2025 Marco Nikander**
