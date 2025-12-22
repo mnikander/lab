@@ -25,11 +25,8 @@ If a feature is not availble in Racket-Datalog, then I can either install Souffl
 2. do exercise [Transitive Closure](https://souffle-lang.github.io/tutorial#transitive-closure) -- i.e. 'reachable'
 3. do exercise [Same generation](https://souffle-lang.github.io/tutorial#same-generation-example)
 4. do exercise [Data-flow analysis](https://souffle-lang.github.io/tutorial#data-flow-analysis-example)
-5. work through [Arithmetic expressions](https://souffle-lang.github.io/tutorial#arithmetic-expressions)
-6. work through [Aggregation](https://souffle-lang.github.io/tutorial#aggregation)
-7. work through [Records](https://souffle-lang.github.io/tutorial#records)
-8. look at [Components](https://souffle-lang.github.io/tutorial#records)
-9. Skim [Performance and profiling facilities](https://souffle-lang.github.io/tutorial#records)
+5. do an example on arithmetic expressions, using the Racket function calls as explained [here](https://docs.racket-lang.org/datalog/datalog.html)
+6. read through the rest of the [Souffle tutorial](https://souffle-lang.github.io/tutorial)
 
 ## Hypothesis
 <!-- What do I think is going to happen? -->
@@ -59,11 +56,16 @@ I hope I can get through those two tutorials and their examples in one or two da
 - wrote down the control flow graph for the exercise, it took a while to create the ASCII art by hand
 - An interesting note is that there can be an arbitrary number of incoming edges, but if you only have (1) an unconditional jump and (2) a binary branch instruction, then there are exactly 1 or 2 edges leading out of a block. This could be of enourmous significance in terms of what you can and cannot test, depending on the direction in which you traverse the CFG.
 
+### Exercise: Arithmetic
+- using basic arithmetic operations from Racket is easy
+- more complex operations from Racket don't seem to work
 
 ## Findings
 <!-- What did I learn? -->
 
 - sometimes it is helpful to wrap an implementation in a new rule, to be able to apply filters properly
+- stratified negation is super valuable, and not having it, limits the usefulness considerably
+- if I want to use Racket Datalog productively, I will probably need to embed the Datalog code into a larger Racket program so that I can do stratification in the Racket portion of the code
 
 ### List of nodes / type predicates
 You can list all the entities which take part in a relation, using a simple rule with a free variable (essentially a wildcard):
@@ -124,7 +126,10 @@ You'd have to try to construct it in a way that keeps unnecessary searching to a
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- try implementing a minimal type-checker using (positive) datalog to find type errors
+- learn to embed Racket-Datalog inside of Racket programs, so I can do stratification
+- try computing SSA dominance-frontiers in a control flow graph to practice the algorithm (requires stratified negation)
+- try out Souffle or Dataflow for the extra features they have
 
 ---
 **Copyright (c) 2025 Marco Nikander**
