@@ -12,10 +12,6 @@ Date: 2025-1
 
 ## Plan
 <!-- What do I want to do? -->
-
-
-
-## Hypothesis
 <!-- What do I think is going to happen? -->
 
 
