@@ -85,7 +85,7 @@ The tables below collect those questions.
 
 ## Rejected
 | Num  | Parent | Created    | Tags                 | Question | Reason for Rejection |
-| ---  | ---    | ---        | ---                  | ---      |
+| ---  | ---    | ---        | ---                  | ---      | --- |
 |      |        | 2025-10-15 | tools, parsing       | ~~How can parsing be done using Bison?~~ | I don't need new AST tooling right now |
 |      |        | 2025-10-15 | tools, lexing        | ~~How can tokenisation be done using flex?~~ | I don't need new AST tooling right now |
 |      |        | 2025-12-26 | tools, ast           | ~~What does TreeSitter do and can I use it for my project?~~ | I don't need AST tooling right now |
