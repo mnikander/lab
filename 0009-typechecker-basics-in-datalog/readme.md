@@ -237,6 +237,52 @@ check(L) :-
     N != N_other.
 ```
 
+#### How do we type-check a function call?
+
+Now let's say we want to type check a unary function call, such as a logical 'not':
+```
+let h: i1 = not 0    % ok
+let i: i1 = not a    % ok
+let j: i1 = not 5    % error: 'not' expects an i1
+let k: i1 = not d    % error: 'not' expects an i1
+let l: i1 = not c    % error: trying to assign from a variable which has an error
+let m: i4 = not 0    % error: trying to assign an i1 into an i4
+```
+
+Unfortunately, allowing functions to take (1) constants and (2) variables as arguments, greatly complicates the rules unless they are rewritten from the ground up.
+
+The new set of rules has a function `check(N, T)` which enforces that the name `N` has type `T`.
+To do this, it looks at the corresponding let-binding for the name `N` and then dispatches to rules which check that the type of a constant, variable, or function call return value is indeed `T`.
+
+Here is the new set of rules:
+
+```
+% relations
+check_constant(L, T) :- constant(L, V), in(T, V).
+check_call(L, T)     :- call(L, F), signature(F, T_other, T), check_arg(L, V, T_other).
+check_arg(L, V, T)   :- arg(L, V), in(T, V).
+check_arg(L, N, T)   :- arg(L, N), check(N, T).
+check(N, T)          :- let(L, N, T), check_constant(L, T).
+check(N, T)          :- let(L, N, T), variable(L, N_other), check(N_other, T).
+check(N, T)          :- let(L, N, T), check_call(L, T).
+
+% function signatures
+signature(not, i1, i1).
+```
+The nice thing about this approach is that the output is also much more readable.
+The query:
+```
+check(N, T)?
+```
+produces the following output:
+```
+check(e, i4).
+check(d, i4).
+check(b, i1).
+check(a, i1).
+check(h, i1).
+check(i, i1).
+```
 ## Findings
 <!-- What did I learn? -->
 

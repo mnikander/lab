@@ -15,18 +15,31 @@ in(i4, 6).
 in(i4, 7).
 
 % relations
-check_expr(L, T) :- constant(L, V), in(T, V).
-check_expr(L, T) :- variable(L, N_other), let(L_other, N_other, T), check(L_other), L != L_other.
-check(L)         :- let(L, N, T), check_expr(L, T).
+check_constant(L, T) :- constant(L, V), in(T, V).
+check_call(L, T)     :- call(L, F), signature(F, T_other, T), check_arg(L, V, T_other).
+check_arg(L, V, T)   :- arg(L, V), in(T, V).
+check_arg(L, N, T)   :- arg(L, N), check(N, T).
+check(N, T)          :- let(L, N, T), check_constant(L, T).
+check(N, T)          :- let(L, N, T), variable(L, N_other), check(N_other, T).
+check(N, T)          :- let(L, N, T), check_call(L, T).
+
+% function signatures
+signature(not, i1, i1).
 
 % code
-let(0, a, i1). constant(0, 0).    % ok
-let(1, b, i1). constant(1, 1).    % ok
-let(2, c, i1). constant(2, 2).    % error
-let(3, d, i4). constant(3, 5).    % ok
-let(4, e, i4). variable(4, d).    % ok
-let(5, f, i1). variable(5, d).    % error
-let(6, g, i1). variable(6, c).    % error
+let( 0, a, i1). constant( 0, 0).              % ok
+let( 1, b, i1). constant( 1, 1).              % ok
+let( 2, c, i1). constant( 2, 2).              % error: trying to assign an i4 into an i1
+let( 3, d, i4). constant( 3, 5).              % ok
+let( 4, e, i4). variable( 4, d).              % ok
+let( 5, f, i1). variable( 5, d).              % error: trying to assign an i4 into an i1
+let( 6, g, i1). variable( 6, c).              % error: trying to assign from a variable which has an error
+let( 7, h, i1). call( 7, not). arg( 7, 0).    % ok
+let( 8, i, i1). call( 8, not). arg( 8, a).    % ok
+let( 9, j, i1). call( 9, not). arg( 9, 5).    % error: 'not' expects an i1
+let(10, k, i1). call(10, not). arg(10, d).    % error: 'not' expects an i1
+let(11, l, i1). call(11, not). arg(11, c).    % error: trying to assign from a variable which has an error
+let(12, m, i4). call(12, not). arg(12, 0).    % error: trying to assign an i1 into an i4
 
 % queries
-check(L)?
+check(N, T)?
