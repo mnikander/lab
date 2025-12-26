@@ -195,6 +195,7 @@ Suppose we have the following code:
 let d: i4 = 5    % ok
 let e: i4 = d    % ok
 let f: i1 = d    % error: trying to assign an i4 into an i1
+let g: i1 = c    % error: trying to assign from a variable which has an error
 ```
 
 We need a way to retrieve the type information of a variable which appears on the right-hand side.
@@ -214,8 +215,27 @@ check(3).
 check(1).
 check(0).
 check(4).
+check(6).
 ```
-So every line except lines #2 and #5 type-check, which is what we expect.
+So every line except lines #2 and #5 type-check, which is not quite what we expect.
+We have to ensure that errors propagate forward.
+Remember that `let c: i1 = 2` was a type error, so `let g: i1 = c` should also be a type error.
+To ensure this, we have to modify the rule, and check that the definition of the variable we are accessing, is valid.
+Our check relation is now defined by these two rules, one of which must be satisfied so that a line L passes the type-check:
+```
+check(L) :-
+    let(L, N, T),
+    constant(L, V),
+    in(T, V).
+
+check(L) :- 
+    let(L, N, T),
+    variable(L, N_other),
+    let(L_other, N_other, T),
+    check(L_other),
+    L != L_other,
+    N != N_other.
+```
 
 ## Findings
 <!-- What did I learn? -->
