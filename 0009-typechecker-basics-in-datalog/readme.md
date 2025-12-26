@@ -187,6 +187,36 @@ let(2, c, i1). constant(2, 2).    % error
 It doesn't look great, but we can make out the original syntax if we squint at it long enough.
 Querying the updated code with `check(L)?` gives the same result as before.
 
+#### How do we look up a variable?
+
+Before we get into functions, and passing arguments into functions, we need to be able to type-check variable lookups.
+Suppose we have the following code:
+```
+let d: i4 = 5    % ok
+let e: i4 = d    % ok
+let f: i1 = d    % error: trying to assign an i4 into an i1
+```
+
+We need a way to retrieve the type information of a variable which appears on the right-hand side.
+For this, we can add a new type-checking rule:
+```
+check(L) :- let(L, N, T), variable(L, N_other), let(L_other, N_other, T), L != L_other, N != N_other.
+```
+This verifies that:
+1. there is a let-binding on the left of the line
+2. a variable access on the right side of the line
+3. the variable on the right side has a let-binding somewhere
+4. the two variables are not actually one and the same
+
+The query `check(L)?` produces the output:
+```
+check(3).
+check(1).
+check(0).
+check(4).
+```
+So every line except lines #2 and #5 type-check, which is what we expect.
+
 ## Findings
 <!-- What did I learn? -->
 
