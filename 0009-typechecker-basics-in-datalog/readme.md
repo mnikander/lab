@@ -256,17 +256,17 @@ To do this, it looks at the corresponding let-binding for the name `N` and then 
 
 Here is the new set of rules:
 ```
+% helpers
+assert_constant(L, T)    :- constant(L, V), in(V, T).
+assert_variable(L, N, T) :- variable(L, N), type(N, T).
+assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
+assert_arg(L, V, T)      :- arg(L, V), in(V, T).
+assert_arg(L, N, T)      :- arg(L, N), type(N, T).
+
 % relations
 type(N, T)               :- let(L, N, T), assert_constant(L, T).
 type(N, T)               :- let(L, N, T), assert_variable(L, N_other, T).
 type(N, T)               :- let(L, N, T), assert_call(L, T).
-
-% helpers
-assert_constant(L, T)    :- constant(L, V), in(T, V).
-assert_variable(L, N, T) :- variable(L, N), type(N, T).
-assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
-assert_arg(L, V, T)      :- arg(L, V), in(T, V).
-assert_arg(L, N, T)      :- arg(L, N), type(N, T).
 
 % function signatures
 signature(not, i1, i1).

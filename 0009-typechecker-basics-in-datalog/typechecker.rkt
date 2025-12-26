@@ -1,25 +1,27 @@
 #lang datalog
 
 % definition of type i1, i.e. booleans
-in(i1, 0).
-in(i1, 1).
+in(0, i1).
+in(1, i1).
 
 % definition of type i4
-in(i4, 0).
-in(i4, 1).
-in(i4, 2).
-in(i4, 3).
-in(i4, 4).
-in(i4, 5).
-in(i4, 6).
-in(i4, 7).
+in(0, i4).
+in(1, i4).
+in(2, i4).
+in(3, i4).
+in(4, i4).
+in(5, i4).
+in(6, i4).
+in(7, i4).
 
-% relations
-assert_constant(L, T)    :- constant(L, V), in(T, V).
+% helpers
+assert_constant(L, T)    :- constant(L, V), in(V, T).
 assert_variable(L, N, T) :- variable(L, N), type(N, T).
 assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
-assert_arg(L, V, T)      :- arg(L, V), in(T, V).
+assert_arg(L, V, T)      :- arg(L, V), in(V, T).
 assert_arg(L, N, T)      :- arg(L, N), type(N, T).
+
+% relations
 type(N, T)               :- let(L, N, T), assert_constant(L, T).
 type(N, T)               :- let(L, N, T), assert_variable(L, N_other, T).
 type(N, T)               :- let(L, N, T), assert_call(L, T).
