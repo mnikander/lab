@@ -127,18 +127,18 @@ let(2, c, i1, 2).    % error
 
 To check them, we introduce the following relation:
 ```
-correctly_typed(Line) :- let(L, N, T, V), in(T, V).
+check(L) :- let(L, N, T, V), in(T, V).
 ```
 L is the line number, N is the name, T is the type, and V is the Value.
 For this to hold, there must be a relation `let` for a given line number, and the type and value of that let-binding must satisfy the relation `in`.
 We can query our new relation with:
 ```
-correctly_typed(X)?
+check(L)?
 ```
 Which produces the following output:
 ```
-correctly_typed(0).
-correctly_typed(1).
+check(0).
+check(1).
 ```
 Notably, line #2 `let z: i1 = 2`, which has a type error, is not on this list. 
 So far so good. :)
@@ -149,8 +149,8 @@ Suppose we want to call a function, and store the result in a variable.
 Let's start with logical function `not`, with the signature `i1 -> i1`.
 In other words, it takes a boolean and returns a boolean.
 ```
-let d: i1 = not 0    % ok
-let e: i1 = not 2    % error
+let x: i1 = not 0    % ok
+let y: i1 = not 2    % error
 ```
 How do we encode that?
 It doesn't fit into the schema we defined for our let-binding.
@@ -164,7 +164,7 @@ We introduce a new relation `constant` with two arguments:
 Our code now looks like this:
 ```
 % relations
-correctly_typed(L) :- let(L, N, T), constant(L, V), in(T, V).
+check(L) :- let(L, N, T), constant(L, V), in(T, V).
 
 % expressions
 
@@ -185,8 +185,7 @@ let(1, b, i1). constant(1, 1).    % ok
 let(2, c, i1). constant(2, 2).    % error
 ```
 It doesn't look great, but we can make out the original syntax if we squint at it long enough.
-Querying the updated code with `correctly_typed(X)?` gives the same result as before.
-
+Querying the updated code with `check(L)?` gives the same result as before.
 
 ## Findings
 <!-- What did I learn? -->
