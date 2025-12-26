@@ -282,10 +282,16 @@ check(h, i1).
 check(i, i1).
 ```
 
-#### TODO: How can n-ary functions be type-checked?
+#### TODO: How do we type-check n-ary function calls?
 
-- I need to either create a linked-list of arguments or key the arguments by position
+- I need to find a way to encode the signatures of n-ary functions
+- I need to either create a linked-list of arguments via `cons(First, Rest)`, key the arguments by position, or key the arguments by their parameter names
 - I can represent functions as n-ary functions or curry them (i.e. make them nested unary functions)
+- Should higher-order functions be allowed?
+
+An `arrow(From, To)` relation could be used to encode various structures such as:
+- `i4 -> i4 -> i4` which is `i4 -> (i4 -> i4)`
+- `(i4 -> i4) -> i4`
 
 ## Findings
 <!-- What did I learn? -->
