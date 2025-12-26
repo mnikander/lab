@@ -51,7 +51,47 @@ Or should I use a dedicated relation for each one?
 
 ### 2nd Attempt: Start Simple, Take it Slow
 
+We are going to define some types manually, so that we have something concrete to work with.
 
+```
+i1 = {0, 1}
+i4 = {0, 1, 2, 3, 4, 5, 6, 7}
+```
+
+Later on, we could try adding a type for natural numbers, defined inductively.
+That means we have a zero-element and a successor function, so the number 3 is encoded as `successor(successor(successor(zero)))`.
+For now, we are going to stick to `i1` (typically called 'boolean') and `i4`.
+For type-checking, let's start with a simple let-binding.
+
+```
+let x: i1 = 0  % ok
+let y: i1 = 1  % ok
+let z: i1 = 2  % type-error
+```
+
+Since we are using monotonic logic, do not have access to negation, stratified or otherwise, we need to formulate our problem accordingly.
+Apparently, the usual solution is to formulate the type-checker as something that finds errors.
+That already raises the first question: without negation, how can we possibly discover that the value `2` is _not_ in the set `{0, 1}`?
+We may actually (1) have to find the valid definitions instead, or (2) provide predicates such as `not_i1(X)` which include the negation in a hard-coded way.
+Let's try approach 1, since it scales better if we add further types in the future.
+So, we are searching for correctly typed statements.
+
+We manually define the types:
+```
+% definition of type i1, i.e. booleans
+i1(0).
+i1(1).
+
+% definition of type i4
+i4(0).
+i4(1).
+i4(2).
+i4(3).
+i4(4).
+i4(5).
+i4(6).
+i4(7).
+```
 
 ## Findings
 <!-- What did I learn? -->

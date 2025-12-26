@@ -1,35 +1,21 @@
 #lang datalog
 
-% definitions
-variable(X) :- let(X, O).
-variable(X) :- function(X, O).
+% definition of type i1, i.e. booleans
+i1(0).
+i1(1).
 
-type(T)     :- cons(T, A, B), type(A), type(B).
-type(red).
-type(green).
-type(blue).
+% definition of type i4
+i4(0).
+i4(1).
+i4(2).
+i4(3).
+i4(4).
+i4(5).
+i4(6).
+i4(7).
 
-% foo :: green -> green
-% bar :: red   -> green -> blue
-%
-% let r: red   = empty
-% let g: green = empty
-% let b: blue  = empty
-%
-% let i: green = (foo g)
-% let j: blue  = (foo g)  % error
-
-% variable bindings
-let(r, red  , empty).
-let(g, green, empty).
-let(b, blue , empty).
-
-% function foo
-cons(sig_foo, green, green).
-function(foo, sig_foo).
-
-% calls to 'foo'
-call(c0, foo, green).
-call(c1, foo, blue).
-
-type(X)?
+% queries
+i1(X)?
+i4(X)?
+i1(42)?
+i4(42)?
