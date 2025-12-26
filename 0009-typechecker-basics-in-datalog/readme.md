@@ -281,10 +281,19 @@ check(e, i4).
 check(h, i1).
 check(i, i1).
 ```
+
+#### TODO: How can n-ary functions be type-checked?
+
+- I need to either create a linked-list of arguments or key the arguments by position
+- I can represent functions as n-ary functions or curry them (i.e. make them nested unary functions)
+
 ## Findings
 <!-- What did I learn? -->
 
-
+- The Datalog code can be reasonably similar to the actual code. That's kind of nice, because in might make it easier to write the source-to-source conversion to actually use such a type-checker.
+- Searching for type-errors seems like it's impossible in positive Datalog (i.e. monotonic logic).
+- Listing the terms which _can_ be typed successfully, seems to work well.
+- I read somewhere that it is good design to structure the rules in layers, i.e. top level rules, helpers, and facts. This design philosophy was very helpful here.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
