@@ -15,14 +15,14 @@ in(i4, 6).
 in(i4, 7).
 
 % relations
-check_constant(L, T)    :- constant(L, V), in(T, V).
-check_variable(L, N, T) :- variable(L, N), check(N, T).
-check_call(L, T)        :- call(L, F), signature(F, T_other, T), check_arg(L, V, T_other).
-check_arg(L, V, T)      :- arg(L, V), in(T, V).
-check_arg(L, N, T)      :- arg(L, N), check(N, T).
-check(N, T)             :- let(L, N, T), check_constant(L, T).
-check(N, T)             :- let(L, N, T), check_variable(L, N_other, T).
-check(N, T)             :- let(L, N, T), check_call(L, T).
+assert_constant(L, T)    :- constant(L, V), in(T, V).
+assert_variable(L, N, T) :- variable(L, N), type(N, T).
+assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
+assert_arg(L, V, T)      :- arg(L, V), in(T, V).
+assert_arg(L, N, T)      :- arg(L, N), type(N, T).
+type(N, T)               :- let(L, N, T), assert_constant(L, T).
+type(N, T)               :- let(L, N, T), assert_variable(L, N_other, T).
+type(N, T)               :- let(L, N, T), assert_call(L, T).
 
 % function signatures
 signature(not, i1, i1).
@@ -43,4 +43,4 @@ let(11, l, i1). call(11, not). arg(11, c).    % error: trying to assign from a v
 let(12, m, i4). call(12, not). arg(12, 0).    % error: trying to assign an i1 into an i4
 
 % queries
-check(N, T)?
+type(N, T)?
