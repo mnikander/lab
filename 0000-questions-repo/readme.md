@@ -41,10 +41,19 @@ I suspect that for larger questions, strong interest in the topic will be especi
 
 Set up the repo and template as described.
 Created the this whole project as the very first question.
-Tried several smaller questions (0001 - 0004) and then a much larger question (0005).
+Tried several smaller 2-3 hour questions (0001 - 0004) and then a much larger question (0005).
 Got a little stuck in 0005 with the implementation of function calls for 3-address code.
+I think the 3AC prototype took more than 10 hours.
 At the same time, external circumstances halted development work for several weeks.
 That froze this project entirely.
+Picked it up again with a 2 hour exercise on cons-cells (0006), which was good for motivation.
+Creating that 3-address-code prototype was instrumental in getting started in the domain of IRs.
+The prototype served as the foundation for a separate repository for an IR and the exploration of static single assignment form.
+That prototype opened the door.
+Did a 2 hour experiment 0007 on how to get Datalog working, first I tried Souffle and then tried Datalog in Racket.
+Again, this experiment opened the door, this time to learning Datalog.
+I did a ~10 hour experiment 0008 where I worked through Datalog tutorials and one particularly challenging exercise.
+It did drag on for a bit, but it got me into the topic.
 
 ## Findings
 <!-- What did I learn? -->
@@ -55,11 +64,24 @@ That froze this project entirely.
 - it's fun to try out new things in this quick and easy context, without having to think/worry about a larger codebase
 - this could be a really good way to try out a wider variety of things, outside of languages and compilers as well
 - large questions bring a greater risk of getting stuck
+- 1 to 3 hour questions are typically better for motivation: it's easier to get started and more satisfying
+- 10 hour+ questions often feel like a drag, but they can really open the door to some new stuff
+- it's unclear how to split a larger task into several smaller ones, within the current folder/repository structure -- this _is_ actually a problem
 - usually only one question is in progress at a time, so having one large question open for a long time, effectively suppresses small questions -> it would be wise to move large questions into another repo sooner so small experiments can continue here, one at a time
+- the 'Hypothesis' heading is not necessary for things like doing a tutorial, so the heading was removed to simplify the template
+- 'notes' were never taken separately, so the folder was removed
+- the notes _within_ the experiments are useful for future reference, especially the ones on setting up / trying a framework or tool for the first time -- those have been valuable references to look things up again a few weeks later
+- the desire to work on the main project is strong, and often it feels off-topic to do a coding lab -- that feeling is an obstacle to doing more of these experiments
+- coding labs are extremely effective in opening the door to new topics and getting started
+- it was tricky to keep at it during work weeks, so forming a habit or a weekly routine around this could be really helpful (one lab per week?)
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
+
+- How can the repository be structured so that large experiments be broken up into several smaller ones, with shared code?
+- How can the mindset be shifted from the main project to more small coding labs?
+- Can these coding labs be made into a regular habit?
 
 ---
 **Copyright (c) 2025 Marco Nikander**

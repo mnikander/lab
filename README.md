@@ -10,7 +10,6 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
 |      |        | 2025-12-22 | datalog, types       | How can a basic type checker for strict typing be implemented in Datalog? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
 |      |        | 2025-12-26 | ir                   | How do you compile a Rust program to MIR? |
@@ -82,6 +81,7 @@ The tables below collect those questions.
 | 0003 |        | 2025-10-05 | parsing              | How can the language of balanced parentheses be verified by a table-driven parser? |
 | 0002 |        | 2025-06-08 | evaluation           | How can de Bruijn levels be used to evaluate unary lambda calculus? |
 | 0001 |        | 2025-10-15 | typescript, deno     | How can Deno be used to prototype a function and a test in typescript? |
+| 0000 |        | 2025-10-15 | learning             | Can a questions repo, with compact code snippets and notes, speed up learning and implementation? |
 
 ## Rejected
 | Num  | Parent | Created    | Tags                 | Question | Reason for Rejection |
