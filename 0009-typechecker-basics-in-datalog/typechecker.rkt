@@ -15,8 +15,9 @@ in(i4, 6).
 in(i4, 7).
 
 % relations
-check(L) :- let(L, N, T), constant(L, V), in(T, V).
-check(L) :- let(L, N, T), variable(L, N_other), let(L_other, N_other, T), check(L_other), L != L_other, N != N_other.
+check_expr(L, T) :- constant(L, V), in(T, V).
+check_expr(L, T) :- variable(L, N_other), let(L_other, N_other, T), check(L_other), L != L_other.
+check(L)         :- let(L, N, T), check_expr(L, T).
 
 % code
 let(0, a, i1). constant(0, 0).    % ok
