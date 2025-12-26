@@ -14,13 +14,14 @@ in(5, i4).
 in(6, i4).
 in(7, i4).
 
-% Helpers, note that in the following:
+% Note that in the following:
 % - L is a Line number
 % - N is a Name of a variable
 % - V is a Value of a constant
 % - T is a Type
 % - F is a Function name
 
+% Helpers
 assert_constant(L, T)    :- constant(L, V), in(V, T).
 assert_variable(L, N, T) :- variable(L, N), type(N, T).
 assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
