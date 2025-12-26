@@ -64,9 +64,9 @@ For now, we are going to stick to `i1` (typically called 'boolean') and `i4`.
 For type-checking, let's start with a simple let-binding.
 
 ```
-let x: i1 = 0  % ok
-let y: i1 = 1  % ok
-let z: i1 = 2  % type-error
+let a: i1 = 0  % ok
+let b: i1 = 1  % ok
+let c: i1 = 2  % type-error
 ```
 
 Since we are using monotonic logic, do not have access to negation, stratified or otherwise, we need to formulate our problem accordingly.
@@ -92,8 +92,7 @@ i4(5).
 i4(6).
 i4(7).
 ```
-
-Now we need a way to represent a let-binding.
+#### How do we represent a let-binding?
 We want to include the following information: 
 - line number
 - variable name
@@ -105,7 +104,7 @@ We can do this with a relation of the Form:
 let(line, name, type, value)
 ```
 
-If we write `let(0, x, i1, 0).` we immediately run into two problems, however.
+If we write `let(0, a, i1, 0).` we immediately run into two problems, however.
 (1) we have a naming conflict between the predicate `i1` which we defined earlier and the type name `i1` which we want to use in this let-binding.
 (2) we have no way to get from the type name to the predicate to actually do any checking
 
@@ -121,9 +120,9 @@ That gives us a relation between the typename and the value.
 
 Now how do we check our let-bindings for correctness?
 ```
-let(0, x, i1, 0).    % ok
-let(1, y, i1, 1).    % ok
-let(2, z, i1, 2).    % error
+let(0, a, i1, 0).    % ok
+let(1, b, i1, 1).    % ok
+let(2, c, i1, 2).    % error
 ```
 
 To check them, we introduce the following relation:
@@ -143,6 +142,51 @@ correctly_typed(1).
 ```
 Notably, line #2 `let z: i1 = 2`, which has a type error, is not on this list. 
 So far so good. :)
+
+#### How do we allow expressions on the right-hand side?
+
+Suppose we want to call a function, and store the result in a variable.
+Let's start with logical function `not`, with the signature `i1 -> i1`.
+In other words, it takes a boolean and returns a boolean.
+```
+let d: i1 = not 0    % ok
+let e: i1 = not 2    % error
+```
+How do we encode that?
+It doesn't fit into the schema we defined for our let-binding.
+If we wanted to encode the whole thing in the let-binding, we would have to add extra positions for the arguments.
+If functions can have any number of arguments, this becomes untenable.
+One solution for this is to split the left-hand side and the right-hand side into two separate relations, so that we gain flexibility.
+We introduce a new relation `constant` with two arguments:
+1. a line-number L, for which it is the right-hand side
+2. the constant value it represents
+
+Our code now looks like this:
+```
+% relations
+correctly_typed(L) :- let(L, N, T), constant(L, V), in(T, V).
+
+% expressions
+
+let(0, a, i1).
+constant(0, 0).    % ok
+
+let(1, b, i1). 
+constant(1, 1).    % ok
+
+let(2, c, i1). 
+constant(2, 2).    % error
+```
+
+We can also omit several newlines and write it as:
+```
+let(0, a, i1). constant(0, 0).    % ok
+let(1, b, i1). constant(1, 1).    % ok
+let(2, c, i1). constant(2, 2).    % error
+```
+It doesn't look great, but we can make out the original syntax if we squint at it long enough.
+Querying the updated code with `correctly_typed(X)?` gives the same result as before.
+
 
 ## Findings
 <!-- What did I learn? -->
