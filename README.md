@@ -10,7 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-|      |        | 2025-12-22 | datalog, types       | How can a basic type checker for strict typing be implemented in Datalog? |
+| 0009 |        | 2025-12-22 | datalog, types       | How can a basic type-checker be implemented in Datalog? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
 |      |        | 2025-12-26 | ir                   | How do you compile a Rust program to MIR? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for stack-values? |
