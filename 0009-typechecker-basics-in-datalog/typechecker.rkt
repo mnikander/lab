@@ -15,13 +15,14 @@ in(i4, 6).
 in(i4, 7).
 
 % relations
-check_constant(L, T) :- constant(L, V), in(T, V).
-check_call(L, T)     :- call(L, F), signature(F, T_other, T), check_arg(L, V, T_other).
-check_arg(L, V, T)   :- arg(L, V), in(T, V).
-check_arg(L, N, T)   :- arg(L, N), check(N, T).
-check(N, T)          :- let(L, N, T), check_constant(L, T).
-check(N, T)          :- let(L, N, T), variable(L, N_other), check(N_other, T).
-check(N, T)          :- let(L, N, T), check_call(L, T).
+check_constant(L, T)    :- constant(L, V), in(T, V).
+check_variable(L, N, T) :- variable(L, N), check(N, T).
+check_call(L, T)        :- call(L, F), signature(F, T_other, T), check_arg(L, V, T_other).
+check_arg(L, V, T)      :- arg(L, V), in(T, V).
+check_arg(L, N, T)      :- arg(L, N), check(N, T).
+check(N, T)             :- let(L, N, T), check_constant(L, T).
+check(N, T)             :- let(L, N, T), check_variable(L, N_other, T).
+check(N, T)             :- let(L, N, T), check_call(L, T).
 
 % function signatures
 signature(not, i1, i1).
