@@ -76,13 +76,13 @@ We may actually (1) have to find the valid definitions instead, or (2) provide p
 Let's try approach 1, since it scales better if we add further types in the future.
 So, we are searching for correctly typed statements.
 
-We manually define the types:
+We manually define type-precicates:
 ```
-% definition of type i1, i.e. booleans
+% definition of what is in type i1, i.e. booleans
 i1(0).
 i1(1).
 
-% definition of type i4
+% definition of what is in type i4
 i4(0).
 i4(1).
 i4(2).
@@ -92,6 +92,57 @@ i4(5).
 i4(6).
 i4(7).
 ```
+
+Now we need a way to represent a let-binding.
+We want to include the following information: 
+- line number
+- variable name
+- variable type
+- value
+
+We can do this with a relation of the Form:
+```
+let(line, name, type, value)
+```
+
+If we write `let(0, x, i1, 0).` we immediately run into two problems, however.
+(1) we have a naming conflict between the predicate `i1` which we defined earlier and the type name `i1` which we want to use in this let-binding.
+(2) we have no way to get from the type name to the predicate to actually do any checking
+
+This means we need to change how we define the types.
+Let's change them to:
+```
+in(i1, 0).
+in(i1, 1).
+in(i4, 0).
+```
+... and so on.
+That gives us a relation between the typename and the value.
+
+Now how do we check our let-bindings for correctness?
+```
+let(0, x, i1, 0).    % ok
+let(1, y, i1, 1).    % ok
+let(2, z, i1, 2).    % error
+```
+
+To check them, we introduce the following relation:
+```
+correctly_typed(Line) :- let(L, N, T, V), in(T, V).
+```
+L is the line number, N is the name, T is the type, and V is the Value.
+For this to hold, there must be a relation `let` for a given line number, and the type and value of that let-binding must satisfy the relation `in`.
+We can query our new relation with:
+```
+correctly_typed(X)?
+```
+Which produces the following output:
+```
+correctly_typed(0).
+correctly_typed(1).
+```
+Notably, line #2 `let z: i1 = 2`, which has a type error, is not on this list. 
+So far so good. :)
 
 ## Findings
 <!-- What did I learn? -->
