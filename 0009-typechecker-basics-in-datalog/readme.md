@@ -1,7 +1,9 @@
-# Question
+# Questions
 <!-- What am I figuring out? -->
 
-How can a basic type-checker be implemented in Datalog?
+1. How can a basic type-checker be implemented in Datalog?
+2. How can multi-argument functions be type-checked using Datalog? |
+3. Can type-errors be found using monotic logic, without stratified negation? |
 
 Date: 2025-12-26
 
@@ -194,7 +196,7 @@ check(h, i1).
 check(i, i1).
 ```
 
-#### TODO: How do we type-check n-ary function calls?
+### 4. Multi-Argument Functions (TODO)
 
 - I need to find a way to encode the signatures of n-ary functions
 - I need to either create a linked-list of arguments via `cons(First, Rest)`, key the arguments by position, or key the arguments by their parameter names
@@ -204,6 +206,21 @@ check(i, i1).
 An `arrow(From, To)` relation could be used to encode various structures such as:
 - `i4 -> i4 -> i4` which is `i4 -> (i4 -> i4)`
 - `(i4 -> i4) -> i4`
+
+### 5. Searching for Errors (TODO)
+
+A big problem with searching for valid code, is that we don't get error messages.
+Searching for invalid code, could actually report which lines were incorrect, and maybe even what the problem is.
+
+Is it possible to take the relation:
+```
+type(N, T) :- let(L, N, T), assert_constant(L, T).
+```
+and change it to something like:
+```
+type_mismatch(L, N, T) :- let(L, N, T), assert_constant(L, T_other), T != T_other.
+```
+Something like this might allow us to find type errors, and even give us the line-number where an error occurred.
 
 ## Findings
 <!-- What did I learn? -->
