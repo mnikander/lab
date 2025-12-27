@@ -211,16 +211,16 @@ An `arrow(From, To)` relation could be used to encode various structures such as
 
 A big problem with searching for valid code, is that we don't get error messages.
 Searching for invalid code, could actually report which lines were incorrect, and maybe even what the problem is.
-
-Is it possible to take the relation:
+Perhaps this relation:
 ```
 type(N, T) :- let(L, N, T), assert_constant(L, T).
 ```
-and change it to something like:
+can be changed to something like:
 ```
 type_mismatch(L, N, T) :- let(L, N, T), assert_constant(L, T_other), T != T_other.
 ```
-Something like this might allow us to find type errors, and even give us the line-number where an error occurred.
+This might allow searching for _type errors_, and even provide the line-number where the error occurred.
+That's what we _expect_ from a type-checker.
 
 ## Findings
 <!-- What did I learn? -->
