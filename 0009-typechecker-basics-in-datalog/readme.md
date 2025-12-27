@@ -188,12 +188,12 @@ To do this, it looks at the corresponding let-binding for the name `N` and then 
 The nice thing about this approach is that the output is also much more readable.
 The query `type(N, T)?` produces the following output:
 ```
-check(d, i4).
-check(b, i1).
-check(a, i1).
-check(e, i4).
-check(h, i1).
-check(i, i1).
+type(d, i4).
+type(b, i1).
+type(a, i1).
+type(e, i4).
+type(h, i1).
+type(i, i1).
 ```
 
 ### 4. Multi-Argument Functions (TODO)
