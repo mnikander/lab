@@ -199,11 +199,24 @@ type(i, i1).
 ### 4. Multi-Argument Functions (TODO)
 
 - I need to find a way to encode the signatures of n-ary functions
-- I need to either create a linked-list of arguments via `cons(First, Rest)`, key the arguments by position, or key the arguments by their parameter names
+- I need to either create a linked-list of arguments via `cons(First, Rest)`, key the arguments by position, or key the arguments by their parameter names.
 - I can represent functions as n-ary functions or curry them (i.e. make them nested unary functions)
 - Should higher-order functions be allowed?
 
-An `arrow(From, To)` relation could be used to encode various structures such as:
+#### Idea: Indexed Signatures and Arguments
+Functions and their type signatures could be defined like this:
+```
+fn(100, not). input(100, 0, i1). output(100, 0, i1).                               % not :: i1 -> i1
+fn(101, logical_and). input(101, 0, i1). input(101, 1, i1). output(101, 0, i1).    % and :: i1 -> i1 -> i1
+```
+Since there is no way to express the universal quanitifier in monotonic logic, we cannot express that _all arguments must type check correctly_.
+This approach would be well-suited for a type-checker which searches for errors, i.e. finds an argument for which the type does not match.
+This approach also has the drawback that functions as arguments and functions as return types cannot be expressed.
+That is not an issue for a low-level intermediate representation, but it would be incovenient for a high-level language.
+
+#### Idea: Cons Signatures and Arguments
+
+An `arrow(From, To)` relation, or a cons-cell, could be used to encode various structures such as:
 - `i4 -> i4 -> i4` which is `i4 -> (i4 -> i4)`
 - `(i4 -> i4) -> i4`
 
