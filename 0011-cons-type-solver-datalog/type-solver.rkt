@@ -40,11 +40,11 @@ match(Sig, Args, T)    :- cons(Sig, S_first, S_rest), cons(Args, A_first, A_rest
 
 % Function declarations
 
-% 'flip' : i1 -> i1
-func(flip). type(flip, sf0). cons(sf0, i1, sf1). cons(sf1, i1, nil).
+%   unary : i1 -> i1
+func(unary). type(unary, sig_u0). cons(sig_u0, i1, sig_u1). cons(sig_u1, i1, nil).
 
-% 'mix'  : i1 -> i1 -> i1
-func(mix ). type(mix , sm0). cons(sm0, i1, sm1). cons(sm1, i1, sm2). cons(sm2, i1, nil).
+%  binary : i1 -> i1 -> i1
+func(binary ). type(binary , sig_b0). cons(sig_b0, i1, sig_b1). cons(sig_b1, i1, sig_b2). cons(sig_b2, i1, nil).
 
 
 % Define atoms and cons-cells
@@ -62,34 +62,34 @@ atom(d, 666).              % error
 type(d, i1).
 
 
-% Call unary function 'flip'
+% Call unary function 'unary'
 
-call(e, flip, arg_e0).     % ok
+call(e, unary, arg_e0).     % ok
 type(e, i1).
 cons(arg_e0, a, nil).
 
-call(f, flip, arg_f0).     % ok
+call(f, unary, arg_f0).     % ok
 type(f, i1).
 cons(arg_f0, b, nil).
 
-call(g, flip, arg_g0).     % error
+call(g, unary, arg_g0).     % error
 type(g, i4).
 cons(arg_g0, b, nil).
 
 
-% Call binary function 'flip'
+% Call binary function 'unary'
 
-call(j, mix, arg_j0).      % ok
+call(j, binary, arg_j0).      % ok
 type(j, i1).
 cons(arg_j0, a, arg_j1).
 cons(arg_j1, b, nil).
 
-call(k, mix, arg_k0).      % error
+call(k, binary, arg_k0).      % error
 type(k, i4).
 cons(arg_k0, a, arg_k1).
 cons(arg_k1, b, nil).
 
-call(l, mix, arg_l0).      % error
+call(l, binary, arg_l0).      % error
 type(l, i1).
 cons(arg_l0, b, nil).
 
