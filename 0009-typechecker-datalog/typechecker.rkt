@@ -26,11 +26,8 @@ in(7, i4).
 %
 % Equality relation between atoms and cons-cells:
 equal(L, nil, nil) :- let(L, N, T).
-equal(L, A, B)     :- atom(L, A, AL), atom(L, B, BR), AL = BR.
+equal(L, A, B)     :- atom(L, A, VA), atom(L, B, VB), VA = VB.
 equal(L, A, B)     :- cons(L, A, A1, A2), cons(L, B, B1, B2), equal(L, A1, B1), equal(L, A2, B2).
-
-is(L, V, T) :- let(L, N, T_other), in(V, T).
-is(L, V, T) :- cons(L, V, VA, VB), cons(L_other, T, TA, TB), is(L, VA, TA), is(L, VB, TB).
 
 % Note that in the following:
 % - L is a Line number
@@ -42,17 +39,32 @@ is(L, V, T) :- cons(L, V, VA, VB), cons(L_other, T, TA, TB), is(L, VA, TA), is(L
 % Helpers
 assert_constant(L, T)    :- constant(L, V), in(V, T).
 assert_variable(L, N, T) :- variable(L, N), type(N, T).
-assert_call(L, T)        :- call(L, F), signature(F, T_other, T), assert_arg(L, V, T_other).
-assert_arg(L, V, T)      :- arg(L, V), in(V, T).
-assert_arg(L, N, T)      :- arg(L, N), type(N, T).
+
+assert_call(L, T)  :- 
+    call      (L   , Func, Args),
+    atom      (L   , Args, V   ),
+    fn        (Ldef, Func, Sgnt),
+    cons      (Ldef, Sgnt, In , Out),
+    atom      (Ldef, In  , T_in),
+    atom      (Ldef, Out , T   ),    
+    in        (V   , T_in).
+
+assert_call(L, T)  :- 
+    call      (L   , Func, Args),
+    atom      (L   , Args, N   ),
+    fn        (Ldef, Func, Sgnt),
+    cons      (Ldef, Sgnt, In , Out),
+    atom      (Ldef, In  , T_in),
+    atom      (Ldef, Out , T   ),
+    type      (N,    T).
+
+% for multi-argument functions, a `cons(Ldef, In, TA, TB),` is needed
+% for function or tuple return types, a `cons(Ldef, Out, A, B)` is needed
 
 % Relations
 type(N, T)               :- let(L, N, T), assert_constant(L, T).
 type(N, T)               :- let(L, N, T), assert_variable(L, N_other, T).
 type(N, T)               :- let(L, N, T), assert_call(L, T).
-
-% Function signatures
-signature(not, i1, i1).                      % not :: i1 -> i1
 
 % Code has the form:
 %
@@ -66,46 +78,28 @@ signature(not, i1, i1).                      % not :: i1 -> i1
 % sign, and the constant, variable access, function call, and parameters on the
 % right-hand side, are all stitched together using their source line number.
 
-let( 0, a, i1). constant( 0, 0).                    % ok
-let( 1, b, i1). constant( 1, 1).                    % ok
-let( 2, c, i1). constant( 2, 2).                    % error: assigned an i4 into an i1
-let( 3, d, i4). constant( 3, 5).                    % ok
-let( 4, e, i4). variable( 4, d).                    % ok
-let( 5, f, i1). variable( 5, d).                    % error: assigned an i4 into an i1
-let( 6, g, i1). variable( 6, c).                    % error: assigned from a variable which has an error
-let( 7, h, i1). call( 7, not). arg( 7, 0).          % ok
-let( 8, i, i1). call( 8, not). arg( 8, a).          % ok
-let( 9, j, i1). call( 9, not). arg( 9, 5).          % error: 'not' expects an i1
-let(10, k, i1). call(10, not). arg(10, d).          % error: 'not' expects an i1
-let(11, l, i1). call(11, not). arg(11, c).          % error: assigned from a variable which has an error
-let(12, m, i4). call(12, not). arg(12, 0).          % error: assigned an i1 into an i4
+let( 0, a, i1). constant( 0, 0).                         % ok
+let( 1, b, i1). constant( 1, 1).                         % ok
+let( 2, c, i1). constant( 2, 2).                         % error: assigned an i4 into an i1
+let( 3, d, i4). constant( 3, 5).                         % ok
+let( 4, e, i4). variable( 4, d).                         % ok
+let( 5, f, i1). variable( 5, d).                         % error: assigned an i4 into an i1
+let( 6, g, i1). variable( 6, c).                         % error: assigned from a variable which has an error
+let( 7, h, i1). call( 7, not, arg). atom( 7, arg, 0).    % ok
+let( 8, i, i1). call( 8, not, arg). atom( 8, arg, a).    % ok
+let( 9, j, i1). call( 9, not, arg). atom( 9, arg, 5).    % error: 'not' expects an i1
+let(10, k, i1). call(10, not, arg). atom(10, arg, d).    % error: 'not' expects an i1
+let(11, l, i1). call(11, not, arg). atom(11, arg, c).    % error: assigned from a variable which has an error
+let(12, m, i4). call(12, not, arg). atom(12, arg, 0).    % error: assigned an i1 into an i4
 
-% logical_not: i1 -> i1
+% not: i1 -> i1
+fn(14, not, signature). cons(14, signature, in, out). atom(14, in, i1). atom(14, out, i1).
 
-fn(14, logical_not, signature). cons(14, signature, in, out). atom(14, in, i1). atom(14, out, i1).
-
-let(15, n, i1). mcall(15, logical_not, args). atom(15, args, 0).    % let n := call not 0
-let(16, n, i1). mcall(16, logical_not, args). atom(16, args, 2).    % let n := call not 2
-
-assert_multi_call(L, T)  :- 
-    mcall     (L   , Func, Args),
-    atom      (L   , Args, V   ),
-    fn        (Ldef, Func, Sgnt),
-    cons      (Ldef, Sgnt, In , Out),
-    atom      (Ldef, In  , T_in),
-    atom      (Ldef, Out , T   ),    % for a higher-order function or tuple, a cons-cell would need to be supported here too
-    is        (L   , V   , T_in).
-
-assert_multi_call(L, T)  :- 
-    mcall     (L   , Func, Args),
-    cons      (L   , Args, VL  , VR  ),
-    fn        (Ldef, Func, Sgnt),
-    cons      (Ldef, Sgnt, In , Out),
-    cons      (Ldef, In  , Lsig, Rsig),
-    atom      (Ldef, Out , T   ),    % for a higher-order function or tuple, a cons-cell would need to be supported here too
-    is        (L   , V   , T_in).
+% Testing queries
+let(15, n, i1). call(15, not, args). atom(15, args, 0).    % let n := call not 0
+let(16, n, i1). call(16, not, args). atom(16, args, 2).    % let n := call not 2
+assert_call(15, T)?
+assert_call(16, T)?
 
 % Query to output all variables with a valid type
-%type(N, T)?
-assert_multi_call(15, T)?
-assert_multi_call(16, T)?
+type(N, T)?
