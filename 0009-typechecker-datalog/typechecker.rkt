@@ -2,6 +2,9 @@
 
 #lang datalog
 
+% The empty value, i.e. unit type, exists:
+nil.
+
 % Definition of type i1, i.e. booleans, which is {0, 1}
 in(0, i1).
 in(1, i1).
@@ -15,6 +18,19 @@ in(4, i4).
 in(5, i4).
 in(6, i4).
 in(7, i4).
+
+% Basic relations for cons-cells:
+%
+%    atom(line, id, value)
+%    cons(line, id, left, right)
+%
+% Equality relation between atoms and cons-cells:
+equal(L, nil, nil) :- let(L, N, T).
+equal(L, A, B)     :- atom(L, A, AL), atom(L, B, BR), AL = BR.
+equal(L, A, B)     :- cons(L, A, A1, A2), cons(L, B, B1, B2), equal(L, A1, B1), equal(L, A2, B2).
+
+is(L, V, T) :- let(L, N, T_other), in(V, T).
+is(L, V, T) :- cons(L, V, VA, VB), cons(L_other, T, TA, TB), is(L, VA, TA), is(L, VB, TB).
 
 % Note that in the following:
 % - L is a Line number
@@ -50,19 +66,46 @@ signature(not, i1, i1).                      % not :: i1 -> i1
 % sign, and the constant, variable access, function call, and parameters on the
 % right-hand side, are all stitched together using their source line number.
 
-let( 0, a, i1). constant( 0, 0).              % ok
-let( 1, b, i1). constant( 1, 1).              % ok
-let( 2, c, i1). constant( 2, 2).              % error: assigned an i4 into an i1
-let( 3, d, i4). constant( 3, 5).              % ok
-let( 4, e, i4). variable( 4, d).              % ok
-let( 5, f, i1). variable( 5, d).              % error: assigned an i4 into an i1
-let( 6, g, i1). variable( 6, c).              % error: assigned from a variable which has an error
-let( 7, h, i1). call( 7, not). arg( 7, 0).    % ok
-let( 8, i, i1). call( 8, not). arg( 8, a).    % ok
-let( 9, j, i1). call( 9, not). arg( 9, 5).    % error: 'not' expects an i1
-let(10, k, i1). call(10, not). arg(10, d).    % error: 'not' expects an i1
-let(11, l, i1). call(11, not). arg(11, c).    % error: assigned from a variable which has an error
-let(12, m, i4). call(12, not). arg(12, 0).    % error: assigned an i1 into an i4
+let( 0, a, i1). constant( 0, 0).                    % ok
+let( 1, b, i1). constant( 1, 1).                    % ok
+let( 2, c, i1). constant( 2, 2).                    % error: assigned an i4 into an i1
+let( 3, d, i4). constant( 3, 5).                    % ok
+let( 4, e, i4). variable( 4, d).                    % ok
+let( 5, f, i1). variable( 5, d).                    % error: assigned an i4 into an i1
+let( 6, g, i1). variable( 6, c).                    % error: assigned from a variable which has an error
+let( 7, h, i1). call( 7, not). arg( 7, 0).          % ok
+let( 8, i, i1). call( 8, not). arg( 8, a).          % ok
+let( 9, j, i1). call( 9, not). arg( 9, 5).          % error: 'not' expects an i1
+let(10, k, i1). call(10, not). arg(10, d).          % error: 'not' expects an i1
+let(11, l, i1). call(11, not). arg(11, c).          % error: assigned from a variable which has an error
+let(12, m, i4). call(12, not). arg(12, 0).          % error: assigned an i1 into an i4
+
+% logical_not: i1 -> i1
+
+fn(14, logical_not, signature). cons(14, signature, in, out). atom(14, in, i1). atom(14, out, i1).
+
+let(15, n, i1). mcall(15, logical_not, args). atom(15, args, 0).    % let n := call not 0
+let(16, n, i1). mcall(16, logical_not, args). atom(16, args, 2).    % let n := call not 2
+
+assert_multi_call(L, T)  :- 
+    mcall     (L   , Func, Args),
+    atom      (L   , Args, V   ),
+    fn        (Ldef, Func, Sgnt),
+    cons      (Ldef, Sgnt, In , Out),
+    atom      (Ldef, In  , T_in),
+    atom      (Ldef, Out , T   ),    % for a higher-order function or tuple, a cons-cell would need to be supported here too
+    is        (L   , V   , T_in).
+
+assert_multi_call(L, T)  :- 
+    mcall     (L   , Func, Args),
+    cons      (L   , Args, VL  , VR  ),
+    fn        (Ldef, Func, Sgnt),
+    cons      (Ldef, Sgnt, In , Out),
+    cons      (Ldef, In  , Lsig, Rsig),
+    atom      (Ldef, Out , T   ),    % for a higher-order function or tuple, a cons-cell would need to be supported here too
+    is        (L   , V   , T_in).
 
 % Query to output all variables with a valid type
-type(N, T)?
+%type(N, T)?
+assert_multi_call(15, T)?
+assert_multi_call(16, T)?
