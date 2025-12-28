@@ -235,19 +235,31 @@ type_mismatch(L, N, T) :- let(L, N, T), assert_constant(L, T_other), T != T_othe
 This might allow searching for _type errors_, and even provide the line-number where the error occurred.
 That's what we _expect_ from a type-checker.
 
+This approach probably does not work. 
+The assertions check whether a value `V` is in type `T`. 
+If we add the constraint `T != T_other` then all that needs to happen for a supposed type error to occur, is for a value to appear in another type.
+The value `0` shows up in both `i1` and `i4`, so there exists at least one other type in which `0` is defined, so the `type_mismatch` will report an error, even when it shouldn't.
+We would need (stratified) negation to implement this, or a hard-coded relation `not-in(V, T)`.
+
 ## Findings
 <!-- What did I learn? -->
 
+- Enumerating the members of a type is an OK solution for small types, to define a relation `in(Value, Type)` which checks if a `Value` is a member of the `Type`.
 - The Datalog code can be reasonably similar to the actual code. That's kind of nice, because in might make it easier to write the source-to-source conversion to actually use such a type-checker.
 - Searching for type-errors seems like it's impossible in positive Datalog (i.e. monotonic logic).
 - Listing the terms which _can_ be typed successfully, seems to work well.
 - I read somewhere that it is good design to structure the rules in layers, i.e. top level rules, helpers, and facts. This design philosophy was very helpful here.
+- Breaking complicated statement into several smaller statements and tying them together, using a unique Id, can work really well.
+- Checking multi-argument functions is complicated, because list-like structures are needed to ensure that the entire signature and the entire set of arguments is checked
+- It seems like checking index-based arguments is a bit tricky, because you have to ensure that there is the right number of arguments. 
+- It may be possible to type check each function argument individually, and then manually check the output for completeness.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- Try implementing a type solver using atoms and cons-cells from the start, and try to keep things as simple as possible
+- Try implementing a type error search using a pre-baked `not-in(Value, Type)` relation to obtain some access to negation
 
 ---
 **Copyright (c) 2025 Marco Nikander**
