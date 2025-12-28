@@ -1,3 +1,5 @@
+; Copyright (c) 2025 Marco Nikander
+
 #lang datalog
 
 % We are given the following control flow graph (CFG) with basic blocks

@@ -1,3 +1,5 @@
+; Copyright (c) 2025 Marco Nikander
+
 #lang datalog
 
 % Definition of type i1, i.e. booleans, which is {0, 1}
