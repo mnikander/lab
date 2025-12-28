@@ -13,7 +13,7 @@
 % the empty value, i.e. unit type, exists:
 nil.
 
-% equality relation
+% Equality relation
 equal(nil, nil).
 equal(L, R) :- atom(L, VL), atom(R, VR), VL = VR.
 equal(L, R) :- let(L, VL), let(R, VR), equal(VL, VR).
@@ -21,7 +21,7 @@ equal(L, R) :- let(L, VL), equal(VL, R).
 equal(L, R) :- let(R, VR), equal(L, VR).
 equal(L, R) :- cons(L, L1, L2), cons(R, R1, R2), equal(L1, R1), equal(L2, R2).
 
-% inequality relation
+% Inequality relation
 not_equal(L, nil) :- atom(L, VL).
 not_equal(L, nil) :- let(L, VL).
 not_equal(L, nil) :- cons(L, VL).
@@ -35,7 +35,7 @@ not_equal(L, R)   :- let(R, VR), not_equal(L, VR), L != R.
 not_equal(L, R)   :- cons(L, L1, L2), cons(R, R1, R2), not_equal(L1, R1), L != R.
 not_equal(L, R)   :- cons(L, L1, L2), cons(R, R1, R2), not_equal(L2, R2), L != R.
 
-% define several atoms
+% Define several example atoms
 % We don't have pointers, so we have to give them some kind of id or name so
 % that we have a handle on them.
 
@@ -70,6 +70,7 @@ equal(ab, xy)?             % true
 equal(m3, o3)?             % true
 equal(ab-cd, abcd)?        % false
 
+% Query:                   % Expectation:
 not_equal(a, nil)?         % true
 not_equal(a, b)?           % true
 not_equal(d, e)?           % false

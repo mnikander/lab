@@ -43,7 +43,7 @@ As soon as one of the two entries is not equal, the cons-cells are not equal.
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- implement `is-empty`
 
 ---
 **Copyright (c) 2025 Marco Nikander**
