@@ -13,6 +13,7 @@ in(0, i4). in(1, i4). in(2, i4). in(3, i4). in(4, i4). in(5, i4). in(6, i4). in(
 
 % Equality relation
 equal(nil, nil).
+equal(L, R) :- L = R.
 equal(L, R) :- atom(L, VL), atom(R, VR), VL = VR.
 equal(L, R) :- cons(L, L1, L2), cons(R, R1, R2), equal(L1, R1), equal(L2, R2).
 
@@ -25,20 +26,22 @@ not_equal(L, R)   :- atom(L, VL), atom(R, VR), VL != VR, L != R.
 not_equal(L, R)   :- cons(L, L1, L2), cons(R, R1, R2), not_equal(L1, R1), L != R.
 not_equal(L, R)   :- cons(L, L1, L2), cons(R, R1, R2), not_equal(L2, R2), L != R.
 
-% Placeholder for a function implementation:
-func.
-
 % Relations:
 %
 %    atom(id, value)
+%    func(id)
 %    cons(id, left, right)
 %    type(id, typename)
+%    call(id, function, arguments)
 %
 % Note that all ids are assumed to be unique. This must be ensured beforehand.
 
+check_inputs (Args, Sig) :- cons(Sig, In, Out), atom(Args, V), in(V, In).
+check_outputs(Type, Sig) :- cons(Sig, In, Out), equal(Type, Out).
 
 typeof(Id, Type) :- atom(Id, Value), type(Id, Type), in(Value, Type).
-typeof(Id, func) :- atom(Id, func), type(Id, Sig), cons(Sig, T1, T2).
+typeof(Id, Type) :- func(Id), type(Id, Type), cons(Type, T1, T2).
+typeof(Id, Type) :- call(Id, Fn, Args), func(Fn), type(Fn, Sig), check_inputs(Args, Sig), check_outputs(Type, Sig).
 
 % Define several atoms
 atom(a,   0). type(a, i1).    % ok
@@ -46,7 +49,9 @@ atom(b, nil). type(b, i1).    % error
 atom(c, 666). type(c, i1).    % error
 
 % function flip : i1 -> i1
-atom(flip, func). type(flip, sig_flip). cons(sig_flip, i1, i1).
+func(flip). type(flip, sig_flip). cons(sig_flip, i1, i1).
+
+atom(d, i1). call(d, flip, a).
 
 % Query
 typeof(X, Type)?

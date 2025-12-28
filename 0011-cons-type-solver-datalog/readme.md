@@ -27,6 +27,8 @@ no idea
 - copy/pasted cons-cell implementation from 0010
 - removed the let-binding from the scope, to keep things simple
 - introduced a special value 'func' as a placeholder for function bodies
+- removed the placeholder, and instead created a new relation `func` specifically for the purpose, which makes the code more readable -- minimize unnecessary clutter
+- type-checked function call for a unary function
 
 ## Findings
 <!-- What did I learn? -->
