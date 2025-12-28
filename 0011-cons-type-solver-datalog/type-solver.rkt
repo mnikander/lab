@@ -36,21 +36,21 @@ not_equal(L, R)   :- cons(L, L1, L2), cons(R, R1, R2), not_equal(L2, R2), L != R
 %
 % Note that all ids are assumed to be unique. This must be ensured beforehand.
 
-check_inputs (Args, Sig) :- cons(Sig, In, Out), in(Args, In).
-check_inputs (Args, Sig) :- cons(Sig, In, Out), atom(Args, V), in(V, In).
-% something is broken here:                                                           v v v v v v v v v v v v v v v v v v v v v
-check_inputs (Args, Sig) :- cons(Sig, In, Out), cons(Args, V1, V2), cons(In, T1, T2), check_inputs(V1, T1), check_inputs(V2, T2).
-check_outputs(Type, Sig) :- cons(Sig, In, Out), equal(Type, Out).
+typeof(Id, Type) :- atom(Id, Value),    type(Id, Type), in(Value, Type).
+typeof(Id, Type) :- func(Id),           type(Id, Type), cons(Type, Sig_first, Sig_rest).
+typeof(Id, Type) :- call(Id, Fn, Args), type(Id, Type), func(Fn), type(Fn, Sig_Fn), match(Sig_Fn, Args, Type).
 
-typeof(Id, Type) :- atom(Id, Value), type(Id, Type), in(Value, Type).
-typeof(Id, Type) :- func(Id), type(Id, Type), cons(Type, T1, T2).
-typeof(Id, Type) :- call(Id, Fn, Args), type(Id, Type), func(Fn), type(Fn, Sig), check_inputs(Args, Sig), check_outputs(Type, Sig).
+
+match(S, Arg, Discard) :- atom(Arg, V), in(V, S), in(X, Discard).
+match(Sig, nil , T)    :- cons(Sig, T_other, nil), in(Discard, T), T_other = T.
+match(Sig, Args, T)    :- cons(Sig, S_first, S_rest), cons(Args, A_first, A_rest), match(S_first, A_first, T), match(S_rest, A_rest, T).
+
 
 % function flip : i1 -> i1
-func(flip). type(flip, sig_flip). cons(sig_flip, i1, i1).
+func(flip). type(flip, sf0). cons(sf0, i1, sf1). cons(sf1, i1, nil).
 
 % function mix : i1 -> i1 -> i1
-func(mix). type(mix, sig_mix). cons(sig_mix, sig_mix_input, i1). cons(sig_mix_input, i1, i1).
+func(mix ). type(mix , sm0). cons(sm0, i1, sm1). cons(sm1, i1, sm2). cons(sm2, i1, nil).
 
 % Define atoms and cons-cells
 atom(a, 0).
@@ -66,22 +66,31 @@ atom(d, 666).
 type(d, i1).               % error
 
 type(e, i1).
-call(e, flip, a).          % ok
+cons(e0, a, nil).
+call(e, flip, e0).         % ok
 
 type(f, i1).
-call(f, flip, b).          % ok
+cons(f0, b, nil).
+call(f, flip, f0).         % ok
 
 type(g, i4).
-call(g, flip, a).          % error
+cons(g0, b, nil).
+call(g, flip, g0).         % error
 
-cons(zero-one, 0, 1).
-cons(a-b, a, b).
+type(j, i1).
+cons(j0, a, j1).
+cons(j1, b, nil).
+call(j, mix, j0).          % ok
 
-type(h, i1).
-call(h, mix, zero-one).    % ok -- something is broken here
+type(k, i4).
+cons(k0, a, k1).
+cons(k1, b, nil).
+call(k, mix, k0).          % error
 
-type(i, i1).
-call(i, mix, a-b).         % ok -- something is broken here
+type(l, i1).
+cons(l0, b, nil).
+call(l, mix, l0).          % error
+
 
 % Query
-typeof(X, Type)?
+typeof(X, Sig)?
