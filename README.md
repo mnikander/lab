@@ -10,7 +10,6 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0010 |        | 2025-12-28 | datalog              | How can the equality of lists, constructed of cons-cells, be tested in Datalog? |
 | 0009 |        | 2025-12-22 | datalog, types       | How can a basic type-checker be implemented in Datalog? |
 |      | 0009   | 2025-12-27 | datalog, types       | How can multi-argument functions be type-checked using Datalog? |
 |      | 0009   | 2025-12-27 | datalog, types       | Can type-errors be found using monotic logic, without stratified negation? |
@@ -69,6 +68,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0010 |        | 2025-12-28 | datalog              | How can the equality of lists, constructed of cons-cells, be tested in Datalog? |
 | 0008 |        | 2025-12-19 | datalog              | How can I solve logic problems using Datalog? |
 | 0007 |        | 2025-12-18 | datalog              | How can Datalog be used to verify properties on graphs? | 
 | 0006 |        | 2025-10-15 | memory               | How can cons cells be implemented? |
