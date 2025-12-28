@@ -28,11 +28,15 @@ Date: 2025-12-28
 - implemented cons-cells
 - implemented equality
 - added `nil` as the empty element / unit type, to model the end of a list (`null` seems to be used by Racket, so it was best to avoid the collision)
-
+- implemented inequality, by relying on `!=` and defining several extra rules
 
 ## Findings
 <!-- What did I learn? -->
 
+Somewhat surprisingly, it's possible to implement inequality on atoms, let-bindings, and cons-cells.
+This can be done by leaning on `!=` and defining a larger set of relations.
+Note that for two cons-cell to be unequal, it is sufficient if one of their entries differs, so _two_ disjoint relations are required for this.
+As soon as one of the two entries is not equal, the cons-cells are not equal.
 
 
 ## Future Work
