@@ -8,7 +8,7 @@ Date: 2025-12-28
 ## Resources
 <!-- Where can I find relevant information? -->
 
-- see lab 0009 and 0010 for helpful examples
+- see labs 0007, 0008, 0009, and 0010 for helpful examples
 
 ## Plan
 <!-- What do I want to do? -->
@@ -48,6 +48,7 @@ Date: 2025-12-28
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+- enfore that all required terms have been type-checked correctly (unit test this with an example containing a badly typed term)
 - test it on a ternary function
 - test it on functions which take tree shaped inputs (i.e. function arguments)
 - test it on functions which return a function
