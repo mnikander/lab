@@ -62,7 +62,7 @@ atom(d, 666).              % error
 type(d, i1).
 
 
-% Call unary function 'unary'
+% Call unary function
 
 call(e, unary, arg_e0).     % ok
 type(e, i1).
@@ -77,7 +77,7 @@ type(g, i4).
 cons(arg_g0, b, nil).
 
 
-% Call binary function 'unary'
+% Call binary function
 
 call(j, binary, arg_j0).      % ok
 type(j, i1).
