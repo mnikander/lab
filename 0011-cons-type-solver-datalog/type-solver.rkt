@@ -38,15 +38,6 @@ match(Sig, nil , T)    :- cons(Sig, T_other, nil), in(Discard, T), T_other = T.
 match(Sig, Args, T)    :- cons(Sig, S_first, S_rest), cons(Args, A_first, A_rest), match(S_first, A_first, T), match(S_rest, A_rest, T).
 
 
-% Function declarations
-
-%   unary : i1 -> i1
-func(unary). type(unary, sig_u0). cons(sig_u0, i1, sig_u1). cons(sig_u1, i1, nil).
-
-%  binary : i1 -> i1 -> i1
-func(binary ). type(binary , sig_b0). cons(sig_b0, i1, sig_b1). cons(sig_b1, i1, sig_b2). cons(sig_b2, i1, nil).
-
-
 % Define atoms and cons-cells
 
 atom(a, 0).                % ok
@@ -62,7 +53,12 @@ atom(d, 666).              % error
 type(d, i1).
 
 
-% Call unary function
+% Unary function
+%   unary : i1 -> i1
+func(unary).
+type(unary, sig_u0).
+cons(sig_u0, i1, sig_u1).
+cons(sig_u1, i1, nil).
 
 call(e, unary, arg_e0).     % ok
 type(e, i1).
@@ -77,7 +73,13 @@ type(g, i4).
 cons(arg_g0, b, nil).
 
 
-% Call binary function
+% Binary function
+%  binary : i1 -> i1 -> i1
+func(binary).
+type(binary, sig_b0).
+cons(sig_b0, i1, sig_b1).
+cons(sig_b1, i1, sig_b2).
+cons(sig_b2, i1, nil).
 
 call(j, binary, arg_j0).      % ok
 type(j, i1).
@@ -92,6 +94,32 @@ cons(arg_k1, b, nil).
 call(l, binary, arg_l0).      % error
 type(l, i1).
 cons(arg_l0, b, nil).
+
+
+% Ternary function
+% ternary : i1 -> i1 -> i1 -> i1
+func(ternary).
+type(ternary, sig_t0). 
+cons(sig_t0, i1, sig_t1).
+cons(sig_t1, i1, sig_t2).
+cons(sig_t2, i1, sig_t3).
+cons(sig_t3, i1, nil).
+
+call(m, ternary, arg_m0).      % ok
+type(m, i1).
+cons(arg_m0, a, arg_m1).
+cons(arg_m1, b, arg_m2).
+cons(arg_m2, b, nil).
+
+call(n, ternary, arg_n0).      % error
+type(n, i4).
+cons(arg_n0, a, arg_n1).
+cons(arg_n1, b, arg_n2).
+cons(arg_n2, b, nil).
+
+call(o, ternary, arg_o0).      % error
+type(o, i1).
+cons(arg_o0, b, nil).
 
 
 % Query to list all type-able variables

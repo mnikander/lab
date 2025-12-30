@@ -35,6 +35,7 @@ Date: 2025-12-28
 - fixed a bunch of bugs in `match` and `typeof`
 - removed the cons equal and unequal, since I didn't need them
 - clarified naming of argument lists in the test-cases
+- tested it on a ternary function
 
 ## Findings
 <!-- What did I learn? -->
@@ -48,8 +49,7 @@ Date: 2025-12-28
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-- enfore that all required terms have been type-checked correctly (unit test this with an example containing a badly typed term)
-- test it on a ternary function
+- enforce that all required terms have been type-checked correctly (unit test this with an example containing a badly typed term)
 - test it on functions which take tree shaped inputs (i.e. function arguments)
 - test it on functions which return a function
 - it would be really nice to get syntax highlighting for Racket-Datalog in VS Code
