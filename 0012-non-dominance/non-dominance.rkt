@@ -97,9 +97,9 @@ reachable_without(e, entry, F)?
 %           entry
 %             |  \
 %             |   '
-%             |    foo
-%             |   /
-%             '  '
+%             |   foo
+%             |  /
+%             ' '
 %             a
 %           /   \
 %          '     '
@@ -115,7 +115,7 @@ reachable_without(e, entry, F)?
 edge(entry, foo).
 edge(foo, a).
 
-% And run the queries again:
+% Queries:
 
 _? % print newline
 _note(2, "TEST CASE 2 "). _note(2, X)?
@@ -137,7 +137,7 @@ edge(foo, a)~        % restore CFG to original state
 %           entry
 %             |  \
 %             |   '
-%             |    foo
+%             |   foo
 %             |      |
 %             '      |
 %             a      |
@@ -155,7 +155,7 @@ edge(foo, a)~        % restore CFG to original state
 edge(entry, foo).
 edge(foo, c).
 
-% And run the queries again:
+% Queries:
 
 _? % print newline
 _note(3, "TEST CASE 3 "). _note(3, X)?

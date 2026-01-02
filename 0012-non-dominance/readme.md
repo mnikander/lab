@@ -36,7 +36,10 @@ What we can do, is search for the existence of alternative paths, which bypass `
 - added back-edge to create a loop
 - tried and failed to define the non-dominator relation off the get-go
 - defined `split`, `join`, and `reachable_without` to break it down into smaller steps
+- it took severall hours to get the `reachable_without` relation to work correctly
+- moved the reachability check for the excluded node `X` into it's own layer, so that those checks don't mess with the recursion -- which was the source of the problems
 
+Let's compute the dominator set for the CFG in 'TEST CASE 1' to check our results.
 We take the relation `path(S, F)` and form a set `P`, of the correspoding pairs `(S, F)`:
 ```
 {
@@ -62,8 +65,7 @@ We take the relation `path(S, F)` and form a set `P`, of the correspoding pairs 
     (e, e),
 }
 ```
-
-We take the relation `path_without(X, E, F)` and form a set `J`, of the corresponding pairs `(X, F)`:
+We then take the relation `path_without(X, E, F)` and form a set `J`, of the corresponding pairs `(X, F)`:
 ```
 {
     (b, e),
@@ -72,7 +74,7 @@ We take the relation `path_without(X, E, F)` and form a set `J`, of the correspo
     (d, e),
 }
 ```
-
+Note the entries were sorted by hand, to make the comparison easier.
 We can compute the set difference `Diff = P - J` and obtain:
 ```
 {
@@ -123,14 +125,36 @@ At least for this example, the computation appears to be working correctly.
 ## Findings
 <!-- What did I learn? -->
 
-A query with an empty result just prints an empty line.
-For example if there is no rule for `_` you can query: `_?` to print a newline to the screen.
+### Non-Dominance seems to work
+For the three test-cases, computing the results and then manually taking the set-difference correctly produces the dominator set.
+The solution does seem to work.
+This is no guaranty that the implementation is correct, but it's encouraging, and good enough for this proof-of-concept.
 
-You can also use a phoney `_note` predicate to print something on the screen:
+It took me six hours to work out this solution.
+I still find it pretty tricky to work with positive Datalog.
+I'm not sure if it would be easier with stratified negation, because in this instance I just negated the question.
+It's good exercise to do it all from scratch, but it really does take a while.
+When working with Datalog in the future, it might be good to search for existing solutions for the given problem.
+
+I guess the interesting question is: if I can embed Datalog inside a Racket program, is it faster to solve a problem using Datalog, than to hand-write the code to solve the problem?
+I can imagine that a hand-crafted solver may also have taken me six hours.
+It's hard to say.
+
+### Tricks to Print Text
+A query with an empty result just prints an empty line.
+For example if there is no rule for `_`, you can query: 
+```
+_?
+```
+... prints a newline (i.e. false):
+```
+
+```
+You can also use a phoney `_note` predicate:
 ```
 _note(0, "some text"). _note(0, X)?
 ```
-prints:
+... to print the following onto the screen:
 ```
 _note(0, "some text").
 ```
@@ -139,7 +163,9 @@ _note(0, "some text").
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- Identify corner-cases worth testing
+- Test those corner cases to check the solution for correctness
+- Write a hand-crafted solver for this problem, in the programming language of my choice, measure how long it takes to implement, and compare it to the 6 hours for this solution. Which approach is more effective?
 
 ---
-**Copyright (c) 2025 Marco Nikander**
+**Copyright (c) 2026 Marco Nikander**
