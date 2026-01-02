@@ -37,6 +37,89 @@ What we can do, is search for the existence of alternative paths, which bypass `
 - tried and failed to define the non-dominator relation off the get-go
 - defined `split`, `join`, and `reachable_without` to break it down into smaller steps
 
+We take the relation `path(S, F)` and form a set `P`, of the correspoding pairs `(S, F)`:
+```
+{
+    (entry, entry),
+    (entry, a),
+    (entry, b),
+    (entry, c),
+    (entry, d),
+    (entry, e),
+    (a, a),
+    (a, b),
+    (a, c),
+    (a, d),
+    (a, e),
+    (b, b),
+    (b, e),
+    (c, c),
+    (c, d),
+    (c, e),
+    (d, c),
+    (d, d),
+    (d, e),
+    (e, e),
+}
+```
+
+We take the relation `path_without(X, E, F)` and form a set `J`, of the corresponding pairs `(X, F)`:
+```
+{
+    (b, e),
+    (c, e),
+    (d, c),
+    (d, e),
+}
+```
+
+We can compute the set difference `Diff = P - J` and obtain:
+```
+{
+    (entry, entry),
+    (entry, a),
+    (entry, b),
+    (entry, c),
+    (entry, d),
+    (entry, e),
+    (a, a),
+    (a, b),
+    (a, c),
+    (a, d),
+    (a, e),
+    (b, b),
+    (c, c),
+    (c, d),
+    (d, d),
+    (e, e),
+}
+```
+
+For the given CFG, we can manually determine the dominator set `dom(D, N)` where a node `D` dominates a node `N`.
+`Dom(D, N)` is:
+```
+{
+    (entry, entry),
+    (entry, a),
+    (entry, b),
+    (entry, c),
+    (entry, d),
+    (entry, e),
+    (a, a),
+    (a, b),
+    (a, c),
+    (a, d),
+    (a, e),
+    (b, b),
+    (c, c),
+    (c, d),
+    (d, d),
+    (e, e),
+}
+```
+which matches the set `Diff` exactly.
+At least for this example, the computation appears to be working correctly.
+
 ## Findings
 <!-- What did I learn? -->
 

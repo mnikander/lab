@@ -3,14 +3,15 @@
 #lang datalog
 
 % Relations
-node(N)                  :- edge(N, Other).
-node(N)                  :- edge(Other, N).
+node(N)               :- edge(N, Other).
+node(N)               :- edge(Other, N).
 
-path(D, F)          :- edge(D, F).
-path(D, F)          :- edge(D, I), path(I, F).
+path(D, D)            :- node(D).
+path(D, F)            :- edge(D, F).
+path(D, F)            :- edge(D, I), path(I, F).
 
-split(N) :- edge(N, A), edge(N, B), A != B.
-join(N)  :- edge(A, N), edge(B, N), A != B.
+split(N)              :- edge(N, A), edge(N, B), A != B.
+join(N)               :- edge(A, N), edge(B, N), A != B.
 
 edge_without(X, E, F) :- node(X), edge(E, F), X != E, X != F.
 
@@ -64,7 +65,13 @@ edge(d, c).
 
 % Queries, sorted by the start node:
 
-_note(0, "list of nodes which have a reachability relation: "). _note(0, X)?
+split(N)? _?
+join(N)? _?
+
+_? % print newline
+_note(0, "tuples `(S, F)` where there exists a path from `S` to `F` "). _note(0, X)?
+_? % print newline
+
 path(entry, X)?
 path(a, X)?
 path(b, X)?
@@ -72,12 +79,10 @@ path(c, X)?
 path(d, X)?
 path(e, X)?
 
-_?    % print newline (i.e. false)
+_? % print newline
+_note(1, "tuples `(X, entry, F)` where there exists a path from `X` to `F`, but `X` does _NOT_ dominate `F` "). _note(1, X)?
+_? % print newline
 
-split(N)? _?
-join(N)? _?
-
-% this should print tuples `path_without(X, entry, F)` where there is a `path(X, F)` but X does _NOT_ dominate F
 path_without(a, entry, F)?
 path_without(b, entry, F)?
 path_without(c, entry, F)?
