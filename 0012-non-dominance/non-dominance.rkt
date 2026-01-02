@@ -19,7 +19,7 @@ path_without(X, S, F)      :- node(X), edge(S, I), path_without(X, I, F), X != S
 % aggressively filters paths for which no relevant dominators X can exist:
 reachable_without(X, S, F) :- path(S, X), path(X, F), path_without(X, S, F).
 
-% Example Control Flow Graph
+% TEST CASE 1: Example Control Flow Graph
 %
 %           entry
 %             |
@@ -80,7 +80,7 @@ path(d, X)?
 path(e, X)?
 
 _? % print newline
-_note(1, "tuples `(X, entry, F)` where there exists a path from `X` to `F`, but `X` does _NOT_ dominate `F` "). _note(1, X)?
+_note(1, "TEST CASE 1 - tuples `(X, entry, F)` where there exists a path from `X` to `F`, but `X` does _NOT_ dominate `F` "). _note(1, X)?
 _? % print newline
 
 reachable_without(foo, entry, F)?
@@ -91,7 +91,8 @@ reachable_without(d, entry, F)?
 reachable_without(e, entry, F)?
 
 
-% Let's modify the graph:
+
+% TEST CASE 2:
 %
 %           entry
 %             |  \
@@ -117,7 +118,7 @@ edge(foo, a).
 % And run the queries again:
 
 _? % print newline
-_note(2, "modified graph "). _note(2, X)?
+_note(2, "TEST CASE 2 "). _note(2, X)?
 _? % print newline
 
 reachable_without(foo, entry, F)?
@@ -126,3 +127,46 @@ reachable_without(b, entry, F)?
 reachable_without(c, entry, F)?
 reachable_without(d, entry, F)?
 reachable_without(e, entry, F)?
+
+edge(entry, foo)~    % restore CFG to original state
+edge(foo, a)~        % restore CFG to original state
+
+
+% TEST CASE 3:
+%
+%           entry
+%             |  \
+%             |   '
+%             |    foo
+%             |      |
+%             '      |
+%             a      |
+%           /   \   /
+%          '     ' '
+%         b       c <---+
+%          \      |     |
+%           \     '     |
+%            \    d ----+
+%             \   |
+%              '  '
+%                e
+%
+
+edge(entry, foo).
+edge(foo, c).
+
+% And run the queries again:
+
+_? % print newline
+_note(3, "TEST CASE 3 "). _note(3, X)?
+_? % print newline
+
+reachable_without(foo, entry, F)?
+reachable_without(a, entry, F)?
+reachable_without(b, entry, F)?
+reachable_without(c, entry, F)?
+reachable_without(d, entry, F)?
+reachable_without(e, entry, F)?
+
+edge(entry, foo)~    % restore CFG to original state
+edge(foo, c)~        % restore CFG to original state
