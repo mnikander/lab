@@ -10,6 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0012 |        | 2026-01-02 | datalog, ssa         | How can non-dominance of CFG nodes be expressed using positive Datalog? |
 |      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor? |
 |      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotonic logic, without stratified negation? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
