@@ -34,11 +34,23 @@ What we can do, is search for the existence of alternative paths, which bypass `
 - defined an example CFG without loop
 - defined reachability relation
 - added back-edge to create a loop
+- tried and failed to define the non-dominator relation off the get-go
+- defined `split`, `join`, and `reachable_without` to break it down into smaller steps
 
 ## Findings
 <!-- What did I learn? -->
 
+A query with an empty result just prints an empty line.
+For example if there is no rule for `_` you can query: `_?` to print a newline to the screen.
 
+You can also use a phoney `_note` predicate to print something on the screen:
+```
+_note(0, "some text"). _note(0, X)?
+```
+prints:
+```
+_note(0, "some text").
+```
 
 ## Future Work
 <!-- Are there follow-up questions? -->
