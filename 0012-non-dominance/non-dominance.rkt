@@ -12,9 +12,11 @@ path(D, F)          :- edge(D, I), path(I, F).
 split(N) :- edge(N, A), edge(N, B), A != B.
 join(N)  :- edge(A, N), edge(B, N), A != B.
 
-path_without(X, E, F) :- node(X), edge(E, F), X != E, X != F.
-path_without(X, E, F) :- node(X), edge(E, I), path_without(X, I, F), X != E, X != I, X != F.
-path_without(X, E, F) :- node(X), path_without(X, E, I), edge(I, F), X != E, X != I, X != F.  % is this rule necessary?
+edge_without(X, E, F) :- node(X), edge(E, F), X != E, X != F.
+
+path_without(X, E, F) :- path(X, F), edge_without(X, E, F).
+path_without(X, E, F) :- path(X, F), edge_without(X, E, I), path_without(X, I, F).
+path_without(X, E, F) :- path(X, F), path_without(X, E, I), edge_without(X, I, F).  % is this rule necessary?
 
 % Example Control Flow Graph
 %
@@ -70,14 +72,14 @@ path(c, X)?
 path(d, X)?
 path(e, X)?
 
-_?    % insert newline (false) in output
+_?    % print newline (i.e. false)
 
 split(N)? _?
 join(N)? _?
 
-path_without(entry, E, F)? _?
-path_without(a, E, F)? _?
-path_without(b, E, F)? _?
-path_without(c, E, F)? _?
-path_without(d, E, F)? _?
-path_without(e, E, F)? _?
+% this should print tuples `path_without(X, entry, F)` where there is a `path(X, F)` but X does _NOT_ dominate F
+path_without(a, entry, F)?
+path_without(b, entry, F)?
+path_without(c, entry, F)?
+path_without(d, entry, F)?
+path_without(e, entry, F)?
