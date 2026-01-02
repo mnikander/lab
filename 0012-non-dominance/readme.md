@@ -33,6 +33,7 @@ What we can do, is search for the existence of alternative paths, which bypass `
 
 - defined an example CFG without loop
 - defined reachability relation
+- added back-edge to create a loop
 
 ## Findings
 <!-- What did I learn? -->

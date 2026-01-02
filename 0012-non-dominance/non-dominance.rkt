@@ -15,10 +15,10 @@ reachable(S, F) :- edge(S, I), reachable(I, F).
 %             a
 %           /   \
 %          '     '
-%         b       c
-%          \      |
-%           \     '
-%            \    d
+%         b       c <---+
+%          \      |     |
+%           \     '     |
+%            \    d ----+
 %             \   |
 %              '  '
 %                e
@@ -31,5 +31,12 @@ edge(a, c).
 edge(b, e).
 edge(c, d).
 edge(d, e).
+edge(d, c).
 
-reachable(X, Y)?
+% Query reachability, sorted by the start node:
+reachable(entry, X)?
+reachable(a, X)?
+reachable(b, X)?
+reachable(c, X)?
+reachable(d, X)?
+reachable(e, X)?
