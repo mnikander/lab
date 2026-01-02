@@ -89,3 +89,40 @@ reachable_without(b, entry, F)?
 reachable_without(c, entry, F)?
 reachable_without(d, entry, F)?
 reachable_without(e, entry, F)?
+
+
+% Let's modify the graph:
+%
+%           entry
+%             |  \
+%             |   '
+%             |    foo
+%             |   /
+%             '  '
+%             a
+%           /   \
+%          '     '
+%         b       c <---+
+%          \      |     |
+%           \     '     |
+%            \    d ----+
+%             \   |
+%              '  '
+%                e
+%
+
+edge(entry, foo).
+edge(foo, a).
+
+% And run the queries again:
+
+_? % print newline
+_note(2, "modified graph "). _note(2, X)?
+_? % print newline
+
+reachable_without(foo, entry, F)?
+reachable_without(a, entry, F)?
+reachable_without(b, entry, F)?
+reachable_without(c, entry, F)?
+reachable_without(d, entry, F)?
+reachable_without(e, entry, F)?
