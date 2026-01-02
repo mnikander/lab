@@ -3,21 +3,21 @@
 #lang datalog
 
 % Relations
-node(N)               :- edge(N, Other).
-node(N)               :- edge(Other, N).
 
-path(D, D)            :- node(D).
-path(D, F)            :- edge(D, F).
-path(D, F)            :- edge(D, I), path(I, F).
+node(N)                    :- edge(N, Other).
+node(N)                    :- edge(Other, N).
 
-split(N)              :- edge(N, A), edge(N, B), A != B.
-join(N)               :- edge(A, N), edge(B, N), A != B.
+path(N, N)                 :- node(N).
+path(N, O)                 :- edge(N, I), path(I, O).
 
-edge_without(X, E, F) :- node(X), edge(E, F), X != E, X != F.
+split(N)                   :- edge(N, A), edge(N, B), A != B.
+join(N)                    :- edge(A, N), edge(B, N), A != B.
 
-path_without(X, E, F) :- path(X, F), edge_without(X, E, F).
-path_without(X, E, F) :- path(X, F), edge_without(X, E, I), path_without(X, I, F).
-path_without(X, E, F) :- path(X, F), path_without(X, E, I), edge_without(X, I, F).  % is this rule necessary?
+path_without(X, S, S)      :- node(X), node(S), X != S.
+path_without(X, S, F)      :- node(X), edge(S, I), path_without(X, I, F), X != S, X != I, X != F.
+
+% aggressively filters paths for which no relevant dominators X can exist:
+reachable_without(X, S, F) :- path(S, X), path(X, F), path_without(X, S, F).
 
 % Example Control Flow Graph
 %
@@ -83,8 +83,9 @@ _? % print newline
 _note(1, "tuples `(X, entry, F)` where there exists a path from `X` to `F`, but `X` does _NOT_ dominate `F` "). _note(1, X)?
 _? % print newline
 
-path_without(a, entry, F)?
-path_without(b, entry, F)?
-path_without(c, entry, F)?
-path_without(d, entry, F)?
-path_without(e, entry, F)?
+reachable_without(foo, entry, F)?
+reachable_without(a, entry, F)?
+reachable_without(b, entry, F)?
+reachable_without(c, entry, F)?
+reachable_without(d, entry, F)?
+reachable_without(e, entry, F)?
