@@ -62,7 +62,7 @@ The tables below collect those questions.
 |      |        | 2025-12-26 | machine learning     | How can a constraint extreme learning machine, with a simple constraint, be implemented using an open source quadratic solver? |
 |      |        | 2025-10-15 | ui, repl             | How can the Monaco editor be deployed onto a static github page? |
 |      |        | 2025-12-26 | concurrency          | Can a publisher-subscriber system be implemented using one thread per topic, with a message queue and a list of callbacks? |
-|      |        | 2025-- | | |
+|      |        | 2026-0- | | |
 
 ## Resolved
 

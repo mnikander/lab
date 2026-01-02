@@ -3,7 +3,7 @@
 
 
 
-Date: 2025-1
+Date: 2026-0
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -34,4 +34,4 @@ Date: 2025-1
 
 
 ---
-**Copyright (c) 2025 Marco Nikander**
+**Copyright (c) 2026 Marco Nikander**
