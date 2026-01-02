@@ -2,6 +2,7 @@
 <!-- What am I figuring out? -->
 
 Can cons-cells be used to type-check multi-argument functions using Datalog?
+How can multi-argument functions be type-checked using Datalog?
 
 Date: 2025-12-28
 
@@ -44,6 +45,7 @@ Date: 2025-12-28
 - many small relations provide many opportunities to document which relation does what, and increases separation of concerns
 - it's really good to prototype a bit first, to find a good design
 - it's really good to have a clear concept on how to structure the program, and then stick to that style/design consistenly, through the entire program -- this feels even more important here than in normal coding
+- using cons-cells function signatures and argument types works, but it quickly gets unwieldy
 
 ## Future Work
 <!-- Are there follow-up questions? -->

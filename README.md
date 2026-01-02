@@ -10,9 +10,8 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0011 |        | 2025-12-28 | datalog, types       | Can cons-cells be used to type-check multi-argument functions using Datalog? |
-|      |        | 2025-12-27 | datalog, types       | How can multi-argument functions be type-checked using Datalog? |
-|      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotic logic, without stratified negation? |
+|      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor? |
+|      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotonic logic, without stratified negation? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
 |      |        | 2025-12-26 | ir                   | How do you compile a Rust program to MIR? |
 |      |        | 2025-10-15 | memory, ownership    | How can borrow-checking be implemented for stack-values? |
@@ -68,6 +67,8 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0011 |        | 2025-12-28 | datalog, types       | Can cons-cells be used to type-check multi-argument functions using Datalog? |
+|      | 0011   | 2025-12-27 | datalog, types       | How can multi-argument functions be type-checked using Datalog? |
 | 0009 |        | 2025-12-22 | datalog, types       | How can a basic type-checker be implemented in Datalog? |
 | 0010 |        | 2025-12-28 | datalog              | How can the equality of lists, constructed of cons-cells, be tested in Datalog? |
 | 0008 |        | 2025-12-19 | datalog              | How can I solve logic problems using Datalog? |
