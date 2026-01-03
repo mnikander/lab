@@ -88,7 +88,7 @@ describe('single digraph', () => {
     });
 });
 
-describe.skip('disjoint digraphs', () => {
+describe('disjoint digraphs', () => {
     it('two nodes with self-cycles', () => {
         const g: Edge[]  = [[0, 0],
                             [1, 1],];
@@ -99,7 +99,7 @@ describe.skip('disjoint digraphs', () => {
         expect(transitive_closure.length).toEqual(2);
     });
 
-    it('one edge each', () => {
+    it('two chains with one edge each', () => {
         const g: Edge[]  = [[0, 1],
                             [2, 3],];
 
@@ -109,7 +109,7 @@ describe.skip('disjoint digraphs', () => {
         expect(transitive_closure.length).toEqual(2);
     });
 
-    it('one edge each', () => {
+    it('two chains with two edges each', () => {
         const g: Edge[]  = [[0, 1],
                             [1, 2],
                             [5, 6],
