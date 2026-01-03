@@ -1,7 +1,6 @@
 // Copyright (c) 2026 Marco Nikander
 
-export enum Get       { from = 0, to = 1};
-export type Edge    = [number, number];
+export type Edge = [number, number];
 
 export function reachable(edges: readonly Edge[]): Edge[] {
     const old  : Edge[] = [];
@@ -25,8 +24,8 @@ export function reachable(edges: readonly Edge[]): Edge[] {
 }
 
 function attempt_join(a: Edge, b: Edge): undefined | Edge {    
-    if (a[Get.to] === b[Get.from]) {
-        return [a[Get.from], b[Get.to]];
+    if (end(a) === start(b)) {
+        return [start(a), end(b)];
     }
     else {
         return undefined;
@@ -34,9 +33,17 @@ function attempt_join(a: Edge, b: Edge): undefined | Edge {
 }
 
 function equal(a: Edge, b: Edge): boolean {
-    return a[Get.from] === b[Get.from] && a[Get.to] === b[Get.to];
+    return start(a) === start(b) && end(a) === end(b);
 }
 
 export function contains(e: Edge, edges: Edge[]): boolean {
     return edges.find((other: Edge) => { return equal(e, other); }) !== undefined;
+}
+
+function start(edge: Edge): number {
+    return edge[0];
+}
+
+function end(edge: Edge): number {
+    return edge[1];
 }
