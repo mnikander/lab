@@ -19,6 +19,17 @@ describe('single digraph', () => {
         expect(transitive_closure.length).toEqual(1);
     });
 
+    it('three nodes in a chain', () => {
+        const g: Edge[]  = [[0, 1],
+                            [1, 2],];
+
+        const transitive_closure: Edge[] = reachable(g);
+        expect(contains([0, 1], transitive_closure)).toEqual(true);
+        expect(contains([0, 2], transitive_closure)).toEqual(true);
+        expect(contains([1, 2], transitive_closure)).toEqual(true);
+        expect(transitive_closure.length).toEqual(3);
+    });
+
     it.skip('two strongly connected nodes', () => {
         const g: Edge[]  = [[0, 1],
                             [1, 0],];
