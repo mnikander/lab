@@ -10,7 +10,9 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0013 |        | 2026-01-03 | graphs               | What is a lightweight way to implement reachability on directed graphs in Typescript? |
+|      |  0013  | 2026-01-03 | graphs               | How do DFS and BFS compare to the brute-force solution for reachability? |
+|      |        | 2026-01-03 | graphs               | How do different encodings of graphs, such as edge-lists, adjacency or incidence lists, and adjacency or incidence matrices affect the runtime and the readability of the resulting code? |
+|      |        | 2026-01-03 | graphs, datalog      | How can a naive or semi-naive solver for Datalog be implemented? |
 |      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor? |
 |      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotonic logic, without stratified negation? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
@@ -68,6 +70,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0013 |        | 2026-01-03 | graphs               | What is a lightweight way to implement reachability on directed graphs in Typescript? |
 | 0012 |        | 2026-01-02 | datalog, ssa         | How can non-dominance of CFG nodes be expressed using positive Datalog? |
 | 0011 |        | 2025-12-28 | datalog, types       | Can cons-cells be used to type-check multi-argument functions using Datalog? |
 |      | 0011   | 2025-12-27 | datalog, types       | How can multi-argument functions be type-checked using Datalog? |

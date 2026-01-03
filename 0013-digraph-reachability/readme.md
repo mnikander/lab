@@ -32,6 +32,7 @@ deno test
 <!-- How do you run the code? -->
 
 - started implementing reachability using sets
+- the solution is brute-force in `O(n^2)`
 - wrote a unit test using a graph with 6 nodes, the same graph I had used in Datalog in lab 0012
 - the `Set::has` function checks for pointer equality not value equality, so the checks for whether or not I already had a particular edge were not working correctly
 - after that I switched to arrays instead, and defined my own value-based equality function to use with `Array::find`
@@ -62,7 +63,7 @@ deno test
 - try depth-first and breadth-first search implementations
 - experiment with different data representations: edge lists, adjacency lists, incidence lists, adjacency matrices to figure out which representations are easy to input into the algorithm and which ones are amenable to fast solvers
 - try solving other monotonic problems with hand-crafted code
-- compare the solutions and the implementation time to their datalog counterparts
+- compare the solutions and the implementation time to their Datalog counterparts
 - find resources on worklist algorithms and naive/semi-naive solvers for Datalog
 - try implementing a naive or semi-naive solver
 
