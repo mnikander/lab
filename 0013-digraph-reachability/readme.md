@@ -17,6 +17,7 @@ Date: 2026-01-03
 
 - define a simple array-based edge representation
 - create a function to compute the transitive closure of reachability
+- write several unit tests to check for correctness
 
 ## Running the Code
 <!-- What steps are required to run the code? -->
@@ -32,9 +33,9 @@ deno test
 - started implementing reachability using sets
 - wrote a unit test using a graph with 6 nodes, the same graph I had used in Datalog in lab 0012
 - the `Set::has` function checks for pointer equality not value equality, so the checks for whether or not I already had a particular edge were not working correctly
-- after that I switched to arrays instead, and defined my own value-based equality function to use with `array::find`
+- after that I switched to arrays instead, and defined my own value-based equality function to use with `Array::find`
 - for some reason strongly-connected components are not being computed correctly
-- created another unit test with just two nodes which form a strongly-connected component, this replicated the issue that reachability is not being computed correctly in that case
+- created another unit test with just two nodes which form a strongly-connected component, this replicated the issue that reachability is not being computed correctly for strongly-connected components
 
 ## Findings
 <!-- What did I learn? -->

@@ -2,7 +2,7 @@ import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
 import { expect } from "jsr:@std/expect@1.0.17";
 import { contains, Edge, reachable } from "./digraph-reachability.ts";
 
-describe('one node with a self-cycle', () => {
+describe('single digraph', () => {
     it('self-cycle', () => {
         const g: Edge[]  = [[0, 0],];
 
@@ -11,7 +11,7 @@ describe('one node with a self-cycle', () => {
         expect(transitive_closure.length).toEqual(1);
     });
 
-    it('two nodes with a single connecting edge', () => {
+    it('two nodes in a chain', () => {
         const g: Edge[]  = [[0, 1],];
 
         const transitive_closure: Edge[] = reachable(g);
