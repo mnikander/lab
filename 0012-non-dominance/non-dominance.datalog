@@ -1,6 +1,5 @@
-; Copyright (c) 2026 Marco Nikander
-
 #lang datalog
+% Copyright (c) 2026 Marco Nikander
 
 % Relations
 

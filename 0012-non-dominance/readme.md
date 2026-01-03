@@ -27,6 +27,13 @@ What we can do, is search for the existence of alternative paths, which bypass `
 - run the example program
 - note down findings
 
+## Running the Code
+<!-- What steps are required to run the code? -->
+
+1. Install Racket
+2. `raco pkg install datalog`
+3. `racket ./non-dominance.datalog`
+
 ## Experiment
 <!-- What did I do? -->
 <!-- How do you run the code? -->
