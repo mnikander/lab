@@ -41,6 +41,7 @@ deno test
 - after taking a 1 hour dinner break, I found and fixed the problem in 20 minutes
 - the issue was down to two strongly connected nodes, with edges `(a, b)` and `(b, a)`, needing to introduce _two_ new reachability edges: `(a, a)` and `(b, b)` instead of just one new edge
 - the implementation was modified to check both ways explicitly and add a new edge if possible
+- added more test-cases to ensure cycles (strongly-connected components) are handled correctly
 
 ## Findings
 <!-- What did I learn? -->

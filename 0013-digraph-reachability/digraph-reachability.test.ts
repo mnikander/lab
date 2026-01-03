@@ -3,14 +3,6 @@ import { expect } from "jsr:@std/expect@1.0.17";
 import { contains, Edge, reachable } from "./digraph-reachability.ts";
 
 describe('single digraph', () => {
-    it('self-cycle', () => {
-        const g: Edge[]  = [[0, 0],];
-
-        const transitive_closure: Edge[] = reachable(g);
-        expect(contains([0, 0], transitive_closure)).toEqual(true);
-        expect(transitive_closure.length).toEqual(1);
-    });
-
     it('two nodes in a chain', () => {
         const g: Edge[]  = [[0, 1],];
 
@@ -28,18 +20,6 @@ describe('single digraph', () => {
         expect(contains([0, 2], transitive_closure)).toEqual(true);
         expect(contains([1, 2], transitive_closure)).toEqual(true);
         expect(transitive_closure.length).toEqual(3);
-    });
-
-    it('strongly-connected component', () => {
-        const g: Edge[]  = [[0, 1],
-                            [1, 0],];
-
-        const transitive_closure: Edge[] = reachable(g);
-        expect(contains([0, 0], transitive_closure)).toEqual(true);
-        expect(contains([0, 1], transitive_closure)).toEqual(true);
-        expect(contains([1, 0], transitive_closure)).toEqual(true);
-        expect(contains([1, 1], transitive_closure)).toEqual(true);
-        expect(transitive_closure.length).toEqual(4);
     });
 
     it('six nodes', () => {
@@ -84,6 +64,72 @@ describe('single digraph', () => {
         expect(contains([4, 3], transitive_closure)).toEqual(true);
         expect(contains([4, 4], transitive_closure)).toEqual(true);
         expect(contains([4, 5], transitive_closure)).toEqual(true);
+        expect(transitive_closure.length).toEqual(16);
+    });
+});
+
+describe('cycles and strongly connected components', () => {
+    it('one-node', () => {
+        const g: Edge[]  = [[0, 0],];
+
+        const transitive_closure: Edge[] = reachable(g);
+        expect(contains([0, 0], transitive_closure)).toEqual(true);
+        expect(transitive_closure.length).toEqual(1);
+    });
+
+    it('two nodes', () => {
+        const g: Edge[]  = [[0, 1],
+                            [1, 0],];
+
+        const transitive_closure: Edge[] = reachable(g);
+        expect(contains([0, 0], transitive_closure)).toEqual(true);
+        expect(contains([0, 1], transitive_closure)).toEqual(true);
+        expect(contains([1, 0], transitive_closure)).toEqual(true);
+        expect(contains([1, 1], transitive_closure)).toEqual(true);
+        expect(transitive_closure.length).toEqual(4);
+    });
+
+    it('three nodes', () => {
+        const g: Edge[]  = [[0, 1],
+                            [1, 2],
+                            [2, 0],];
+
+        const transitive_closure: Edge[] = reachable(g);
+        expect(contains([0, 0], transitive_closure)).toEqual(true);
+        expect(contains([0, 1], transitive_closure)).toEqual(true);
+        expect(contains([0, 2], transitive_closure)).toEqual(true);
+        expect(contains([1, 0], transitive_closure)).toEqual(true);
+        expect(contains([1, 1], transitive_closure)).toEqual(true);
+        expect(contains([1, 2], transitive_closure)).toEqual(true);
+        expect(contains([2, 0], transitive_closure)).toEqual(true);
+        expect(contains([2, 1], transitive_closure)).toEqual(true);
+        expect(contains([2, 2], transitive_closure)).toEqual(true);
+        expect(transitive_closure.length).toEqual(9);
+    });
+
+    it('four nodes', () => {
+        const g: Edge[]  = [[0, 1],
+                            [1, 2],
+                            [2, 3],
+                            [3, 0],];
+
+        const transitive_closure: Edge[] = reachable(g);
+        expect(contains([0, 0], transitive_closure)).toEqual(true);
+        expect(contains([0, 1], transitive_closure)).toEqual(true);
+        expect(contains([0, 2], transitive_closure)).toEqual(true);
+        expect(contains([0, 3], transitive_closure)).toEqual(true);
+        expect(contains([1, 0], transitive_closure)).toEqual(true);
+        expect(contains([1, 1], transitive_closure)).toEqual(true);
+        expect(contains([1, 2], transitive_closure)).toEqual(true);
+        expect(contains([1, 3], transitive_closure)).toEqual(true);
+        expect(contains([2, 0], transitive_closure)).toEqual(true);
+        expect(contains([2, 1], transitive_closure)).toEqual(true);
+        expect(contains([2, 2], transitive_closure)).toEqual(true);
+        expect(contains([2, 3], transitive_closure)).toEqual(true);
+        expect(contains([3, 0], transitive_closure)).toEqual(true);
+        expect(contains([3, 1], transitive_closure)).toEqual(true);
+        expect(contains([3, 2], transitive_closure)).toEqual(true);
+        expect(contains([3, 3], transitive_closure)).toEqual(true);
         expect(transitive_closure.length).toEqual(16);
     });
 });
