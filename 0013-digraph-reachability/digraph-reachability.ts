@@ -15,9 +15,17 @@ export function reachable(edges: readonly Edge[]): Edge[] {
         old.push(element);
         
         for (const o of old) {
-            const j = attempt_join(o, element);
-            if(j && !contains(j, old) && !contains(j, delta)) {
-                delta.push(j);
+            // Join in both directions, if possible. This is vital
+            // for cases where there are edges (a, b) and (b, a) and
+            // there are thus _two_ new edges: (a, a) and (b, b).
+            const a = attempt_join(o, element);
+            if(a && !contains(a, old) && !contains(a, delta)) {
+                delta.push(a);
+            }
+            
+            const b = attempt_join(element, o);
+            if(b && !contains(b, old) && !contains(b, delta)) {
+                delta.push(b);
             }
         }
     }

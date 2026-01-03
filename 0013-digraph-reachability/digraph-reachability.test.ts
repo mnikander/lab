@@ -30,7 +30,7 @@ describe('single digraph', () => {
         expect(transitive_closure.length).toEqual(3);
     });
 
-    it.skip('strongly-connected component', () => {
+    it('strongly-connected component', () => {
         const g: Edge[]  = [[0, 1],
                             [1, 0],];
 
@@ -38,11 +38,11 @@ describe('single digraph', () => {
         expect(contains([0, 0], transitive_closure)).toEqual(true);
         expect(contains([0, 1], transitive_closure)).toEqual(true);
         expect(contains([1, 0], transitive_closure)).toEqual(true);
-        expect(contains([1, 1], transitive_closure)).toEqual(true); // problems
+        expect(contains([1, 1], transitive_closure)).toEqual(true);
         expect(transitive_closure.length).toEqual(4);
     });
 
-    it.skip('six nodes', () => {
+    it('six nodes', () => {
         // The following digraph starts at node 0 and with the exception of
         // the back edge from 4 to 3, the arrows move downward toward node 5.
         //
@@ -78,11 +78,11 @@ describe('single digraph', () => {
         expect(contains([1, 4], transitive_closure)).toEqual(true);
         expect(contains([1, 5], transitive_closure)).toEqual(true);
         expect(contains([2, 5], transitive_closure)).toEqual(true);
-        expect(contains([3, 3], transitive_closure)).toEqual(true); // had problems initially
+        expect(contains([3, 3], transitive_closure)).toEqual(true);
         expect(contains([3, 4], transitive_closure)).toEqual(true);
         expect(contains([3, 5], transitive_closure)).toEqual(true);
         expect(contains([4, 3], transitive_closure)).toEqual(true);
-        expect(contains([4, 4], transitive_closure)).toEqual(true); // problems
+        expect(contains([4, 4], transitive_closure)).toEqual(true);
         expect(contains([4, 5], transitive_closure)).toEqual(true);
         expect(transitive_closure.length).toEqual(16);
     });
