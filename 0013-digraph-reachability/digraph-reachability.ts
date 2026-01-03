@@ -1,6 +1,8 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Edge = [number, number];
+export function start(edge: Edge): number { return edge[0]; }
+export function end(edge: Edge): number { return edge[1]; }
 
 export function reachable(edges: readonly Edge[]): Edge[] {
     const old  : Edge[] = [];
@@ -19,8 +21,15 @@ export function reachable(edges: readonly Edge[]): Edge[] {
             }
         }
     }
-
     return old;
+}
+
+export function contains(e: Edge, edges: Edge[]): boolean {
+    return edges.find((other: Edge) => { return equal(e, other); }) !== undefined;
+}
+
+function equal(a: Edge, b: Edge): boolean {
+    return start(a) === start(b) && end(a) === end(b);
 }
 
 function attempt_join(a: Edge, b: Edge): undefined | Edge {    
@@ -30,20 +39,4 @@ function attempt_join(a: Edge, b: Edge): undefined | Edge {
     else {
         return undefined;
     }
-}
-
-function equal(a: Edge, b: Edge): boolean {
-    return start(a) === start(b) && end(a) === end(b);
-}
-
-export function contains(e: Edge, edges: Edge[]): boolean {
-    return edges.find((other: Edge) => { return equal(e, other); }) !== undefined;
-}
-
-function start(edge: Edge): number {
-    return edge[0];
-}
-
-function end(edge: Edge): number {
-    return edge[1];
 }

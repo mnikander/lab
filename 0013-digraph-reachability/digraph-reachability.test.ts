@@ -30,7 +30,7 @@ describe('single digraph', () => {
         expect(transitive_closure.length).toEqual(3);
     });
 
-    it.skip('two strongly connected nodes', () => {
+    it.skip('strongly-connected component', () => {
         const g: Edge[]  = [[0, 1],
                             [1, 0],];
 
