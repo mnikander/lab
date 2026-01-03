@@ -8,7 +8,9 @@ edge(c, d).
 reachable(X, Y):- edge(X, Y).
 reachable(X, Z):- edge(X, Y), reachable(Y, Z).
 
+% strongly-connected components (SCC)
 scc(X, Y) :- reachable(X, Y), reachable(Y, X).
+
 cycle(X)  :- reachable(X, X).
 cyclic    :- reachable(X, X).
 
