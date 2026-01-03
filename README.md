@@ -10,6 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0013 |        | 2026-01-03 | graphs               | What is a lightweight way to implement reachability on directed graphs in Typescript? |
 |      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor? |
 |      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotonic logic, without stratified negation? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
