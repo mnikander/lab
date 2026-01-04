@@ -32,7 +32,7 @@ deno test
 <!-- How do you run the code? -->
 
 - started implementing reachability using sets
-- the solution is brute-force in `O(n^2)`
+- the solution is brute-force in `O(n^3)`, due to a linear search for the `contains` function
 - wrote a unit test using a graph with 6 nodes, the same graph I had used in Datalog in lab 0012
 - the `Set::has` function checks for pointer equality not value equality, so the checks for whether or not I already had a particular edge were not working correctly
 - after that I switched to arrays instead, and defined my own value-based equality function to use with `Array::find`
