@@ -1,6 +1,7 @@
 import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
 import { expect } from "jsr:@std/expect@1.0.17";
-import { contains, Edge, reachable } from "./digraph-reachability.ts";
+import { reachable } from "./digraph-reachability.ts";
+import { contains, Edge } from "./edge.ts";
 
 describe('single digraph', () => {
     it('two nodes in a chain', () => {

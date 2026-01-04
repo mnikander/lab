@@ -1,10 +1,6 @@
 // Copyright (c) 2026 Marco Nikander
-export type Edge = [number, number];
-export function start(edge: Edge): number { return edge[0]; }
-export function end(edge: Edge): number { return edge[1]; }
 
-type Key = `${number},${number}`;
-function make_key([a, b]: Edge): Key { return `${a},${b}`; }
+import { attempt_join, Edge, Key, make_key } from "./edge.ts";
 
 export function reachable(edges: readonly Edge[]): Edge[] {
     const known: Set<Key> = new Set();
@@ -28,23 +24,6 @@ export function reachable(edges: readonly Edge[]): Edge[] {
         }
     }
     return old;
-}
-
-export function contains(e: Edge, edges: readonly Edge[]): boolean {
-    return edges.find((other: Edge) => { return equal(e, other); }) !== undefined;
-}
-
-function equal(a: Edge, b: Edge): boolean {
-    return start(a) === start(b) && end(a) === end(b);
-}
-
-function attempt_join(a: Edge, b: Edge): undefined | Edge {    
-    if (end(a) === start(b)) {
-        return [start(a), end(b)];
-    }
-    else {
-        return undefined;
-    }
 }
 
 // checks if an edge is already known, if not: add it to 'delta' and the 'known' set
