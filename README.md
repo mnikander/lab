@@ -10,10 +10,15 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-|      |  0013  | 2026-01-03 | graphs               | How do DFS and BFS compare to the brute-force solution for reachability? |
-|      |        | 2026-01-03 | graphs               | How do different encodings of graphs, such as edge-lists, adjacency or incidence lists, and adjacency or incidence matrices affect the runtime and the readability of the resulting code? |
+|      |        | 2026-01-04 | ssa, graphs          | What is a maximal-fixed-point algorithm and why is it relevant for SSA? |
+|      |        | 2026-01-04 | ssa, graphs          | How can dominance frontiers be used to check/place phi nodes? |
+|      |        | 2026-01-04 | ssa, graphs          | How can dominance, dominator trees, and the dominance frontier be computed in a control flow graph? |
+|      |        | 2026-01-04 | graphs, tools        | How can a directed graph, such as a CFG, be visualized? |
+|      |        | 2026-01-04 | graphs               | How can a cylic graph be condensed into a DAG? |
+|      |        | 2026-01-04 | graphs               | How can a DAG be sorted topologically? |
+|      |        | 2026-01-03 | graphs, datalog      | How do you convert monotonic logic on ternary relations into a graph problem? |
 |      |        | 2026-01-03 | graphs, datalog      | How can a naive or semi-naive solver for Datalog be implemented? |
-|      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor? |
+|      |        | 2025-12-30 | tools                | How can syntax-highlighting for Datalog be defined for the Monaco editor or another editor? |
 |      |        | 2025-12-27 | datalog, types       | Can type-errors be found using monotonic logic, without stratified negation? |
 |      |        | 2025-12-26 | types                | Can a basic type system be defined with only a unit type, reference type, and arrow type? |
 |      |        | 2025-12-26 | ir                   | How do you compile a Rust program to MIR? |
