@@ -1,14 +1,17 @@
 // Copyright (c) 2026 Marco Nikander
-
 export type Edge = [number, number];
 export function start(edge: Edge): number { return edge[0]; }
 export function end(edge: Edge): number { return edge[1]; }
 
-export function reachable(edges: readonly Edge[]): Edge[] {
-    const old: Edge[] = [];
-    let delta: Edge[] = [];
+type Key = `${number},${number}`;
+function make_key([a, b]: Edge): Key { return `${a},${b}`; }
 
-    edges.forEach((e: Edge) => delta.push(e));
+export function reachable(edges: readonly Edge[]): Edge[] {
+    const known: Set<Key> = new Set();
+    const old: Edge[]     = [];
+    let delta: Edge[]     = [];
+
+    edges.forEach((e: Edge) => insert(e, delta, known));
     
     while(delta.length > 0) {
         const element: Edge = (delta.shift() as Edge);
@@ -20,8 +23,8 @@ export function reachable(edges: readonly Edge[]): Edge[] {
             // there are thus _two_ new edges: (a, a) and (b, b).
             const a = attempt_join(o, element);
             const b = attempt_join(element, o);
-            delta   = attempt_insert(a, delta, old);
-            delta   = attempt_insert(b, delta, old);
+            delta   = insert(a, delta, known);
+            delta   = insert(b, delta, known);
         }
     }
     return old;
@@ -44,9 +47,14 @@ function attempt_join(a: Edge, b: Edge): undefined | Edge {
     }
 }
 
-function attempt_insert(a: undefined | Edge, delta: Edge[], old: readonly Edge[]): Edge[] {
-    if(a && !contains(a, old) && !contains(a, delta)) {
-        delta.push(a);
+// checks if an edge is already known, if not: add it to 'delta' and the 'known' set
+function insert(edge: undefined | Edge, delta: Edge[], known: Set<Key>): Edge[] {
+    if (edge) {
+        const key: Key = make_key(edge);
+        if(!known.has(key)) {
+            known.add(key);
+            delta.push(edge);
+        }
     }
     return delta;
 }
