@@ -40,4 +40,19 @@ describe('create availability', () => {
         expect(avail[0].in_set.size).toBe(0);
         expect(avail[0].out_set.size).toBe(2);
     });
+
+    it('two blocks', () => {
+        const cfg: Block[] = [
+            { name: 'Entry', predecessors: [], successors: ['Alpha'], body: new Set(['x']) },
+            { name: 'Alpha', predecessors: ['Entry'], successors: [], body: new Set(['a']) },
+        ];
+        const avail: Availability[] = iterate(cfg);
+        expect(avail.length).toBe(2);
+        expect(avail[0].name).toBe('Entry');
+        expect(avail[0].in_set.size).toBe(0);
+        expect(avail[0].out_set.size).toBe(1);
+        expect(avail[1].name).toBe('Alpha');
+        // expect(avail[1].in_set.size).toBe(1);
+        // expect(avail[1].out_set.size).toBe(2);  
+    });
 });
