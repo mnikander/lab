@@ -41,6 +41,8 @@ export function iterate(cfg: Block[]): Availability[] {
     return avail;
     
     function visit(block: number) {
+        worklist.delete(block);
+
         // TODO: merge predecessor out-sets into the current in-set
         avail[block].out_join = traverse(cfg[block], avail[block].in_join);
         avail[block].out_meet = traverse(cfg[block], avail[block].in_meet);
