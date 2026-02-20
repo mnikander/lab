@@ -8,7 +8,7 @@ Date: 2026-02-20
 ## Resources
 <!-- Where can I find relevant information? -->
 
-
+- [lattices](https://en.wikipedia.org/wiki/Lattice_(order))
 
 ## Plan
 <!-- What do I want to do? -->

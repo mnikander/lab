@@ -44,8 +44,12 @@ export function iterate(cfg: Block[]): Availability[] {
         worklist.delete(block);
 
         // TODO: merge predecessor out-sets into the current in-set
+
+        // traverse the block itself
         avail[block].out_join = traverse(cfg[block], avail[block].in_join);
         avail[block].out_meet = traverse(cfg[block], avail[block].in_meet);
+
+        // TODO: if the out-sets of this block changed, then enqueue all its successors into the worklist
     }
 
     function init(block: Block): Availability {
