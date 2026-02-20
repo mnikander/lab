@@ -24,12 +24,24 @@ export function traverse(block: Block, in_set: Set<Definition>): Set<Definition>
 }
 
 export function iterate(cfg: Block[]): Availability[] {
-    const avail: Availability[] = cfg.map(init);
-    for (let i = 0; i < cfg.length; ++i) {
-        avail[i].out_set = traverse(cfg[i], avail[i].in_set);
+    if (cfg.length > 0 && cfg[0].name !== 'Entry') {
+        throw Error(`Expected CFG block 0 to be called 'Entry', got '${cfg[0].name}' instead`);
     }
+
+    const avail: Availability[] = cfg.map(init);
+    const worklist: Set<number> = new Set();
+
+    // TODO: find an algorithm like 'std::iota' to do this
+    for (let i = 0; i < cfg.length; ++i) {
+        worklist.add(i);
+    }
+    worklist.forEach(visit);
     return avail;
     
+    function visit(block: number) {
+        avail[block].out_set = traverse(cfg[block], avail[block].in_set);
+    }
+
     function init(block: Block): Availability {
         return { name: block.name, in_set: new Set(), out_set: new Set() };
     }
