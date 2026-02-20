@@ -14,18 +14,25 @@ Date: 2026-02-20
 <!-- What do I want to do? -->
 <!-- What do I think is going to happen? -->
 
-
+- create a block type as a set or list of defines
+- create a set/map type for block in-sets and out-sets
+- create a directed edge type, which links blocks together
+- implement a function which maps from the in-set and body of a block, to its out-set
+- implement an iterative fixed-point solver which propagates availability through the CFG
 
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
-
+```
+deno test
+```
 
 ## Experiment
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-
+- defined a type for a CFG node, which contains the block name, set of defined variables, and the names of predecessor and successor blocks for easy navigation
+- implemented a function 'traverse' which updates the block's availabity
 
 ## Findings
 <!-- What did I learn? -->
