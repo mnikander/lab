@@ -5,16 +5,16 @@ import { Availability, Block, Definition, iterate, traverse } from "./availabili
 describe('block traversal', () => {
     it('empty block', () => {
         const block: Block = { name: 'Entry', predecessors: [], successors: [], body: new Set() };
-        const in_set:  Set<Definition> = new Set();
-        const out_set: Set<Definition> = traverse(block, in_set);
-        expect(out_set.size).toEqual(0);
+        const in_join:  Set<Definition> = new Set();
+        const out_join: Set<Definition> = traverse(block, in_join);
+        expect(out_join.size).toEqual(0);
     });
 
     it('block with two definitions', () => {
         const block: Block = { name: 'Entry', predecessors: [], successors: [], body: new Set(['a', 'b']) };
-        const in_set:  Set<Definition> = new Set();
-        const out_set: Set<Definition> = traverse(block, in_set);
-        expect(out_set.size).toEqual(2);
+        const in_join:  Set<Definition> = new Set();
+        const out_join: Set<Definition> = traverse(block, in_join);
+        expect(out_join.size).toEqual(2);
     });
 });
 
@@ -26,8 +26,8 @@ describe('create availability', () => {
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(1);
         expect(avail[0].name).toBe('Entry');
-        expect(avail[0].in_set.size).toBe(0);
-        expect(avail[0].out_set.size).toBe(0);
+        expect(avail[0].in_join.size).toBe(0);
+        expect(avail[0].out_join.size).toBe(0);
     });
 
     it('one block with two variables', () => {
@@ -37,8 +37,8 @@ describe('create availability', () => {
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(1);
         expect(avail[0].name).toBe('Entry');
-        expect(avail[0].in_set.size).toBe(0);
-        expect(avail[0].out_set.size).toBe(2);
+        expect(avail[0].in_join.size).toBe(0);
+        expect(avail[0].out_join.size).toBe(2);
     });
 
     it('two blocks', () => {
@@ -49,10 +49,10 @@ describe('create availability', () => {
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(2);
         expect(avail[0].name).toBe('Entry');
-        expect(avail[0].in_set.size).toBe(0);
-        expect(avail[0].out_set.size).toBe(1);
+        expect(avail[0].in_join.size).toBe(0);
+        expect(avail[0].out_join.size).toBe(1);
         expect(avail[1].name).toBe('Alpha');
-        // expect(avail[1].in_set.size).toBe(1);
-        // expect(avail[1].out_set.size).toBe(2);  
+        // expect(avail[1].in_join.size).toBe(1);
+        // expect(avail[1].out_join.size).toBe(2);  
     });
 });

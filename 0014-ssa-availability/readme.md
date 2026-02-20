@@ -16,9 +16,10 @@ Date: 2026-02-20
 
 - create a block type as a set or list of defines
 - create a set/map type for block in-sets and out-sets
-- create a directed edge type, which links blocks together
+- ~~create a directed edge type, which links blocks together~~
 - implement a function which maps from the in-set and body of a block, to its out-set
 - implement an iterative fixed-point solver which propagates availability through the CFG
+- model phi nodes
 
 ## Running the Code
 <!-- What steps are required to run the code? -->
@@ -34,6 +35,8 @@ deno test
 - defined a type for a CFG node, which contains the block name, set of defined variables, and the names of predecessor and successor blocks for easy navigation
 - implemented a function `traverse` which updates the block's availabity
 - simplified the `traverse` function to project the block and its in-set to its out-set
+- created function to initialize availability information for a given CFG to ensure validity
+- extended the in-set and out-set to distinguish 'defined' and 'maybe defined'
 
 ## Findings
 <!-- What did I learn? -->

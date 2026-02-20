@@ -11,9 +11,11 @@ export type Block = {
 };
 
 export type Availability = {
-    name: Label,
-    in_set: Set<Definition>,
-    out_set: Set<Definition>,
+    name:     Label,
+    in_join:  Set<Definition>,
+    in_meet:  Set<Definition>,
+    out_join: Set<Definition>,
+    out_meet: Set<Definition>,
 };
 
 export function traverse(block: Block, in_set: Set<Definition>): Set<Definition> {
@@ -39,10 +41,18 @@ export function iterate(cfg: Block[]): Availability[] {
     return avail;
     
     function visit(block: number) {
-        avail[block].out_set = traverse(cfg[block], avail[block].in_set);
+        // TODO: merge predecessor out-sets into the current in-set
+        avail[block].out_join = traverse(cfg[block], avail[block].in_join);
+        avail[block].out_meet = traverse(cfg[block], avail[block].in_meet);
     }
 
     function init(block: Block): Availability {
-        return { name: block.name, in_set: new Set(), out_set: new Set() };
+        return {
+            name: block.name,
+            in_join:  new Set(),
+            in_meet:  new Set(),
+            out_join: new Set(),
+            out_meet: new Set(),
+        };
     }
 }
