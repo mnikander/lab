@@ -32,15 +32,15 @@ describe('create availability', () => {
 
     it('two populated blocks', () => {
         const cfg: Block[] = [
-            { name: 'Alpha', predecessors: [], successors: [], body: new Set(['a']) },
-            { name: 'Bravo', predecessors: [], successors: [], body: new Set(['b', 'c']) },
+            { name: 'Entry', predecessors: [], successors: [], body: new Set(['x']) },
+            { name: 'Alpha', predecessors: [], successors: [], body: new Set(['a', 'b']) },
         ];
         const avail: Availability[] = create_availability(cfg);
         expect(avail.length).toBe(2);
-        expect(avail[0].name).toBe('Alpha');
+        expect(avail[0].name).toBe('Entry');
         expect(avail[0].in_set.size).toBe(0);
         expect(avail[0].out_set.size).toBe(0);
-        expect(avail[1].name).toBe('Bravo');
+        expect(avail[1].name).toBe('Alpha');
         expect(avail[1].in_set.size).toBe(0);
         expect(avail[1].out_set.size).toBe(0);
     });
