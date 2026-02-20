@@ -16,11 +16,9 @@ export type Availability = {
     out: Set<Definition>,
 };
 
-export function traverse(block: Block, availability: Availability): Availability {
-    if(block.name !== availability.name) {
-        throw Error(`the given block '${block.name}' and availability for '${availability.name}' do not belong together`);
-    }
-    
-    availability.out = availability.in.union(block.body);
-    return availability;
+export function traverse(block: Block, in_set: Set<Definition>): Set<Definition> {
+    let out_set: Set<Definition> = new Set();
+    out_set = out_set.union(in_set);
+    out_set = out_set.union(block.body);
+    return out_set;
 } 

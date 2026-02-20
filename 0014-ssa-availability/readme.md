@@ -32,7 +32,8 @@ deno test
 <!-- How do you run the code? -->
 
 - defined a type for a CFG node, which contains the block name, set of defined variables, and the names of predecessor and successor blocks for easy navigation
-- implemented a function 'traverse' which updates the block's availabity
+- implemented a function `traverse` which updates the block's availabity
+- simplified the `traverse` function to project the block and its in-set to its out-set
 
 ## Findings
 <!-- What did I learn? -->
