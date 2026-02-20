@@ -12,8 +12,8 @@ export type Block = {
 
 export type Availability = {
     name: Label,
-    in: Set<Definition>,
-    out: Set<Definition>,
+    in_set: Set<Definition>,
+    out_set: Set<Definition>,
 };
 
 export function traverse(block: Block, in_set: Set<Definition>): Set<Definition> {
@@ -21,4 +21,12 @@ export function traverse(block: Block, in_set: Set<Definition>): Set<Definition>
     out_set = out_set.union(in_set);
     out_set = out_set.union(block.body);
     return out_set;
-} 
+}
+
+export function create_availability(cfg: Block[]): Availability[] {
+    return cfg.map(build);
+
+    function build(block: Block): Availability {
+        return { name: block.name, in_set: new Set(), out_set: new Set() };
+    }
+}
