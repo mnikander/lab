@@ -1,6 +1,6 @@
 import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
 import { expect } from "jsr:@std/expect@1.0.17";
-import { Availability, Block, create_availability, Definition, traverse } from "./availability.ts";
+import { Availability, Block, Definition, iterate, traverse } from "./availability.ts";
 
 describe('block traversal', () => {
     it('empty block', () => {
@@ -19,29 +19,25 @@ describe('block traversal', () => {
 });
 
 describe('create availability', () => {
-    it('one empty block', () => {
+    it('one block without variables', () => {
         const cfg: Block[] = [
             { name: 'Entry', predecessors: [], successors: [], body: new Set() },
         ];
-        const avail: Availability[] = create_availability(cfg);
+        const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(1);
         expect(avail[0].name).toBe('Entry');
         expect(avail[0].in_set.size).toBe(0);
         expect(avail[0].out_set.size).toBe(0);
     });
 
-    it('two populated blocks', () => {
+    it('one block with two variables', () => {
         const cfg: Block[] = [
-            { name: 'Entry', predecessors: [], successors: [], body: new Set(['x']) },
-            { name: 'Alpha', predecessors: [], successors: [], body: new Set(['a', 'b']) },
+            { name: 'Entry', predecessors: [], successors: [], body: new Set(['a', 'b']) },
         ];
-        const avail: Availability[] = create_availability(cfg);
-        expect(avail.length).toBe(2);
+        const avail: Availability[] = iterate(cfg);
+        expect(avail.length).toBe(1);
         expect(avail[0].name).toBe('Entry');
         expect(avail[0].in_set.size).toBe(0);
-        expect(avail[0].out_set.size).toBe(0);
-        expect(avail[1].name).toBe('Alpha');
-        expect(avail[1].in_set.size).toBe(0);
-        expect(avail[1].out_set.size).toBe(0);
+        expect(avail[0].out_set.size).toBe(2);
     });
 });
