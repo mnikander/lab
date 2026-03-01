@@ -1,12 +1,5 @@
 // Copyright (c) 2026 Marco Nikander
-import { Availability, Block, Definition } from "./types.ts"
-
-export function traverse(block: Block, in_set: Set<Definition>): Set<Definition> {
-    let out_set: Set<Definition> = new Set();
-    out_set = out_set.union(in_set);
-    out_set = out_set.union(block.body);
-    return out_set;
-}
+import { Availability, Block } from "./types.ts"
 
 export function iterate(cfg: Block[]): Availability[] {
     const avail: Availability[] = cfg.map(init);
@@ -25,8 +18,8 @@ export function iterate(cfg: Block[]): Availability[] {
         // TODO: merge predecessor out-sets into the current in-set
 
         // traverse the block itself
-        avail[block].out_join = traverse(cfg[block], avail[block].in_join);
-        avail[block].out_meet = traverse(cfg[block], avail[block].in_meet);
+        avail[block].out_join = avail[block].in_join.union(cfg[block].body);
+        avail[block].out_meet = avail[block].in_meet.union(cfg[block].body);
 
         // TODO: if the out-sets of this block changed, then enqueue all its successors into the worklist
     }

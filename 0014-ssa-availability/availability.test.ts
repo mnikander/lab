@@ -1,20 +1,20 @@
 import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
 import { expect } from "jsr:@std/expect@1.0.17";
-import { iterate, traverse } from "./availability.ts";
+import { iterate } from "./availability.ts";
 import { Availability, Block, Definition } from "./types.ts"
 
 describe('block traversal', () => {
     it('empty block', () => {
         const block: Block = { index: 0, predecessors: [], successors: [], body: new Set() };
         const in_join:  Set<Definition> = new Set();
-        const out_join: Set<Definition> = traverse(block, in_join);
+        const out_join: Set<Definition> = in_join.union(block.body);
         expect(out_join.size).toEqual(0);
     });
 
     it('block with two definitions', () => {
         const block: Block = { index: 0, predecessors: [], successors: [], body: new Set(['a', 'b']) };
         const in_join:  Set<Definition> = new Set();
-        const out_join: Set<Definition> = traverse(block, in_join);
+        const out_join: Set<Definition> = in_join.union(block.body);
         expect(out_join.size).toEqual(2);
     });
 });
