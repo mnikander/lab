@@ -119,4 +119,29 @@ describe('compute availability', () => {
         expect(avail[3].out_meet.has('a')).toBe(true);
         expect(avail[3].out_meet.has('z')).toBe(true);
     });
+
+    it('loop with one block', () => {
+        const cfg: Block[] = [
+            { index: 0, predecessors: [0], successors: [0], body: new Set(['a']) },
+        ];
+        const avail: Availability[] = iterate(cfg);
+        expect(avail.length).toBe(1);
+        expect(avail[0].in_join.size).toBe(1);
+        expect(avail[0].out_join.size).toBe(1);
+    });
+
+    it('loop with two blocks', () => {
+        const cfg: Block[] = [
+            { index: 0, predecessors: [1], successors: [1], body: new Set(['a']) },
+            { index: 1, predecessors: [0], successors: [0], body: new Set(['b']) },
+        ];
+        const avail: Availability[] = iterate(cfg);
+        expect(avail.length).toBe(2);
+
+        expect(avail[0].in_join.size).toBe(2);
+        expect(avail[0].out_join.size).toBe(2);
+
+        expect(avail[1].in_join.size).toBe(2);
+        expect(avail[1].out_join.size).toBe(2);
+    });
 });
