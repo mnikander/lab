@@ -49,11 +49,17 @@ describe('create availability', () => {
         ];
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(2);
+        
         expect(avail[0].index).toBe(0);
         expect(avail[0].in_join.size).toBe(0);
+        expect(avail[0].in_meet.size).toBe(0);
         expect(avail[0].out_join.size).toBe(1);
+        expect(avail[0].out_meet.size).toBe(1);
+
         expect(avail[1].index).toBe(1);
-        // expect(avail[1].in_join.size).toBe(1);
-        // expect(avail[1].out_join.size).toBe(2);  
+        expect(avail[1].in_join.size).toBe(1);
+        expect(avail[1].in_meet.size).toBe(1);
+        expect(avail[1].out_join.size).toBe(2);  
+        expect(avail[1].out_meet.size).toBe(2);
     });
 });
