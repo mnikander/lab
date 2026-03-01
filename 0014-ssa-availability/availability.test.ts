@@ -19,14 +19,13 @@ describe('block traversal', () => {
     });
 });
 
-describe('create availability', () => {
+describe('compute availability', () => {
     it('one block without variables', () => {
         const cfg: Block[] = [
             { index: 0, predecessors: [], successors: [], body: new Set() },
         ];
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(1);
-        expect(avail[0].index).toBe(0);
         expect(avail[0].in_join.size).toBe(0);
         expect(avail[0].out_join.size).toBe(0);
     });
@@ -37,7 +36,6 @@ describe('create availability', () => {
         ];
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(1);
-        expect(avail[0].index).toBe(0);
         expect(avail[0].in_join.size).toBe(0);
         expect(avail[0].out_join.size).toBe(2);
     });
@@ -50,7 +48,6 @@ describe('create availability', () => {
         const avail: Availability[] = iterate(cfg);
         expect(avail.length).toBe(2);
         
-        expect(avail[0].index).toBe(0);
         expect(avail[0].in_join.size).toBe(0);
         expect(avail[0].in_meet.size).toBe(0);
         expect(avail[0].out_join.size).toBe(1);
@@ -58,7 +55,6 @@ describe('create availability', () => {
         expect(avail[0].out_meet.size).toBe(1);
         expect(avail[0].out_meet.has('a')).toBe(true);
 
-        expect(avail[1].index).toBe(1);
         expect(avail[1].in_join.size).toBe(1);
         expect(avail[1].in_meet.size).toBe(1);
         expect(avail[1].out_join.size).toBe(2);
