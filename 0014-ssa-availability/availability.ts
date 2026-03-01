@@ -1,17 +1,16 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Definition = string;
-export type Label      = string;
 
 export type Block = {
-    name: Label,
-    predecessors: Label[],
-    successors: Label[],
+    index: number,
+    predecessors: number[],
+    successors: number[],
     body: Set<Definition>,
 };
 
 export type Availability = {
-    name:     Label,
+    index:    number,
     in_join:  Set<Definition>,
     in_meet:  Set<Definition>,
     out_join: Set<Definition>,
@@ -26,10 +25,6 @@ export function traverse(block: Block, in_set: Set<Definition>): Set<Definition>
 }
 
 export function iterate(cfg: Block[]): Availability[] {
-    if (cfg.length > 0 && cfg[0].name !== 'Entry') {
-        throw Error(`Expected CFG block 0 to be called 'Entry', got '${cfg[0].name}' instead`);
-    }
-
     const avail: Availability[] = cfg.map(init);
     const worklist: Set<number> = new Set();
 
@@ -54,7 +49,7 @@ export function iterate(cfg: Block[]): Availability[] {
 
     function init(block: Block): Availability {
         return {
-            name: block.name,
+            index: block.index,
             in_join:  new Set(),
             in_meet:  new Set(),
             out_join: new Set(),

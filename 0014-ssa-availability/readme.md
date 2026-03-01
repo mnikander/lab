@@ -37,6 +37,7 @@ deno test
 - simplified the `traverse` function to project the block and its in-set to its out-set
 - created function to initialize availability information for a given CFG to ensure validity
 - extended the in-set and out-set to distinguish 'defined' and 'maybe defined'
+- refactor blocks to be identified by their index instead of a name, to allow O(1) lookup in the array of blocks
 
 ## Findings
 <!-- What did I learn? -->
