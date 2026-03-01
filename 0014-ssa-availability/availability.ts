@@ -16,8 +16,13 @@ export function iterate(cfg: Block[]): Availability[] {
         worklist.delete(block);
         const old_size: readonly [number, number] = out_size(block);
 
-        // merge predecessor out-sets into the current in-set
+        // merge predecessor out-join set into the current in-join set
         cfg[block].predecessors.forEach((pred: number) => { join_in(pred, block); });
+        
+        // copy the in-join set into the in-meet set to initialize it
+        avail[block].in_meet = avail[block].in_meet.union(avail[block].in_join);
+        
+        // prune the in-meet set, to those entries which are common to all predecessors
         cfg[block].predecessors.forEach((pred: number) => { meet_in(pred, block); });
 
         // traverse the block itself
@@ -37,7 +42,7 @@ export function iterate(cfg: Block[]): Availability[] {
     }
 
     function meet_in(predecessor: number, current: number) {
-        avail[current].in_meet = avail[current].in_join.intersection(avail[predecessor].out_meet);
+        avail[current].in_meet = avail[current].in_meet.intersection(avail[predecessor].out_meet);
     }
 
     function out_size(index: number): [number, number] {
