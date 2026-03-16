@@ -39,6 +39,8 @@ deno test
 - extended the in-set and out-set to distinguish 'defined' and 'maybe defined'
 - refactor blocks to be identified by their index instead of a name, to allow O(1) lookup in the array of blocks
 
+- found that the `meet` calculation is incorrect, I need a way to implement it as a monotonically decreasing function, which only removes stuff once it is certain that it should be removed
+
 ## Findings
 <!-- What did I learn? -->
 
