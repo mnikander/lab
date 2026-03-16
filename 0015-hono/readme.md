@@ -9,6 +9,7 @@ Date: 2026-03-16
 <!-- Where can I find relevant information? -->
 
 1. [Hono Docs](https://hono.dev/docs/)
+2. [Hono: Getting Started](https://hono.dev/docs/getting-started/basic)
 
 ## Plan
 <!-- What do I want to do? -->
@@ -29,7 +30,9 @@ deno task start
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-
+- defined a GET request
+- defined a POST request
+- tried out the developer console in the browser to send and receive data
 
 ## Findings
 <!-- What did I learn? -->
