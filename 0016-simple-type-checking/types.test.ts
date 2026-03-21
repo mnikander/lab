@@ -32,4 +32,16 @@ describe('type equivalence', () => {
         const b: Type = { type: "Arrow", from: { type: "Bool"}, to: { type: "Bool"} };
         expect(equivalent(a, b)).toBe(true);
     });
+
+    it('Bool_to_Bool__unequal__Bool_to_Bool_to_Bool', () => {
+        const a: Type = { type: "Arrow", from: { type: "Bool"}, to: { type: "Bool"} };
+        const b: Type = { type: "Arrow", from: { type: "Bool"}, to: { type: "Arrow", from: { type: "Bool"}, to: { type: "Bool"}} };
+        expect(equivalent(a, b)).toBe(false);
+    });
+
+    it('Bool_to_Bool_to_Bool__equal__Bool_to_Bool_to_Bool', () => {
+        const a: Type = { type: "Arrow", from: { type: "Bool"}, to: { type: "Arrow", from: { type: "Bool"}, to: { type: "Bool"}} };
+        const b: Type = { type: "Arrow", from: { type: "Bool"}, to: { type: "Arrow", from: { type: "Bool"}, to: { type: "Bool"}} };
+        expect(equivalent(a, b)).toBe(true);
+    });
 });
