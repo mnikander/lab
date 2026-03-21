@@ -39,7 +39,9 @@ deno test
 - defined Top, Bottom, Unit, Bool, Char8, and Int64 to have a small assortment of types available
 - defined equivalence relation
 - defined Arrow type and extended the equivalence relation accordingly
-
+- tested nested arrow types
+- implemented check for assignment (it's just the equivalence function)
+- started implementing check for function application
 
 ## Findings
 <!-- What did I learn? -->
