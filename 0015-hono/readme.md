@@ -3,7 +3,8 @@
 
 How can Hono be used to create a simple web backend?
 
-Date: 2026-03-16
+Date:   2026-03-16
+Status: In progress, as of 2026-03-21
 
 ## Resources
 <!-- Where can I find relevant information? -->

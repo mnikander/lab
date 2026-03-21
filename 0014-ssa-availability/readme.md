@@ -3,7 +3,8 @@
 
 How can an iterative fixed-point solver compute the availabilty of SSA variables?
 
-Date: 2026-02-20
+Date:   2026-02-20
+Status: Incomplete, as of 2026-03-21
 
 ## Resources
 <!-- Where can I find relevant information? -->
