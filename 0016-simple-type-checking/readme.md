@@ -16,9 +16,9 @@ Status: In progress
 <!-- What do I think is going to happen? -->
 
 - [x] define elementary types
-- [ ] define unary arrow types (functions)
-- [ ] write test-cases for type-checking
+- [x] define unary arrow types (functions)
 - [x] define equivalence relation on types
+- [ ] write test-cases for type-checking
 - [ ] implement a simple type-checker
 - [ ] optional: extend arrows to n-ary functions, perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`
 - [ ] can type-deduction be done for generic functions?
@@ -38,6 +38,7 @@ deno test
 
 - defined Top, Bottom, Unit, Bool, Char8, and Int64 to have a small assortment of types available
 - defined equivalence relation
+- defined Arrow type and extended the equivalence relation accordingly
 
 
 ## Findings
