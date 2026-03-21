@@ -12,6 +12,7 @@ The tables below collect those questions.
 | ---  | ---    | ---        | ---                  | ---      |
 | 0015 |        | 2026-03-16 | backend              | How can Hono be used to create a simple web backend? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | How can an iterative fixed-point solver compute the availabilty of SSA variables? |
+|      |        | 2026-03-16 | frontend, backend    | How can a simple web-app be created? |
 |      |        | 2026-01-04 | ssa, graphs          | How can dominance, dominator trees, and the dominance frontier be computed in a control flow graph? |
 |      |        | 2026-01-04 | ssa, graphs          | How can dominance frontiers be used to check/place phi nodes? |
 |      |        | 2026-01-03 | graphs, datalog      | How do you convert monotonic logic on ternary relations into a graph problem? |

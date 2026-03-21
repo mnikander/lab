@@ -21,8 +21,34 @@ Date: 2026-03-16
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
-```
+```bash
 deno task start
+```
+
+or:
+```bash
+deno run --allow-net main.ts
+```
+
+### GET request
+Type the following into the developer console in the browser:
+```js
+fetch("data");
+```
+or
+```js
+let response = await fetch("/data");
+let data = await response.json();
+```
+
+### POST request
+
+```js
+await fetch("/data", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ year: 2026, month: 3, day: 16, total: 65 })
+});
 ```
 
 
