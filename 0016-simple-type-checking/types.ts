@@ -5,8 +5,8 @@ export type Simple     = Top | Bottom | Unit | Bool | Char8 | Int64;
 export type Descriptor = "Top" | "Bottom" | "Unit" | "Bool" | "Char8" | "Int64" | "Arrow" | "Tuple" | "Variant" | "Array";
 
 export type Top     = ["Top"]; // 'unknown', all Types belong to Top
-export type Bottom  = ["Bottom"]; // 'never', impossiblity, never returns
-export type Unit    = ["Unit"]; // returns without a meaningful value, useful for procedures
+export type Unit    = ["Unit"]; // singular type, no a distinguishing value, useful for procedures
+export type Bottom  = ["Bottom"]; // 'never', no Type, impossiblity, never returns, unreachable
 export type Bool    = ["Bool"];
 export type Char8   = ["Char8"];
 export type Int64   = ["Int64"];

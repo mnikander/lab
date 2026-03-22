@@ -4,7 +4,7 @@
 How can a simple system be defined and checked?
 
 Date:   2026-03-21
-Status: In progress
+Status: Completed
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -23,14 +23,11 @@ Status: In progress
 - [x] optional: extend arrows to n-ary functions, ~~perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`~~
 - [x] define sum and product types
 - [x] static array types
-- [ ] optional: dynamic array types
 - [ ] optional: pointer types
+- [ ] ~~optional: dynamic array types (just like the static ones, but even easier because it doesn't have the capacity)~~
 - [ ] optional: how do you parse IR code to get the required information for type-checking?
 - [ ] optional: define order relation on types (may be useful for casting Int8 to Int16 for example)
 - [ ] optional: can type-deduction be done for generic functions?
-
-One way to implement the checking of function arguments, is to flatten the tree structure created by nested arrows, with an in-order traversal.
-After that, you can compare the resulting list against the argument list.
 
 ## Running the Code
 <!-- What steps are required to run the code? -->
@@ -57,6 +54,12 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
+When typing is explicit and strict, it is surprisingly easy to implement a type checker.
+The only two cases which need to be implemented are equivalence for assignment and function calls.
+It pays dividends to define a simple representation which is well-suited to the task.
+This type-checking problem boils down to just tree-equivalence.
+
+### Representation
 It is possible to encode the arrows in a very compact form using JavaScript arrays.
 A compact tuple-based encoding of `Int64 -> Int64 -> Int64` is `["Int64", ["Int64", "Bool"]]`. 
 In such an encoding, it is not possible to distinguish aggregate types, such as sum and product types, from arrows.
@@ -64,11 +67,18 @@ Inserting a tag at the start of the array, resolves this ambiguity.
 The resulting notation is: `["Arrow", "Int64", ["Arrow", "Int64", "Bool"]]`.
 That is still much more compact than JS objects would be.
 
+### Equivalence of Arrow Types
+One way to implement the checking of function arguments, is to flatten the tree structure created by nested arrows, with an in-order traversal.
+After that, you can compare the resulting list against the argument list.
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- How do you parse IR code to get the required information for type-checking?
+- Can other analyses, such as const-correctness or pointer-escaping be implemented as their own micro-pass, which operates in the same way as the type-checker, but just checks qualifiers instead of types? This would be like have 3 different "type systems" which are parsed and checked indepently of one another, to check different aspects of the language.
+- How can generics be implemented?
+- How can type deduction be implemented for primitives?
 
 ---
 **Copyright (c) 2026 Marco Nikander**

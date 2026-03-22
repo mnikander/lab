@@ -10,7 +10,6 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0016 |        | 2026-03-21 | types                | How can a simple system be defined and checked? |
 | 0015 |        | 2026-03-16 | backend              | How can Hono be used to create a simple web backend? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | How can an iterative fixed-point solver compute the availabilty of SSA variables? |
 |      |        | 2026-03-16 | frontend, backend    | How can a simple web-app be created? |
@@ -51,6 +50,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0016 |        | 2026-03-21 | types                | How can a simple system be defined and checked? |
 | 0013 |        | 2026-01-03 | graphs               | What is a lightweight way to implement reachability on directed graphs in Typescript? |
 | 0012 |        | 2026-01-02 | datalog, ssa         | How can non-dominance of CFG nodes be expressed using positive Datalog? |
 | 0011 |        | 2025-12-28 | datalog, types       | Can cons-cells be used to type-check multi-argument functions using Datalog? |
