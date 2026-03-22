@@ -46,19 +46,17 @@ deno test
 - implemented check for assignment (it's just the equivalence function)
 - started implementing check for function application
 - simplified types to use tuples
+- wrote function to flatten arrow types to an in-order list, which can be compared against the argument list
 
 ## Findings
 <!-- What did I learn? -->
 
-It would be possible to encode the arrows in a very compact form using javascript arrays. `Int64 -> Int64 -> Int64` could be encoded as `[["Int64", "Int64"], "Bool"]`. However, this would make it impossible to distinguish Other things taking multiple arguments, such as sum and product types, from arrows.
-So it might be better to write everything out as javascript objects.
-That said, I could include a small tag at the start, and then still just use arrays.
-I could write: `["->", "Int64", ["->", "Int64", "Bool"]]`.
-This might allow writing a generic algorithm to flatten the whole structure in various orders, regardless of what sort of types are used inside.
-Static array types might still be an issue, with `["Array", "Int64", 20]`, since the '20' is not a type argument.
-I might have to handle that array type separately.
-
-
+It is possible to encode the arrows in a very compact form using JavaScript arrays.
+A compact tuple-based encoding of `Int64 -> Int64 -> Int64` is `["Int64", ["Int64", "Bool"]]`. 
+In such an encoding, it is not possible to distinguish aggregate types, such as sum and product types, from arrows.
+Inserting a tag at the start of the array, resolves this ambiguity.
+The resulting notation is: `["Arrow", "Int64", ["Arrow", "Int64", "Bool"]]`.
+That is still much more compact than JS objects would be.
 
 ## Future Work
 <!-- Are there follow-up questions? -->

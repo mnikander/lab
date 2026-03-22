@@ -32,3 +32,19 @@ export function equivalent(a: Type, b: Type): boolean {
         return get_type(a) === get_type(b);
     }
 }
+
+export function flatten_arrow(f: Arrow): Simple[] {
+    let list: Simple[] = [];
+    impl(f, list);
+    return list;
+
+    function impl(t: Type, list: Simple[]): Simple[] {
+        if (is_arrow(t)) {
+            list = impl(t[1], list);
+            list = impl(t[2], list);
+        } else {
+            list.push(t);
+        }
+        return list;
+    }
+}

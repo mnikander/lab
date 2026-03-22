@@ -40,7 +40,7 @@ describe('type checking', () => {
         expect(check_application(fn, arg)).toEqual(true);
     });
 
-    it.skip('Int64_to_Int64_to_Bool__applied__Int64_Bool', () => {
+    it('Int64_to_Int64_to_Bool__applied__Int64_Bool', () => {
         const fn: Arrow   = ["Arrow", ["Int64"], ["Arrow", ["Int64"], ["Bool"] ] ];
         const arg: Simple[] = [["Int64"], ["Bool"]];
         expect(check_application(fn, arg)).toEqual(false);
