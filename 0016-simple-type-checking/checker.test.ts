@@ -3,14 +3,14 @@ import { expect } from "jsr:@std/expect@1.0.17";
 import { check_application, check_assignment } from "./checker.ts";
 import { Arrow, Simple, Type } from "./types.ts";
 
-describe('assignment of simple types which are', () => {
-    it('identical must type check', () => {
+describe('assignment of', () => {
+    it('matching simple types must type check', () => {
         const left: Simple  = ["Bool"] ;
         const right: Simple = ["Bool"] ;
         expect(check_assignment(left, right)).toEqual(true);
     });
 
-    it('different must NOT type check', () => {
+    it('mismatching simple types must NOT type check', () => {
         const left: Simple  = ["Bool"] ;
         const right: Simple = ["Int64"] ;
         expect(check_assignment(left, right)).toEqual(false);
