@@ -18,7 +18,7 @@ Status: In progress
 - [x] define elementary types
 - [x] define unary arrow types (functions)
 - [x] define equivalence relation on types
-- [ ] write test-cases for type-checking
+- [x] write test-cases for type-checking
 - [ ] implement a simple type-checker
 - [ ] optional: extend arrows to n-ary functions, perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`
 - [ ] can type-deduction be done for generic functions?
@@ -47,6 +47,7 @@ deno test
 - started implementing check for function application
 - simplified types to use tuples
 - wrote function to flatten arrow types to an in-order list, which can be compared against the argument list
+- modified the function which flattens arrow types, to _not_ flatten left arguments, which adds support for higher-order functions
 
 ## Findings
 <!-- What did I learn? -->
