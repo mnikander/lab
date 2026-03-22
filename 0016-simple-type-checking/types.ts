@@ -21,12 +21,7 @@ export function is_arrow(t: Type): t is Arrow { return t[0] === 'Arrow'; }
 
 export function equivalent(a: Type, b: Type): boolean {
     if (is_arrow(a)) {
-        if (is_arrow(b)) {
-            return equivalent(a[1], b[1]) && equivalent(a[2], b[2]);
-        }
-        else {
-            return false;
-        }
+        return (is_arrow(b) && equivalent(a[1], b[1]) && equivalent(a[2], b[2]));
     }
     else {
         return get_type(a) === get_type(b);
@@ -34,9 +29,7 @@ export function equivalent(a: Type, b: Type): boolean {
 }
 
 export function flatten_arrow(f: Arrow): Simple[] {
-    let list: Simple[] = [];
-    list = impl(f, list);
-    return list;
+    return impl(f, []);
 
     function impl(t: Type, list: Simple[]): Simple[] {
         if (is_arrow(t)) {
