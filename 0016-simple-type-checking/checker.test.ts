@@ -60,7 +60,7 @@ describe('application of first-order functions to', () => {
         expect(check_application(fn, arg)).toEqual(true);
     });
 
-    it('mismatching variants must type check', () => {
+    it('mismatching variants must NOT type check', () => {
         const fn: Arrow   = ["Arrow", ["Variant", [["Bool"], ["Int64"]]], ["Int64"]];
         const arg: Type[] = [["Variant", [["Unit"], ["Top"]]]];
         expect(check_application(fn, arg)).toEqual(false);
@@ -72,7 +72,7 @@ describe('application of first-order functions to', () => {
         expect(check_application(fn, arg)).toEqual(true);
     });
 
-    it('mismatching tuples must type check', () => {
+    it('mismatching tuples must NOT type check', () => {
         const fn: Arrow   = ["Arrow", ["Tuple", [["Bool"], ["Int64"]]], ["Int64"]];
         const arg: Type[] = [["Tuple", [["Unit"], ["Top"]]]];
         expect(check_application(fn, arg)).toEqual(false);
