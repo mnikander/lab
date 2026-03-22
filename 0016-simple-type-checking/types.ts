@@ -32,12 +32,12 @@ export function equivalent(a: Type, b: Type): boolean {
     }
 }
 
-export function flatten_arrow(f: Arrow): Simple[] {
+export function flatten_arrow(f: Arrow): Type[] {
     return impl(f, []);
 
-    function impl(t: Type, list: Simple[]): Simple[] {
+    function impl(t: Type, list: Type[]): Type[] {
         if (is_arrow(t)) {
-            list = impl(t[1], list);
+            list.push(t[1]);
             list = impl(t[2], list);
         } else {
             list.push(t);
@@ -52,7 +52,7 @@ export function equivalent_array(a: readonly Type[], b: readonly Type[]): boolea
     }
     else {
         for (let i = 0; i < a.length; ++i) {
-            if (get_type(a[i]) !== get_type(b[i])) {
+            if (!equivalent(a[i], b[i])) {
                 return false;
             }
         }
