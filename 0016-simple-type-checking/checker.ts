@@ -7,6 +7,6 @@ export function check_assignment(left: Simple, right: Simple): boolean {
 }
 
 export function check_application(fun: Arrow, args: Type[]): boolean {
-    const f: Type[] = flatten_arrow(fun).slice(0, -1);
+    const f: Type[] = flatten_arrow(fun).slice(0, -1); // this slice drops the result-type
     return equivalent_sequence(f, args);
 }
