@@ -2,7 +2,7 @@ import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
 import { expect } from "jsr:@std/expect@1.0.17";
 import { equivalent, Type } from "./types.ts"
 
-describe('simple type equivalence', () => {
+describe('simple-type equivalence', () => {
     it('identical types must be equivalent', () => {
         const a: Type = ["Bool"];
         const b: Type = ["Bool"];
@@ -14,7 +14,9 @@ describe('simple type equivalence', () => {
         const b: Type = ["Int64"];
         expect(equivalent(a, b)).toBe(false);
     });
+});
 
+describe('arrow-type equivalence', () => {
     it('arrow type and simple types must NOT be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         const b: Type = ["Bool"];
