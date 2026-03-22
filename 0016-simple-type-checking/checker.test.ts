@@ -24,6 +24,18 @@ describe('check first-order functions', () => {
         expect(check_application(fn, arg)).toEqual(true);
     });
 
+    it('Int64_to_VariantBoolInt64__applied__Int64', () => {
+        const fn: Arrow     = ["Arrow", ["Int64"], ["Variant", [["Bool"], ["Int64"]]]];
+        const arg: Simple[] = [["Int64"]];
+        expect(check_application(fn, arg)).toEqual(true);
+    });
+    
+    it('Int64_to_TupleBoolInt64__applied__Int64', () => {
+        const fn: Arrow     = ["Arrow", ["Int64"], ["Tuple", [["Bool"], ["Int64"]]]];
+        const arg: Simple[] = [["Int64"]];
+        expect(check_application(fn, arg)).toEqual(true);
+    });
+
     it('Int64_to_Bool__applied__no_arguments', () => {
         const fn: Arrow     = ["Arrow", ["Int64"], ["Bool"] ];
         const arg: Simple[] = [];
