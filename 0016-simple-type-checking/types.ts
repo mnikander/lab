@@ -41,20 +41,6 @@ export function equivalent(a: Type, b: Type): boolean {
     }
 }
 
-export function flatten_arrow(f: Arrow): Type[] {
-    return impl(f, []);
-
-    function impl(t: Type, list: Type[]): Type[] {
-        if (is_arrow(t)) {
-            list.push(t[1]);
-            list = impl(t[2], list);
-        } else {
-            list.push(t);
-        }
-        return list;
-    }
-}
-
 export function equivalent_array(a: readonly Type[], b: readonly Type[]): boolean {
     if (a.length !== b.length) {
         return false;
@@ -66,5 +52,19 @@ export function equivalent_array(a: readonly Type[], b: readonly Type[]): boolea
             }
         }
         return true;
+    }
+}
+
+export function flatten_arrow(f: Arrow): Type[] {
+    return impl(f, []);
+
+    function impl(t: Type, list: Type[]): Type[] {
+        if (is_arrow(t)) {
+            list.push(t[1]);
+            list = impl(t[2], list);
+        } else {
+            list.push(t);
+        }
+        return list;
     }
 }
