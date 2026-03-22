@@ -1,27 +1,34 @@
 // Copyright (c) 2026 Marco Nikander
 
-export type Type   = Top | Bottom | Unit | Bool | Char8 | Int64 | Arrow;
+export type Type       = Simple | Arrow;
+export type Simple     = Top | Bottom | Unit | Bool | Char8 | Int64;
+export type Descriptor = "Top" | "Bottom" | "Unit" | "Bool" | "Char8" | "Int64" | "Arrow";
 
-export type Top    = { type: "Top" }; // 'unknown', all Types belong to Top
-export type Bottom = { type: "Bottom" }; // 'never', impossiblity, never returns
-export type Unit   = { type: "Unit" }; // returns without a meaningful value, useful for procedures
+export type Top    = ["Top"]; // 'unknown', all Types belong to Top
+export type Bottom = ["Bottom"]; // 'never', impossiblity, never returns
+export type Unit   = ["Unit"]; // returns without a meaningful value, useful for procedures
+export type Bool   = ["Bool"];
+export type Char8  = ["Char8"];
+export type Int64  = ["Int64"];
 
-export type Bool   = { type: "Bool" };
-export type Char8  = { type: "Char8" };
-export type Int64  = { type: "Int64" };
+export type Arrow  = ["Arrow", from: Type, to: Type];
 
-export type Arrow  = { type: "Arrow", from: Type, to: Type };
+export function get_type(t: Type): Descriptor {
+    return t[0];
+}
+
+export function is_arrow(t: Type): t is Arrow { return t[0] === 'Arrow'; }
 
 export function equivalent(a: Type, b: Type): boolean {
-    if (a.type === "Arrow") {
-        if (b.type === "Arrow") {
-            return equivalent(a.from, b.from) && equivalent(a.to, b.to);
+    if (is_arrow(a)) {
+        if (is_arrow(b)) {
+            return equivalent(a[1], b[1]) && equivalent(a[2], b[2]);
         }
         else {
             return false;
         }
     }
     else {
-        return a.type === b.type;
+        return get_type(a) === get_type(b);
     }
 }

@@ -25,6 +25,9 @@ Status: In progress
 - [ ] define sum and product types
 - [ ] optional: define order relation on types (useful for casting Int8 to Int16 for example)
 
+One way to implement the checking of function arguments, is to flatten the tree structure created by nested arrows, with an in-order traversal.
+After that, you can compare the resulting list against the argument list.
+
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
@@ -42,9 +45,18 @@ deno test
 - tested nested arrow types
 - implemented check for assignment (it's just the equivalence function)
 - started implementing check for function application
+- simplified types to use tuples
 
 ## Findings
 <!-- What did I learn? -->
+
+It would be possible to encode the arrows in a very compact form using javascript arrays. `Int64 -> Int64 -> Int64` could be encoded as `[["Int64", "Int64"], "Bool"]`. However, this would make it impossible to distinguish Other things taking multiple arguments, such as sum and product types, from arrows.
+So it might be better to write everything out as javascript objects.
+That said, I could include a small tag at the start, and then still just use arrays.
+I could write: `["->", "Int64", ["->", "Int64", "Bool"]]`.
+This might allow writing a generic algorithm to flatten the whole structure in various orders, regardless of what sort of types are used inside.
+Static array types might still be an issue, with `["Array", "Int64", 20]`, since the '20' is not a type argument.
+I might have to handle that array type separately.
 
 
 
