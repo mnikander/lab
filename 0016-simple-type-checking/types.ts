@@ -17,14 +17,18 @@ export function get_type(t: Type): Descriptor {
     return t[0];
 }
 
+export function is_simple(t: Type): t is Simple { return t[0] === "Top" || t[0] === "Bottom" || t[0] === "Unit" || t[0] === "Bool" || t[0] === "Char8" || t[0] === "Int64"}
 export function is_arrow(t: Type): t is Arrow { return t[0] === 'Arrow'; }
 
 export function equivalent(a: Type, b: Type): boolean {
-    if (is_arrow(a)) {
-        return (is_arrow(b) && equivalent(a[1], b[1]) && equivalent(a[2], b[2]));
+    if (is_simple(a)) {
+        return get_type(a) === get_type(b);
+    }
+    else if (is_arrow(a) && is_arrow(b)) {
+        return equivalent(a[1], b[1]) && equivalent(a[2], b[2]);
     }
     else {
-        return get_type(a) === get_type(b);
+        return false;
     }
 }
 
