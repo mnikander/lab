@@ -35,7 +35,7 @@ export function equivalent(a: Type, b: Type): boolean {
 
 export function flatten_arrow(f: Arrow): Simple[] {
     let list: Simple[] = [];
-    impl(f, list);
+    list = impl(f, list);
     return list;
 
     function impl(t: Type, list: Simple[]): Simple[] {
