@@ -33,10 +33,10 @@ export function equivalent(a: Type, b: Type): boolean {
         return equivalent(a[1], b[1]) && equivalent(a[2], b[2]);
     }
     else if (is_tuple(a) && is_tuple(b)) {
-        return equivalent_array(a[1], b[1]);
+        return equivalent_sequence(a[1], b[1]);
     }
     else if (is_variant(a) && is_variant(b)) {
-        return equivalent_array(a[1].sort(), b[1].sort());
+        return equivalent_sequence(a[1].sort(), b[1].sort());
     }
     else if (is_array(a) && is_array(b)) {
         return get_type(a[1]) === get_type(b[1]) && a[2] === b[2];
@@ -46,7 +46,7 @@ export function equivalent(a: Type, b: Type): boolean {
     }
 }
 
-export function equivalent_array(a: readonly Type[], b: readonly Type[]): boolean {
+export function equivalent_sequence(a: readonly Type[], b: readonly Type[]): boolean {
     if (a.length !== b.length) {
         return false;
     }
@@ -65,8 +65,9 @@ export function flatten_arrow(f: Arrow): Type[] {
 
     function impl(t: Type, list: Type[]): Type[] {
         if (is_arrow(t)) {
-            list.push(t[1]);
-            list = impl(t[2], list);
+            // left and right side are treated differently to allow higher-order functions
+            list.push(t[1]); // left is pushed as-is
+            list = impl(t[2], list); // right is flattened recursively
         } else {
             list.push(t);
         }

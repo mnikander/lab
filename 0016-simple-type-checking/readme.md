@@ -23,8 +23,8 @@ Status: Completed
 - [x] optional: extend arrows to n-ary functions, ~~perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`~~
 - [x] define sum and product types
 - [x] static array types
-- [ ] optional: pointer types
 - [ ] ~~optional: dynamic array types (just like the static ones, but even easier because it doesn't have the capacity)~~
+- [ ] optional: pointer types
 - [ ] optional: how do you parse IR code to get the required information for type-checking?
 - [ ] optional: define order relation on types (may be useful for casting Int8 to Int16 for example)
 - [ ] optional: can type-deduction be done for generic functions?
