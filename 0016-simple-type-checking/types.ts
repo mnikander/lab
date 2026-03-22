@@ -41,3 +41,17 @@ export function flatten_arrow(f: Arrow): Simple[] {
         return list;
     }
 }
+
+export function equivalent_array(a: readonly Type[], b: readonly Type[]): boolean {
+    if (a.length !== b.length) {
+        return false;
+    }
+    else {
+        for (let i = 0; i < a.length; ++i) {
+            if (get_type(a[i]) !== get_type(b[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
