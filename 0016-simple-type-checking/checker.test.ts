@@ -77,6 +77,18 @@ describe('application of first-order functions to', () => {
         const arg: Type[] = [["Tuple", [["Unit"], ["Top"]]]];
         expect(check_application(fn, arg)).toEqual(false);
     });
+
+    it('matching arrays must type check', () => {
+        const fn: Arrow   = ["Arrow", ["Array", ["Int64"], 2], ["Int64"]];
+        const arg: Type[] = [["Array", ["Int64"], 2]];
+        expect(check_application(fn, arg)).toEqual(true);
+    });
+
+    it('mismatching arrays must NOT type check', () => {
+        const fn: Arrow   = ["Arrow", ["Array", ["Int64"], 2], ["Int64"]];
+        const arg: Type[] = [["Array", ["Bool"], 3]];
+        expect(check_application(fn, arg)).toEqual(false);
+    });
 });
 
 describe('check higher-order functions', () => {

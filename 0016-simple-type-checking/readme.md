@@ -22,7 +22,7 @@ Status: In progress
 - [x] implement a simple type-checker
 - [x] optional: extend arrows to n-ary functions, ~~perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`~~
 - [x] define sum and product types
-- [ ] static array types
+- [x] static array types
 - [ ] optional: dynamic array types
 - [ ] optional: pointer types
 - [ ] optional: how do you parse IR code to get the required information for type-checking?
@@ -52,6 +52,7 @@ deno test
 - simplified types to use tuples
 - wrote function to flatten arrow types to an in-order list, which can be compared against the argument list
 - modified the function which flattens arrow types, to _not_ flatten left arguments, which adds support for higher-order functions
+- implemented fixed-size array type
 
 ## Findings
 <!-- What did I learn? -->

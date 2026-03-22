@@ -1,8 +1,8 @@
 // Copyright (c) 2026 Marco Nikander
 
-export type Type       = Simple | Arrow | Tuple | Variant;
+export type Type       = Simple | Arrow | Tuple | Variant | Array;
 export type Simple     = Top | Bottom | Unit | Bool | Char8 | Int64;
-export type Descriptor = "Top" | "Bottom" | "Unit" | "Bool" | "Char8" | "Int64" | "Arrow" | "Tuple" | "Variant";
+export type Descriptor = "Top" | "Bottom" | "Unit" | "Bool" | "Char8" | "Int64" | "Arrow" | "Tuple" | "Variant" | "Array";
 
 export type Top     = ["Top"]; // 'unknown', all Types belong to Top
 export type Bottom  = ["Bottom"]; // 'never', impossiblity, never returns
@@ -13,6 +13,7 @@ export type Int64   = ["Int64"];
 export type Arrow   = ["Arrow", from: Type, to: Type];
 export type Tuple   = ["Tuple", Type[]];
 export type Variant = ["Variant", Type[]];
+export type Array   = ["Array", Type, capacity: number]
 
 export function get_type(t: Type): Descriptor {
     return t[0];
@@ -22,6 +23,7 @@ export function is_simple(t: Type): t is Simple { return t[0] === "Top" || t[0] 
 export function is_arrow(t: Type): t is Arrow { return t[0] === 'Arrow'; }
 export function is_tuple(t: Type): t is Tuple { return t[0] === 'Tuple'; }
 export function is_variant(t: Type): t is Variant { return t[0] === 'Variant'; }
+export function is_array(t: Type): t is Array { return t[0] === 'Array'; }
 
 export function equivalent(a: Type, b: Type): boolean {
     if (is_simple(a)) {
@@ -35,6 +37,9 @@ export function equivalent(a: Type, b: Type): boolean {
     }
     else if (is_variant(a) && is_variant(b)) {
         return equivalent_array(a[1].sort(), b[1].sort());
+    }
+    else if (is_array(a) && is_array(b)) {
+        return get_type(a[1]) === get_type(b[1]) && a[2] === b[2];
     }
     else {
         return false;

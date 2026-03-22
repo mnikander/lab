@@ -133,3 +133,41 @@ describe('product-type equivalence', () => {
         expect(equivalent(a, b)).toBe(false);
     });
 });
+
+describe('array-type equivalence', () => {
+    it('empty arrays must be equivalent', () => {
+        const a: Type = ["Array", ["Bottom"], 0];
+        const b: Type = ["Array", ["Bottom"], 0];
+        expect(equivalent(a, b)).toBe(true);
+    });
+
+    it('identical unary arrays must be equivalent', () => {
+        const a: Type = ["Array", ["Bool"], 1];
+        const b: Type = ["Array", ["Bool"], 1];
+        expect(equivalent(a, b)).toBe(true);
+    });
+
+    it('different unary arrays must NOT be equivalent', () => {
+        const a: Type = ["Array", ["Bool"], 1];
+        const b: Type = ["Array", ["Int64"], 1];
+        expect(equivalent(a, b)).toBe(false);
+    });
+
+    it('identical binary arrays must be equivalent', () => {
+        const a: Type = ["Array", ["Bool"], 2];
+        const b: Type = ["Array", ["Bool"], 2];
+        expect(equivalent(a, b)).toBe(true);
+    });
+
+    it('different binary arrays must NOT be equivalent', () => {
+        const a: Type = ["Array", ["Bool"], 2];
+        const b: Type = ["Array", ["Int64"], 2];
+        expect(equivalent(a, b)).toBe(false);
+    });
+
+    it('different-size arrays must NOT be equivalent', () => {
+        const a: Type = ["Array", ["Bool"], 1];
+        const b: Type = ["Array", ["Bool"], 2];
+        expect(equivalent(a, b)).toBe(false);
+    });
+});
