@@ -19,11 +19,15 @@ Status: In progress
 - [x] define unary arrow types (functions)
 - [x] define equivalence relation on types
 - [x] write test-cases for type-checking
-- [ ] implement a simple type-checker
-- [ ] optional: extend arrows to n-ary functions, perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`
-- [ ] can type-deduction be done for generic functions?
-- [ ] define sum and product types
-- [ ] optional: define order relation on types (useful for casting Int8 to Int16 for example)
+- [x] implement a simple type-checker
+- [x] optional: extend arrows to n-ary functions, ~~perhaps with `type Arrow  = { type: "Arrow", from: Type[], to: Type[] };`~~
+- [x] define sum and product types
+- [ ] static array types
+- [ ] optional: dynamic array types
+- [ ] optional: pointer types
+- [ ] optional: how do you parse IR code to get the required information for type-checking?
+- [ ] optional: define order relation on types (may be useful for casting Int8 to Int16 for example)
+- [ ] optional: can type-deduction be done for generic functions?
 
 One way to implement the checking of function arguments, is to flatten the tree structure created by nested arrows, with an in-order traversal.
 After that, you can compare the resulting list against the argument list.
