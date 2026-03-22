@@ -59,4 +59,14 @@ describe('check higher-order functions', () => {
         const arg: Type[] = [["Arrow", ["Int64"], ["Bool"]], ["Int64"]];
         expect(check_application(fn, arg)).toEqual(true);
     });
+
+        it('Int64toBool_to_Int64_to_Bool__applied__Int64', () => {
+        // this is a higher-order function like 'map', but on one element:
+        // fn : Int64 -> (Int64 -> Bool) -> Bool
+        // note that arrows are right-associative, to this is equivalent to:
+        // fn : Int64 -> ((Int64 -> Bool) -> Bool)
+        const fn: Arrow   = ["Arrow", ["Int64"], ["Arrow", ["Arrow", ["Int64"], ["Bool"]], ["Bool"]]];
+        const arg: Type[] = [["Int64"], ["Arrow", ["Int64"], ["Bool"]]];
+        expect(check_application(fn, arg)).toEqual(true);
+    });
 });
