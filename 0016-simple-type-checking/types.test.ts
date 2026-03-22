@@ -3,43 +3,43 @@ import { expect } from "jsr:@std/expect@1.0.17";
 import { equivalent, Type } from "./types.ts"
 
 describe('simple type equivalence', () => {
-    it('Bool__equal__Bool', () => {
+    it('identical types must be equivalent', () => {
         const a: Type = ["Bool"];
         const b: Type = ["Bool"];
         expect(equivalent(a, b)).toBe(true);
     });
 
-    it('Bool__unequal__Int64', () => {
+    it('different types must NOT be equivalent', () => {
         const a: Type = ["Bool"];
         const b: Type = ["Int64"];
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('Bool_to_Bool__unequal__Bool', () => {
+    it('arrow type and simple types must NOT be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         const b: Type = ["Bool"];
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('Bool_to_Bool__unequal__Bool_to_Int64', () => {
+    it('different arrow types must NOT be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         const b: Type = [ "Arrow", ["Bool"], ["Int64"] ];
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('Bool_to_Bool__equal__Bool_to_Bool', () => {
+    it('identical arrow types must be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         const b: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         expect(equivalent(a, b)).toBe(true);
     });
 
-    it('Bool_to_Bool__unequal__Bool_to_Bool_to_Bool', () => {
+    it('different arity arrow types must NOT be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], ["Bool"] ];
         const b: Type = [ "Arrow", ["Bool"], [ "Arrow", ["Bool"], ["Bool"] ] ];
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('Bool_to_Bool_to_Bool__equal__Bool_to_Bool_to_Bool', () => {
+    it('identical nested arrow types must be equivalent', () => {
         const a: Type = [ "Arrow", ["Bool"], [ "Arrow", ["Bool"], ["Bool"] ] ];
         const b: Type = [ "Arrow", ["Bool"], [ "Arrow", ["Bool"], ["Bool"] ] ];
         expect(equivalent(a, b)).toBe(true);
@@ -71,7 +71,7 @@ describe('sum-type equivalence', () => {
         expect(equivalent(a, b)).toBe(true);
     });
 
-    it('reversed binary variants, must be equivalent', () => {
+    it('reversed binary variants must be equivalent', () => {
         const a: Type = ["Variant", [["Bool"], ["Int64"]]];
         const b: Type = ["Variant", [["Int64"], ["Bool"]]];
         expect(equivalent(a, b)).toBe(true);
@@ -83,7 +83,7 @@ describe('sum-type equivalence', () => {
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('different-size variants, must NOT be equivalent', () => {
+    it('different-size variants must NOT be equivalent', () => {
         const a: Type = ["Variant", [["Bool"]]];
         const b: Type = ["Variant", [["Bool"], ["Int64"]]];
         expect(equivalent(a, b)).toBe(false);
@@ -115,7 +115,7 @@ describe('product-type equivalence', () => {
         expect(equivalent(a, b)).toBe(true);
     });
 
-    it('reversed binary tuples, must NOT be equivalent', () => {
+    it('reversed binary tuples must NOT be equivalent', () => {
         const a: Type = ["Tuple", [["Bool"], ["Int64"]]];
         const b: Type = ["Tuple", [["Int64"], ["Bool"]]];
         expect(equivalent(a, b)).toBe(false);
@@ -127,7 +127,7 @@ describe('product-type equivalence', () => {
         expect(equivalent(a, b)).toBe(false);
     });
 
-    it('different-size tuples, must NOT be equivalent', () => {
+    it('different-size tuples must NOT be equivalent', () => {
         const a: Type = ["Tuple", [["Bool"]]];
         const b: Type = ["Tuple", [["Bool"], ["Int64"]]];
         expect(equivalent(a, b)).toBe(false);
