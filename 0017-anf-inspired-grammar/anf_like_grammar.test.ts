@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import * as Grammar from "./tuple_grammar.ts";
+import * as Grammar from "./anf_like_grammar.ts";
 
 describe("tuple-based grammar", () => {
   it("must allow an empty block", () => {
