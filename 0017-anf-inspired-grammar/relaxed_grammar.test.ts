@@ -10,7 +10,7 @@ describe("tuple-based grammar", () => {
       [
         ["main", ["func", [], ["unit"]]],
       ],
-      "in",
+
       ["call", "main", [["unit"]]],
     ];
     expect(input).toBeDefined();
@@ -39,7 +39,6 @@ describe("tuple-based grammar", () => {
         "x",
         ["call", "+", [["int", 2], ["int", 3]]],
       ]],
-      "in",
       "x",
     ]]];
     expect(input).toBeDefined();
@@ -47,7 +46,7 @@ describe("tuple-based grammar", () => {
 
   it("must allow conditionals in let-bindings", () => {
     const _text: string = "let x = 5 in if > x 0 then 1 else -1";
-    const input: Grammar.Expression = ["let", [["x", ["int", 5]]], "in", [
+    const input: Grammar.Expression = ["let", [["x", ["int", 5]]], [
       "if",
       ["call", ">", ["x", ["int", 0]]],
       ["int", 1],

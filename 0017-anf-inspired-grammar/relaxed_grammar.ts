@@ -10,7 +10,7 @@ export type Expression =
   | Int
   | Unit;
 
-export type Let = ["let", bindings: [Id, Expression][], "in", body: Expression];
+export type Let = ["let", bindings: [Id, Expression][], body: Expression];
 export type Application = ["call", func: Expression, args: Expression[]];
 export type Abstraction = ["func", params: Id[], body: Expression];
 
