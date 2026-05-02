@@ -37,7 +37,7 @@ describe("tuple-based grammar", () => {
   });
 
   it("must allow arithmetic let-bindings", () => {
-    const _text: string = "{+ 1 { let x = + 2 3 in x }}";
+    const _text: string = "{+ 1 { let {x = + 2 3} in x }}";
     const input: Grammar.Expression = ["call", "+", [["int", 1], [
       "let",
       [[
@@ -50,7 +50,7 @@ describe("tuple-based grammar", () => {
   });
 
   it("must allow conditionals in let-bindings", () => {
-    const _text: string = "let x = 5 in if > x 0 then 1 else -1";
+    const _text: string = "let {x = 5} in if > x 0 then 1 else -1";
     const input: Grammar.Expression = ["let", [["x", ["int", 5]]], [
       "if",
       ["call", ">", ["x", ["int", 0]]],

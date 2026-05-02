@@ -57,7 +57,7 @@ describe("tuple-based grammar", () => {
   });
 
   it("must allow conditionals in let-bindings", () => {
-    const _text: string = "let x = 5 in if > x 0 then 1 else -1";
+    const _text: string = "{ let x = 5 in { if > x 0 then 1 else -1 }}";
     const input: Grammar.Block = ["block", [], [
       "if",
       ["block", [], ["call", ">", ["x", ["int", 0]]]],
