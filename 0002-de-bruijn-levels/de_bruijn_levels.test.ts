@@ -1,5 +1,5 @@
-import { describe, it } from "jsr:@std/testing/bdd";
-import { expect } from "jsr:@std/expect";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { AST, debruijn, evaluate } from './de_bruijn_levels.ts'
 
 const i_combinator: AST = ['lambda', 'x', 'x']; // identity function

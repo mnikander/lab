@@ -1,4 +1,4 @@
-import { expect } from "jsr:@std/expect";
+import { expect } from "@std/expect";
 import { Expr, Call, Arg, Node, curry } from "./currying.ts"
 
 Deno.test("do nothing", () => {

@@ -1,5 +1,5 @@
-import { describe, it } from "jsr:@std/testing@1.0.16/bdd";
-import { expect } from "jsr:@std/expect@1.0.17";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { iterate } from "./availability.ts";
 import { Availability, Block, Definition } from "./types.ts"
 

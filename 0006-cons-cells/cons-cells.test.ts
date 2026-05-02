@@ -1,5 +1,5 @@
-import { describe, it } from "jsr:@std/testing/bdd";
-import { expect } from "jsr:@std/expect";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { nil, Nil, first, rest, cons, Cons, value, Value, symbol, Symbol } from "./cons-cells.ts";
 
 describe('must allow initialization of', () => {

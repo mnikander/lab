@@ -1,5 +1,5 @@
-import { describe, it } from "jsr:@std/testing/bdd";
-import { expect } from "jsr:@std/expect";
+import { describe, it } from "@std/testing/bdd";
+import { expect } from "@std/expect";
 import { evaluate, Instruction } from "./three_address_code.ts";
 
 describe('constants and exit', () => {
