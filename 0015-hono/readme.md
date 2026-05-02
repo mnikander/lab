@@ -1,10 +1,10 @@
 # Question
 <!-- What am I figuring out? -->
 
-How can Hono be used to create a simple web backend?
+How can Hono be used to accept GET and POST requests?
 
 Date:   2026-03-16
-Status: In progress, as of 2026-03-21
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
