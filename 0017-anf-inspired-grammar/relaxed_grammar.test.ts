@@ -5,12 +5,17 @@ import * as Grammar from "./relaxed_grammar.ts";
 describe("tuple-based grammar", () => {
   it("must allow an empty block", () => {
     const _text: string = "{unit}";
+    const input: Grammar.Expression = ["unit"];
+    expect(input).toBeDefined();
+  });
+
+  it("must allow defining a function", () => {
+    const _text: string = "{unit}";
     const input: Grammar.Expression = [
       "let",
       [
         ["main", ["func", [], ["unit"]]],
       ],
-
       ["call", "main", [["unit"]]],
     ];
     expect(input).toBeDefined();

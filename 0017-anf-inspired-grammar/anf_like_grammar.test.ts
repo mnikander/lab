@@ -9,6 +9,18 @@ describe("tuple-based grammar", () => {
     expect(input).toBeDefined();
   });
 
+  it("must allow defining a function", () => {
+    const _text: string = "{unit}";
+    const input: Grammar.Block = [
+      "block",
+      [
+        ["let", "main", ["func", [], ["block", [], ["unit"]]]],
+      ],
+      ["call", "main", [["unit"]]],
+    ];
+    expect(input).toBeDefined();
+  });
+
   it("must allow simple arithmetic expressions", () => {
     const _text: string = "{+ 1 2}";
     const input: Grammar.Block = ["block", [], ["call", "+", [["int", 1], [
