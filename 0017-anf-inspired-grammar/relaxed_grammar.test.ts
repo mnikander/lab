@@ -44,4 +44,15 @@ describe("tuple-based grammar", () => {
     ]]];
     expect(input).toBeDefined();
   });
+
+  it("must allow conditionals in let-bindings", () => {
+    const _text: string = "let x = 5 in if > x 0 then 1 else -1";
+    const input: Grammar.Expression = ["let", [["x", ["int", 5]]], "in", [
+      "if",
+      ["call", ">", ["x", ["int", 0]]],
+      ["int", 1],
+      ["int", -1],
+    ]];
+    expect(input).toBeDefined();
+  });
 });
