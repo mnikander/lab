@@ -1,10 +1,10 @@
 # Question
 <!-- What am I figuring out? -->
 
-How can a simple system be defined and checked?
+How can a simple type system be defined and checked?
 
 Date:   2026-03-21
-Status: Completed
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
