@@ -4,7 +4,7 @@
     "@std/expect": "jsr:@std/expect@1.0.19"
   },
   "fmt": {
-    "include": ["*.ts"],
+    "include": ["**/*.ts"],
     "exclude": ["*.md"]
   }
 }
