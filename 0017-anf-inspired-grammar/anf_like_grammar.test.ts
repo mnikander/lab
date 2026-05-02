@@ -11,7 +11,7 @@ describe("tuple-based grammar", () => {
 
   it("must allow simple arithmetic expressions", () => {
     const _text: string = "{+ 1 2}";
-    const input: Grammar.Block = ["block", [], ["binary", "+", [["int", 1], [
+    const input: Grammar.Block = ["block", [], ["call", "+", [["int", 1], [
       "int",
       2,
     ]]]];
@@ -20,10 +20,10 @@ describe("tuple-based grammar", () => {
 
   it("must allow nested arithmetic expressions", () => {
     const _text: string = "{+ 1 {+ 2 3}}";
-    const input: Grammar.Block = ["block", [], ["binary", "+", [["int", 1], [
+    const input: Grammar.Block = ["block", [], ["call", "+", [["int", 1], [
       "block",
       [],
-      ["binary", "+", [["int", 2], ["int", 3]]],
+      ["call", "+", [["int", 2], ["int", 3]]],
     ]]]];
     expect(input).toBeDefined();
   });
@@ -33,12 +33,12 @@ describe("tuple-based grammar", () => {
     const input: Grammar.Block = [
       "block",
       [],
-      ["binary", "+", [["int", 1], [
+      ["call", "+", [["int", 1], [
         "block",
         [
-          ["let", ["id", "x"], ["binary", "+", [["int", 2], ["int", 3]]]],
+          ["let", "x", ["call", "+", [["int", 2], ["int", 3]]]],
         ],
-        ["id", "x"],
+        "x",
       ]]],
     ];
     expect(input).toBeDefined();
@@ -48,7 +48,7 @@ describe("tuple-based grammar", () => {
     const _text: string = "let x = 5 in if > x 0 then 1 else -1";
     const input: Grammar.Block = ["block", [], [
       "if",
-      ["block", [], ["binary", ">", [["id", "x"], ["int", 0]]]],
+      ["block", [], ["call", ">", ["x", ["int", 0]]]],
       ["int", 1],
       ["int", -1],
     ]];

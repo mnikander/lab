@@ -15,8 +15,8 @@ export type Atom =
   | Unit;
 
 // TODO: 'Abstraction' is very similar to the block definition. Can I use functions at the top level and get rid of the Block?
-export type Application = ["call", Atom, Expression[]];
-export type Abstraction = ["func", Id[], Block];
+export type Application = ["call", func: Atom, args: Expression[]];
+export type Abstraction = ["func", params: Id[], body: Block];
 
 export type Conditional = [
   "if",
@@ -25,14 +25,11 @@ export type Conditional = [
   elseExp: Expression,
 ];
 
-export type Builtin = Unary | Binary;
-export type Unary = ["unary", op: Op_unary, args: [Expression]];
-export type Binary = ["binary", op: Op_binary, args: [Expression, Expression]];
-
+export type Builtin = Op_unary | Op_arithmetic | Op_comparison;
 export type Op_unary = "~";
-export type Op_binary = Op_arithmetic | Op_comparison;
 export type Op_arithmetic = "+" | "-" | "*" | "/" | "%" | "min" | "max";
 export type Op_comparison = "<" | ">" | "<=" | ">=" | "==" | "!=";
-export type Id = ["id", string];
+
+export type Id = string;
 export type Int = ["int", number];
 export type Unit = ["unit"];
