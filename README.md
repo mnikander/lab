@@ -10,6 +10,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0018 |        | 2026-05-03 | ownership            | Can variables be checked, for valid life-cycles, via a small specialized grammar? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | How can an iterative fixed-point solver compute the availabilty of SSA variables? |
 |      |        | 2026-03-16 | frontend, backend    | How can a simple web-app be created? |
 |      |        | 2026-03-28 | regular languages    | How can a deterministic finite automaton be implemented in TypeScript? |
