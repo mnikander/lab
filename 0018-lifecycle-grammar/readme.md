@@ -24,6 +24,17 @@ Status: Doing
 - [ ] define in-set/out-set
 - [ ] propagate state through a linear block of instructions
 
+### Lowering and what we _really_ need
+
+Instructions which use variables and define a new variable, can be lowered into a set of instructions, i.e. `x = add a b` -> (`use a`, `use b`, `define x`).
+Phi nodes can be elimated in advance, by splitting edges.
+Moves, i.e. `consume x` can be eliminated in advance, by replacing it with a (`copy x`,`drop x`)
+Jump can be eliminated by having one general `branch` instruction which takes 1..n successors.
+A HIR `branch condition left right` can be lowered to (`use condition`, `branch [left, right]`)
+
+The memory operations, such as `borrow`, `own`, `load`, `copy` of pointers, as well as `phi` will not be modelled here.
+It is hoped that they can be eliminated during lowering.
+
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
