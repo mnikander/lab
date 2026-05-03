@@ -13,7 +13,7 @@ import {
 import { define, free, is_ok, Result, use } from "./lattice.ts";
 
 export function dataflow(program: Program): undefined | [Register, Result] {
-  const variables: Register[] = extract_variables(program);
+  const variables: Register[] = extract_variables_from_function(program[0]);
   let states: Map<Register, Result> = make_map(variables);
   // TODO: run dataflow analysis over the program
   states = dataflow_block(program[0].blocks[0], states);
@@ -79,15 +79,6 @@ function make_map(registers: Register[]): Map<Register, Result> {
   const result: Map<Register, Result> = new Map();
   registers.forEach((reg) => result.set(reg, ["ok", "pre"]));
   return result;
-}
-
-function extract_variables(program: Program): Register[] {
-  const blockwise: Register[][] = program.map(extract_variables_from_function);
-  const variables: Register[] = blockwise.reduce((
-    prev,
-    next,
-  ) => [...prev, ...next]);
-  return variables;
 }
 
 function extract_variables_from_function(func: Function): Register[] {
