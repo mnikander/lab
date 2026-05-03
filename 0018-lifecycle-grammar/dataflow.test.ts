@@ -39,4 +39,31 @@ describe("life-cycle", () => {
     const maybe_error: undefined | [Register, Result] = dataflow(program);
     expect(maybe_error).toBe(undefined);
   });
+
+  it("use-after-free", () => {
+    const program: Program = [
+      {
+        name: "@main",
+        params: [],
+        blocks: [
+          {
+            name: "@entry",
+            lines: [
+              ["define", "%answer"],
+              ["use", "%answer"],
+              ["free", "%answer"],
+              ["use", "%answer"],
+            ],
+            terminator: ["return"],
+          },
+        ],
+      },
+    ];
+    const maybe_error: undefined | [Register, Result] = dataflow(program);
+    expect(maybe_error).toEqual(["%answer", [
+      "error",
+      "top",
+      "use-after-free",
+    ]]);
+  });
 });

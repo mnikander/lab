@@ -1,12 +1,22 @@
 // Copyright (c) 2026 Marco Nikander
 
-import { Block, Function, get_arg, Program, Register } from "./grammar.ts";
-import { is_ok, Result } from "./lattice.ts";
+import { assert } from "node:console";
+import {
+  Block,
+  Function,
+  get_arg,
+  get_tag,
+  Line,
+  Program,
+  Register,
+} from "./grammar.ts";
+import { define, free, is_ok, Result, use } from "./lattice.ts";
 
 export function dataflow(program: Program): undefined | [Register, Result] {
   const variables: Register[] = extract_variables(program);
-  const states: Map<Register, Result> = make_map(variables);
+  let states: Map<Register, Result> = make_map(variables);
   // TODO: run dataflow analysis over the program
+  states = dataflow_block(program[0].blocks[0], states);
   const maybe_error: undefined | [Register, Result] = find_errors(states);
   return maybe_error;
 }
@@ -18,6 +28,51 @@ function find_errors(
     entry,
   ) => !is_ok(entry[1]));
   return maybe_error;
+}
+
+// in-place updates of 'states'
+function dataflow_block(
+  block: Block,
+  states: Map<Register, Result>,
+): Map<Register, Result> {
+  block.lines.forEach((line) => dataflow_line(line, states));
+  return states;
+}
+
+// in-place updates of 'states'
+function dataflow_line(
+  line: Line,
+  states: Map<Register, Result>,
+): void {
+  const register: Register = get_arg(line);
+  const result: undefined | Result = states.get(register);
+
+  if (result) {
+    switch (get_tag(line)) {
+      case "define":
+        states.set(register, define(result));
+        break;
+      case "use":
+        states.set(register, use(result));
+        break;
+      case "free":
+        states.set(register, free(result));
+        break;
+      default:
+        states.set(register, [
+          "error",
+          "bottom",
+          "instruction could not be processed",
+        ]);
+        break;
+    }
+  } else {
+    states.set(register, [
+      "error",
+      "bottom",
+      "register could not be found",
+    ]);
+  }
 }
 
 function make_map(registers: Register[]): Map<Register, Result> {
