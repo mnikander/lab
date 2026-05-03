@@ -28,8 +28,8 @@ describe("life-cycle", () => {
           {
             name: "@entry",
             lines: [
-              ["define", "%answer"],
-              ["use", "%answer"],
+              ["define", "%x"],
+              ["use", "%x"],
             ],
             terminator: ["return"],
           },
@@ -49,10 +49,10 @@ describe("life-cycle", () => {
           {
             name: "@entry",
             lines: [
-              ["define", "%answer"],
-              ["use", "%answer"],
-              ["free", "%answer"],
-              ["use", "%answer"],
+              ["define", "%x"],
+              ["use", "%x"],
+              ["free", "%x"],
+              ["use", "%x"],
             ],
             terminator: ["return"],
           },
@@ -60,10 +60,37 @@ describe("life-cycle", () => {
       },
     ];
     const maybe_error: undefined | [Register, Result] = dataflow(program);
-    expect(maybe_error).toEqual(["%answer", [
+    expect(maybe_error).toEqual(["%x", [
       "error",
       "top",
       "use-after-free",
+    ]]);
+  });
+
+  it("double-free", () => {
+    const program: Program = [
+      {
+        name: "@main",
+        params: [],
+        blocks: [
+          {
+            name: "@entry",
+            lines: [
+              ["define", "%x"],
+              ["use", "%x"],
+              ["free", "%x"],
+              ["free", "%x"],
+            ],
+            terminator: ["return"],
+          },
+        ],
+      },
+    ];
+    const maybe_error: undefined | [Register, Result] = dataflow(program);
+    expect(maybe_error).toEqual(["%x", [
+      "error",
+      "top",
+      "free-after-free",
     ]]);
   });
 });
