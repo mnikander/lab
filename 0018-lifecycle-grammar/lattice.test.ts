@@ -2,7 +2,7 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { define, free, get_state, is_ok, Result, use } from "./lattice.ts";
 
-describe("life-cycle", () => {
+describe("lattice", () => {
   it("(define) => ok", () => {
     const result: Result = define(["ok", "pre"]);
     expect(is_ok(result)).toBe(true);
