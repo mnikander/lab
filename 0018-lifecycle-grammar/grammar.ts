@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Program    = readonly Function[];
-export type Function   = { name: Label, params: Register[], return_blocks: Block[] }; // TODO: should params just be Register instead of Input, or can a function require a move?
+export type Function   = { name: Label, params: Register[], blocks: Block[] };
 export type Block      = { name: Label, lines: Line[], terminator: Terminator };
 
 export type Line       = Define | Use | Free ;
