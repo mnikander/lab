@@ -19,10 +19,11 @@ Status: Doing
 - [ ] write ownership grammar examples on paper or in markdown
 - [x] ~~prototype define-use-free grammar in langium~~
 - [x] prototype define-use-free grammar in Typescript, based on my High Intermediate Represenation (HIR)
-- [ ] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
-- [ ] find the set of all variables in a block (or function)
-- [ ] define in-set/out-set
-- [ ] propagate state through a linear block of instructions
+- [x] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
+- [ ] find the set of all variables in a function
+- [ ] define map from variable to state
+- [ ] propagate map of states through a linear block of instructions, updating at each instruction
+- [ ] at the end, search if the map contains any error states
 
 ### Lowering and what we _really_ need
 
@@ -49,6 +50,13 @@ deno test
 - outlined essentials and potential lowering story
 - built small life-cycle grammar based on HIR
 - renamed `drop` to `free` to better conform with the usual error names such as 'use after free'
+- defined lattice with bottom, pre, live, post, top
+- defined transition functions
+- wrote a few test-cases
+- refactored transition functions to be a combination of the result and state monad
+- used an agent to enumerate all 3-instruction test-cases
+- coded the expected result into each test-case
+- used an agent to generate the function calls corresponding to each test-case
 
 ## Findings
 <!-- What did I learn? -->
