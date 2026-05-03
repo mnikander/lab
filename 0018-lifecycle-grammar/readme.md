@@ -20,10 +20,12 @@ Status: Doing
 - [x] ~~prototype define-use-free grammar in langium~~
 - [x] prototype define-use-free grammar in Typescript, based on my High Intermediate Represenation (HIR)
 - [x] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
-- [ ] find the set of all variables in a function
-- [ ] define map from variable to state
+- [ ] write code examples in the life-cycle grammar
+- [x] find the set of all variables in a function
+- [x] define a map from variable to state
+- [x] initialize every variable's state with `["ok", "pre"]`
 - [ ] propagate map of states through a linear block of instructions, updating at each instruction
-- [ ] at the end, search if the map contains any error states
+- [ ] search the map for any variables in an error state
 
 ### Lowering and what we _really_ need
 
@@ -57,6 +59,7 @@ deno test
 - used an agent to enumerate all 3-instruction test-cases
 - coded the expected result into each test-case
 - used an agent to generate the function calls corresponding to each test-case
+- extract all variables from a program and create a map
 
 ## Findings
 <!-- What did I learn? -->

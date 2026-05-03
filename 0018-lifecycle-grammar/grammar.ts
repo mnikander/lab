@@ -22,6 +22,10 @@ export function get_tag(instruction: Line | Terminator): Tag {
     return instruction[0];
 }
 
-export function get_arg(instruction: Line | Branch) {
+export function get_arg(instruction: Line) {
+    return instruction[1];
+}
+
+export function get_target(instruction: Branch) {
     return instruction[1];
 }
