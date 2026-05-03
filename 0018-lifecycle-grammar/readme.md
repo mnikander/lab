@@ -70,7 +70,10 @@ deno test
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- Improve the variable extraction: write a pass over a Function which iterates over the blocks and lines of code (for-loop or for-each). It keeps an array of variable names and a set of seen variable names. For each instruction, check if the variable is unseen, if so, append it to the array and add it to the set. This returns an array of variable names without duplicates. This array provides a mapping from index to variable names. This in turn allows holding the state information for each variable as an array of states. That makes it much faster, cleaner, and easier to compare in-sets and out-sets for element-wise equality as well as doing join operations. This simplifies `[Register, Result]` to `Result[]`.
+- Implement the `join` function to combine information from separate branches.
+- Implement a queue-based worklist algorithm to do analysis over branching code. Do it on a per-function basis.
+- Create a CFG (array of CFG nodes) which contains the block name (Label), as well as the predecessor indices and successor indices. The CFG array should be aligned with the block array, so the indices line up. This provides O(1) access to blocks and the CFG. Similarly an array of In-Sets can be held for each block, an array of out-sets, and an array of flags for whether or not the CFG node is already enqueued in the work list.
 
 ---
 **Copyright (c) 2026 Marco Nikander**
