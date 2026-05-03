@@ -5,7 +5,8 @@
 2. How can multi-argument functions be type-checked using Datalog? |
 3. Can type-errors be found using monotic logic, without stratified negation? |
 
-Date: 2025-12-26
+Date:   2025-12-26
+Status: Partially done. Aborted.
 
 ## Resources
 <!-- Where can I find relevant information? -->
