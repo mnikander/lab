@@ -3,6 +3,14 @@
 export type State = "top" | "pre" | "live" | "post" | "bottom";
 export type Result = ["ok", State] | ["error", State, string];
 
+export function is_ok(result: Result): boolean {
+  return result[0] === "ok";
+}
+
+export function get_state(result: Result): State {
+  return result[1];
+}
+
 export function define(state: Result): Result {
   if (state[0] == "ok") {
     switch (state[1]) {
