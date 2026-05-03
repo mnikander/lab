@@ -1,27 +1,27 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import { define, free, State, Success, use } from "./lattice.ts";
+import { define, free, Result, use } from "./lattice.ts";
 
 describe("life-cycle", () => {
   it("define, free", () => {
-    const defined: [State, Success] = define("pre");
-    const freed: [State, Success] = free(defined[0]);
-    expect(freed[0]).toEqual("post");
-    expect(freed[1][0]).toEqual("ok");
+    const defined: Result = define(["ok", "pre"]);
+    const freed: Result = free(defined);
+    expect(freed[0]).toEqual("ok");
+    expect(freed[1]).toEqual("post");
   });
 
   it("define, use, free", () => {
-    const defined: [State, Success] = define("pre");
-    const used: [State, Success] = use(defined[0]);
-    const freed: [State, Success] = free(used[0]);
-    expect(freed[0]).toEqual("post");
-    expect(freed[1][0]).toEqual("ok");
+    const defined: Result = define(["ok", "pre"]);
+    const used: Result = use(defined);
+    const freed: Result = free(used);
+    expect(freed[0]).toEqual("ok");
+    expect(freed[1]).toEqual("post");
   });
 
   it("define, define", () => {
-    const defined: [State, Success] = define("pre");
-    const again: [State, Success] = define(defined[0]);
-    expect(again[0]).toEqual("top");
-    expect(again[1][0]).toEqual("error");
+    const defined: Result = define(["ok", "pre"]);
+    const again: Result = define(defined);
+    expect(again[0]).toEqual("error");
+    expect(again[1]).toEqual("top");
   });
 });
