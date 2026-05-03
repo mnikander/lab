@@ -15,10 +15,10 @@ Status: Doing
 <!-- What do I want to do? -->
 <!-- What do I think is going to happen? -->
 
-- [ ] decide on a tiny define-use-drop grammar scope
+- [x] decide on a tiny define-use-drop grammar scope
 - [ ] write ownership grammar examples on paper or in markdown
-- [ ] prototype define-use-drop grammar in langium
-- [ ] prototype define-use-drop grammar in Typescript, based on my High Intermediate Represenation (HIR)
+- [x] ~~prototype define-use-drop grammar in langium~~
+- [x] prototype define-use-drop grammar in Typescript, based on my High Intermediate Represenation (HIR)
 - [ ] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
 - [ ] find the set of all variables in a block (or function)
 - [ ] define in-set/out-set
@@ -46,7 +46,9 @@ deno test
 <!-- What did I do? -->
 <!-- How do you run the code? -->
 
-
+- outlined essentials and potential lowering story
+- built small life-cycle grammar based on HIR
+- renamed `drop` to `free` to better conform with the usual error names such as 'use after free'
 
 ## Findings
 <!-- What did I learn? -->
