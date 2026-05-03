@@ -15,10 +15,10 @@ Status: Doing
 <!-- What do I want to do? -->
 <!-- What do I think is going to happen? -->
 
-- [x] decide on a tiny define-use-drop grammar scope
+- [x] decide on a tiny define-use-free grammar scope
 - [ ] write ownership grammar examples on paper or in markdown
-- [x] ~~prototype define-use-drop grammar in langium~~
-- [x] prototype define-use-drop grammar in Typescript, based on my High Intermediate Represenation (HIR)
+- [x] ~~prototype define-use-free grammar in langium~~
+- [x] prototype define-use-free grammar in Typescript, based on my High Intermediate Represenation (HIR)
 - [ ] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
 - [ ] find the set of all variables in a block (or function)
 - [ ] define in-set/out-set
@@ -28,7 +28,7 @@ Status: Doing
 
 Instructions which use variables and define a new variable, can be lowered into a set of instructions, i.e. `x = add a b` -> (`use a`, `use b`, `define x`).
 Phi nodes can be elimated in advance, by splitting edges.
-Moves, i.e. `consume x` can be eliminated in advance, by replacing it with a (`copy x`,`drop x`)
+Moves, i.e. `consume x` can be eliminated in advance, by replacing it with a (`copy x`,`free x`)
 Jump can be eliminated by having one general `branch` instruction which takes 1..n successors.
 A HIR `branch condition left right` can be lowered to (`use condition`, `branch [left, right]`)
 
