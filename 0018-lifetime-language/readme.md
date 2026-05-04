@@ -1,7 +1,7 @@
 # Question
 <!-- What am I figuring out? -->
 
-Can variables be checked, for valid life-cycles, via a small specialized grammar?
+Can variable lifetimes be verified with a domain specific language (DSL)?
 
 Date:   2026-05-03
 Status: Doing
@@ -20,7 +20,7 @@ Status: Doing
 - [x] ~~prototype define-use-free grammar in langium~~
 - [x] prototype define-use-free grammar in Typescript, based on my High Intermediate Represenation (HIR)
 - [x] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
-- [ ] write code examples in the life-cycle grammar
+- [ ] write code examples in the lifetime grammar
 - [x] find the set of all variables in a function
 - [x] define a map from variable to state
 - [x] initialize every variable's state with `["ok", "pre"]`
@@ -50,7 +50,7 @@ deno test
 <!-- How do you run the code? -->
 
 - outlined essentials and potential lowering story
-- built small life-cycle grammar based on HIR
+- built small lifetime grammar based on HIR
 - renamed `drop` to `free` to better conform with the usual error names such as 'use after free'
 - defined lattice with bottom, pre, live, post, top
 - defined transition functions
