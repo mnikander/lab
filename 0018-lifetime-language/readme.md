@@ -16,16 +16,16 @@ Status: Doing
 <!-- What do I think is going to happen? -->
 
 - [x] decide on a tiny define-use-free grammar scope
-- [ ] write ownership grammar examples on paper or in markdown
+- [x] ~~write ownership grammar examples on paper or in markdown~~
 - [x] ~~prototype define-use-free grammar in langium~~
 - [x] prototype define-use-free grammar in Typescript, based on my High Intermediate Represenation (HIR)
 - [x] define lattice on `{Undefined, Live, Dead}` or `{Pre, Live, Post}`
-- [ ] write code examples in the lifetime grammar
+- [x] write code examples in the lifetime grammar
 - [x] find the set of all variables in a function
 - [x] define a map from variable to state
 - [x] initialize every variable's state with `["ok", "pre"]`
-- [ ] propagate map of states through a linear block of instructions, updating at each instruction
-- [ ] search the map for any variables in an error state
+- [x] propagate map of states through a linear block of instructions, updating at each instruction
+- [x] search the map for any variables in an error state
 
 ### Lowering and what we _really_ need
 
@@ -64,7 +64,10 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
-
+- It's super easy to write an analysis pass on such a simple DSL
+- Arrays with a tag at index 0 is a really simple way to encode things, and can be much easier to code with than objects, for simple structures
+- It's worth thinking about the convenience and performance of a `Map<Register, Result>`, it's clunky to work with
+- A mix of human and AI code creation works well for test-cases
 
 ## Future Work
 <!-- Are there follow-up questions? -->
