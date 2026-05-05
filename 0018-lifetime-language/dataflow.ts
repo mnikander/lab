@@ -1,6 +1,5 @@
 // Copyright (c) 2026 Marco Nikander
 
-import { assert } from "node:console";
 import {
   Block,
   Function,
