@@ -46,7 +46,6 @@ export type Primitive    = { value: number };
 export enum Get {
     Dest   = 0,
     Tag    = 1,
-    Type   = 2,
-    Left   = 3, // alias to first argument
-    Right  = 4, // alias to second argument
+    Left   = 2, // alias to first argument
+    Right  = 3, // alias to second argument
 }
