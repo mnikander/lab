@@ -15,11 +15,11 @@ Status: Doing
 <!-- What do I want to do? -->
 <!-- What do I think is going to happen? -->
 
-- [ ] copy HIR grammar into this lab
-- [ ] copy several HIR examples from IR test-cases into these test-cases
-- [ ] define CFG `Node = {name: Label, predecessors: number[], successors: number[]}`
-- [ ] define `CFG = Node[]`
-- [ ] ensure test-cases contain phi, a line of code, and all terminators (jump, branch, return)
+- [x] copy HIR grammar into this lab
+- [x] copy several HIR examples from IR test-cases into these test-cases
+- [x] define CFG `Node = {name: Label, predecessors: number[], successors: number[]}`
+- [x] define `CFG = Node[]`
+- [x] ensure test-cases contain phi, a line of code, and all terminators (jump, branch, return)
 - [ ] create a function to construct the CFG for a HIR.Function
 
 ... how do I check them for correctness? Do I do that by hand, or perhaps AI generate the expected results, before writing the code for CFG creation?
