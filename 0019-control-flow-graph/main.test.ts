@@ -36,10 +36,10 @@ function @main [] -> Int
             name: "@entry",
             phis: [],
             lines: [],
-            terminator: [null, "jump", "@second"],
+            terminator: [null, "jump", "@bravo"],
           },
           {
-            name: "@first",
+            name: "@alpha",
             phis: [],
             lines: [
               ["%1", "constant", { value: 11 }],
@@ -47,7 +47,7 @@ function @main [] -> Int
             terminator: [null, "return", "%1"],
           },
           {
-            name: "@second",
+            name: "@bravo",
             phis: [],
             lines: [
               ["%2", "constant", { value: 13 }],
