@@ -58,7 +58,11 @@ function @main [] -> Int
       },
     ];
     const result: CFG = make_cfg(input[0]);
-    const expected: CFG = []; // TODO: fill this in
+    const expected: CFG = [
+      { name: "@entry", predecessors: [], successors: [2] },
+      { name: "@alpha", predecessors: [], successors: [] },
+      { name: "@bravo", predecessors: [0], successors: [] },
+    ];
 
     expect(input).toBeDefined();
     expect(result).toEqual(expected);
@@ -141,7 +145,12 @@ function @main [] -> Int
       },
     ];
     const result: CFG = make_cfg(input[0]);
-    const expected: CFG = []; // TODO: fill this in
+    const expected: CFG = [
+      { name: "@entry", predecessors: [], successors: [1] },
+      { name: "@alpha", predecessors: [0], successors: [2, 3] },
+      { name: "@bravo", predecessors: [1], successors: [3] },
+      { name: "@charlie", predecessors: [1, 2], successors: [] },
+    ];
 
     expect(input).toBeDefined();
     expect(result).toEqual(expected);
