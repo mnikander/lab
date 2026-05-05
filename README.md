@@ -10,7 +10,6 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0018 |        | 2026-05-03 | ownership            | Can variable lifetimes be verified with a domain specific language (DSL)? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | How can an iterative fixed-point solver compute the availabilty of SSA variables? |
 |      |        | 2026-03-16 | frontend, backend    | How can a simple web-app be created? |
 |      |        | 2026-03-28 | regular languages    | How can a deterministic finite automaton be implemented in TypeScript? |
@@ -51,6 +50,7 @@ The tables below collect those questions.
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0018 |        | 2026-05-03 | ownership            | Can variable lifetimes be verified with a domain specific language (DSL)? |
 | 0017 |        | 2026-05-02 | ast, grammar         | Can an ANF-inspired grammar be relaxed to support nested expressions like Scheme? |
 | 0015 |        | 2026-03-16 | backend              | How can Hono be used to accept GET and POST requests? |
 | 0016 |        | 2026-03-21 | types                | How can a simple type system be defined and checked? |

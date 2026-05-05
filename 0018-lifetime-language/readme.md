@@ -4,7 +4,7 @@
 Can variable lifetimes be verified with a domain specific language (DSL)?
 
 Date:   2026-05-03
-Status: Doing
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
