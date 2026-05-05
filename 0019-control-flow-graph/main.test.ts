@@ -1,6 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import * as HIGH from "./grammar.ts";
+import { CFG, make_cfg } from "./main.ts";
 
 describe("unit testing", () => {
   it("jump and return", () => {
@@ -56,7 +57,11 @@ function @main [] -> Int
         ],
       },
     ];
+    const result: CFG = make_cfg(input[0]);
+    const expected: CFG = []; // TODO: fill this in
+
     expect(input).toBeDefined();
+    expect(result).toBe(expected);
   });
 
   it("jump, branch, phi node, and return", () => {
@@ -135,6 +140,10 @@ function @main [] -> Int
         ],
       },
     ];
+    const result: CFG = make_cfg(input[0]);
+    const expected: CFG = []; // TODO: fill this in
+
     expect(input).toBeDefined();
+    expect(result).toBe(expected);
   });
 });

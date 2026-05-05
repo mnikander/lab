@@ -9,3 +9,8 @@ export type Node = {
 };
 
 export type CFG = Node[];
+
+export function make_cfg(func: HIGH.Function): CFG {
+  // TODO: implement this function
+  return [];
+}
