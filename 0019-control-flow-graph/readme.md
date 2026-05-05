@@ -58,6 +58,7 @@ deno test
 - an index-based map is an awesome way to zip, super easy to use
 - predecessors were a little tricky to compute
 - returning partially computed CFG nodes was messy, since it threw away type-safety, it was much cleaner and easier to do calculations which returned the indices, and then zip everything together
+- it is an option to include the array index in every CFG node, but given that you can use the (value, index) version of `map` to transform things, there is very little value in including the redundant information about the index, which is given implicitly by the position in the array anyway
 
 ## Future Work
 <!-- Are there follow-up questions? -->
