@@ -81,15 +81,22 @@ function make_map(registers: Register[]): Map<Register, Result> {
 }
 
 function extract_variables_from_function(func: Function): Register[] {
-  const params: Register[] = func.params;
-  const blockwise: Register[][] = func.blocks.map(extract_variables_from_block);
-  const variables: Register[] = blockwise.reduce((
-    prev,
-    next,
-  ) => [...prev, ...next]);
-  return [...params, ...variables];
-}
+  const variables: Register[] = [];
+  const seen: Set<Register> = new Set();
 
-function extract_variables_from_block(block: Block): Register[] {
-  return block.lines.map((line) => get_arg(line));
+  // captures 'variables' and 'seen'
+  function try_to_add_variable(register: Register) {
+    if (!seen.has(register)) {
+      seen.add(register);
+      variables.push(register);
+    }
+  }
+
+  func.params.forEach(try_to_add_variable);
+  for (const block of func.blocks) {
+    for (const line of block.lines) {
+      try_to_add_variable(get_arg(line));
+    }
+  }
+  return variables;
 }
