@@ -61,7 +61,7 @@ function @main [] -> Int
     const expected: CFG = []; // TODO: fill this in
 
     expect(input).toBeDefined();
-    expect(result).toBe(expected);
+    expect(result).toEqual(expected);
   });
 
   it("jump, branch, phi node, and return", () => {
@@ -144,6 +144,6 @@ function @main [] -> Int
     const expected: CFG = []; // TODO: fill this in
 
     expect(input).toBeDefined();
-    expect(result).toBe(expected);
+    expect(result).toEqual(expected);
   });
 });
