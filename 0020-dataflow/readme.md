@@ -9,39 +9,13 @@ Status: Doing
 ## Resources
 <!-- Where can I find relevant information? -->
 
-- Static Program Analysis, Moller and Schwartzbach
+- _Static Program Analysis_, Moller and Schwartzbach
     - 5.3 Fixed Point Algorithms (pp 58)
     - Simple Work List Algorithm (pp 60)
     - 5.5 Available Expressions Analysis (pp 66)
 
-## Plan
-<!-- What do I want to do? -->
-<!-- What do I think is going to happen? -->
 
-- [ ] list expected inputs of the algorithm
-- [ ] list expected outputs of the algorithm
-- [ ] define a flat lattice on `{Undefined, Defined, Destroyed}`, i.e. `{Bottom, Undefined, Defined, Destroyed, Top}` or perhaps simplified to `{Bottom, Defined, Destroyed, Top}`
-- [ ] copy the define-use-drop grammar from Lab-0018
-- [ ] adapt the grammar to have with numeric variable names, numeric block labels, and numeric function labels
-- [ ] create 3 code examples (or copy and adapt them from Lab-0018 and the IR repo):
-    - 1. an entry block of straight-line code with a jump, and then a final block with straight-line code
-    - 2. an entry block with a branch, left and right blocks, and a final join block
-    - 3. an entry block, a loop block with a branch to itself, and a final block
-- [ ] take the control-flow graph datatype from Lab-0019 (and hard-code some sensible block names, even if they are all just indices)
-- [ ] hand-write or generate matching control-flow graphs for those programs
-- [ ] define worklist with `has`, `add`, `pop` operations which has a queue and a occupancy bitmask
-- [ ] implement a simple work list algorithm (see: Static Program Analysis, pp 60)
-
-Lattice:
-```
-           Top
-         /  |  \
-  Defined   |   Destroyed
-         \  |  /
-         Bottom
-```
-
-From Moeller, Static Program Analysis, pp 60:
+Pseudocode from Moeller, _Static Program Analysis_, pp 60:
 ```
 procedure SimpleWorkListAlgorithm(f1 , ... , fn)
     (x1 , ... , xn ) := (⊥, ... , ⊥)
@@ -60,6 +34,42 @@ procedure SimpleWorkListAlgorithm(f1 , ... , fn)
 end procedure
 ```
 
+## Plan
+<!-- What do I want to do? -->
+<!-- What do I think is going to happen? -->
+
+- [x] list expected inputs of the algorithm
+- [x] list expected outputs of the algorithm
+- [x] define a flat lattice on `{Undefined, Defined, Destroyed}`, i.e. `{Bottom, Undefined, Defined, Destroyed, Top}` or perhaps simplified to `{Bottom, Defined, Destroyed, Top}`
+- [x] copy the define-use-free grammar from Lab-0018
+- [x] adapt the grammar to have with numeric variable names, numeric block labels, and numeric function labels
+- [x] copy the control-flow graph datatype from Lab-0019
+- [ ] define worklist with `has`, `add`, `pop` operations which has a queue and a occupancy bitmask
+- [ ] create 6 code examples, 3 CFGs each with a happy paths and error path implementation:
+    - 1. an entry block of straight-line code with a jump, and then a final block with straight-line code
+    - 2. an entry block with a branch, left and right blocks, and a final join block
+    - 3. an entry block, a loop block with a branch to itself, and a final block
+- [ ] hand-write or generate matching control-flow graphs for the example programs
+- [ ] implement a simple work list algorithm (see pseudo-code)
+
+### Lattice
+```
+           Top
+         /  |  \
+  Defined   |   Destroyed
+         \  |  /
+         Bottom
+```
+
+### Inputs
+- program
+- control flow graph
+- list of all variables
+
+### Outputs
+
+- array of `("ok", state) | ("error", state, message)` for each variable
+
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
@@ -76,13 +86,9 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
-
-
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
-
-
 
 ---
 **Copyright (c) 2026 Marco Nikander**
