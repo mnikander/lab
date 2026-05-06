@@ -274,6 +274,127 @@ describe("branch", () => {
 
     expect(error_indices.length).toBe(4);
   });
+
+  it("must accept use of valid variables in multiple returns", () => {
+    const program: Program = [
+      {
+        name: "@main",
+        params: [],
+        blocks: [
+          {
+            name: "@entry",
+            lines: [
+              ["define", 0],
+              ["use", 0],
+            ],
+            terminator: ["branch", [1, 2]],
+          },
+          {
+            name: "@left",
+            lines: [
+              ["use", 0],
+              ["define", 1],
+              ["use", 1],
+            ],
+            terminator: ["return"],
+          },
+          {
+            name: "@right",
+            lines: [
+              ["use", 0],
+              ["define", 2],
+              ["use", 2],
+            ],
+            terminator: ["return"],
+          },
+        ],
+      },
+    ];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1, 2],
+      },
+      {
+        name: "@left",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@right",
+        predecessors: [0],
+        successors: [3],
+      },
+    ];
+    const variables: number[] = [];
+    const results: Result[] = dataflow(program, graph, variables);
+    const error_indices: number[] = find_errors(results);
+
+    expect(error_indices.length).toBe(0);
+  });
+
+  // TODO: error accumulation in the dataflow algorithm needs to be done differently to pass this test
+  it.skip("must reject use of invalid variables in multiple returns", () => {
+    const program: Program = [
+      {
+        name: "@main",
+        params: [],
+        blocks: [
+          {
+            name: "@entry",
+            lines: [
+              ["define", 0],
+              ["use", 0],
+            ],
+            terminator: ["branch", [1, 2]],
+          },
+          {
+            name: "@left",
+            lines: [
+              ["use", 0],
+              ["define", 1],
+              ["use", 1],
+              ["use", 2],
+            ],
+            terminator: ["return"],
+          },
+          {
+            name: "@right",
+            lines: [
+              ["use", 0],
+              ["define", 2],
+              ["use", 1],
+              ["use", 2],
+            ],
+            terminator: ["return"],
+          },
+        ],
+      },
+    ];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1, 2],
+      },
+      {
+        name: "@left",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@right",
+        predecessors: [0],
+        successors: [3],
+      },
+    ];
+    const variables: number[] = [];
+    const results: Result[] = dataflow(program, graph, variables);
+    const error_indices: number[] = find_errors(results);
+
+    expect(error_indices.length).toBe(2);
+  });
 });
 
 describe("loop", () => {
