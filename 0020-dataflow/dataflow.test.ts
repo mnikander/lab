@@ -17,7 +17,7 @@ describe("life-cycle for a single basic block", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [{ name: "@entry", predecessors: [], successors: [] }];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -54,7 +54,18 @@ describe("jump", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1],
+      },
+      {
+        name: "@final",
+        predecessors: [0],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -89,7 +100,18 @@ describe("jump", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1],
+      },
+      {
+        name: "@final",
+        predecessors: [0],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -145,7 +167,28 @@ describe("branch", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry_0",
+        predecessors: [],
+        successors: [1, 2],
+      },
+      {
+        name: "@left_1",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@right_2",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@final_3",
+        predecessors: [1, 2],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -203,7 +246,28 @@ describe("branch", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry_0",
+        predecessors: [],
+        successors: [1, 2],
+      },
+      {
+        name: "@left_1",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@right_2",
+        predecessors: [0],
+        successors: [3],
+      },
+      {
+        name: "@final_3",
+        predecessors: [1, 2],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -220,7 +284,7 @@ describe("loop", () => {
         params: [],
         blocks: [
           {
-            name: "@entry_0",
+            name: "@entry",
             lines: [
               ["define", 0],
               ["use", 0],
@@ -228,7 +292,7 @@ describe("loop", () => {
             terminator: ["branch", [1]],
           },
           {
-            name: "@loop_1",
+            name: "@loop",
             lines: [
               ["use", 0],
               ["define", 1],
@@ -237,7 +301,7 @@ describe("loop", () => {
             terminator: ["branch", [1, 2]],
           },
           {
-            name: "@final_2",
+            name: "@final",
             lines: [
               ["use", 0],
               ["drop", 0],
@@ -249,7 +313,23 @@ describe("loop", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1],
+      },
+      {
+        name: "@loop",
+        predecessors: [0, 1],
+        successors: [1, 2],
+      },
+      {
+        name: "@final",
+        predecessors: [1],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
@@ -293,7 +373,23 @@ describe("loop", () => {
         ],
       },
     ];
-    const graph: CFG = [];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1],
+      },
+      {
+        name: "@loop",
+        predecessors: [0, 1],
+        successors: [1, 2],
+      },
+      {
+        name: "@final",
+        predecessors: [1],
+        successors: [],
+      },
+    ];
     const variables: number[] = [];
     const results: Result[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
