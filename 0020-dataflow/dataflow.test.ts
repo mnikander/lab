@@ -6,7 +6,7 @@ import { dataflow, find_errors } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
 import { Result } from "./lattice.ts";
 
-describe("life-cycle for a single basic block", () => {
+describe("single block", () => {
   it("must accept an empty block", () => {
     const program: Program = [
       {

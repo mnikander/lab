@@ -35,6 +35,6 @@ function iota(count: number): number[] {
   return [...Array(count).keys()];
 }
 
-function fill<T>(count: number, value: T): T[] {
+export function fill<T>(count: number, value: T): T[] {
   return Array(count).map((_i) => value);
 }

@@ -1,16 +1,28 @@
 // Copyright (c) 2026 Marco Nikander
 
 import { CFG } from "./control-flow-graph.ts";
-import { Program } from "./grammar.ts";
-import { Result } from "./lattice.ts";
+import { Block, get_arg, get_tag, Line, Program } from "./grammar.ts";
+import { define, drop, Result, use } from "./lattice.ts";
+import { fill, make_worklist, size, try_pop, Worklist } from "./worklist.ts";
 
 export function dataflow(
   program: Program,
   graph: CFG,
   variables: number[],
 ): Result[] {
-  // TODO
-  return [];
+  const variable_count: number = variables.length;
+  const block_count: number = graph.length;
+  const default_state: Result[] = fill(variable_count, ["ok", "bottom"]);
+  let in_sets: Result[][] = fill(block_count, default_state);
+  let out_sets: Result[][] = fill(block_count, default_state);
+  let worklist: Worklist = make_worklist(block_count);
+  while (size(worklist) > 0) {
+    const block: number = try_pop(worklist) as number;
+  }
+
+  // we assume there is a final block which contains all errors
+  // TODO: accumulate errors from all blocks, and return them from this function
+  return out_sets.pop() as Result[];
 }
 
 export function find_errors(
@@ -22,4 +34,49 @@ export function find_errors(
   );
   const result: number[] = filtered.map((e) => e[0]);
   return result;
+}
+
+// in-place updates of 'states'
+function dataflow_block(
+  block: Block,
+  states: Result[],
+): Result[] {
+  block.lines.forEach((line) => dataflow_line(line, states));
+  return states;
+}
+
+// in-place updates of 'states'
+function dataflow_line(
+  line: Line,
+  states: Result[],
+): void {
+  const register: number = get_arg(line);
+  const result: undefined | Result = states[register];
+
+  if (result) {
+    switch (get_tag(line)) {
+      case "define":
+        states[register] = define(result);
+        break;
+      case "use":
+        states[register] = use(result);
+        break;
+      case "drop":
+        states[register] = drop(result);
+        break;
+      default:
+        states[register] = [
+          "error",
+          "bottom",
+          "instruction could not be processed",
+        ];
+        break;
+    }
+  } else {
+    states[register] = [
+      "error",
+      "bottom",
+      "register could not be found",
+    ];
+  }
 }
