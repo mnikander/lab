@@ -6,7 +6,7 @@ describe("lattice", () => {
   it("(define) => ok", () => {
     const result: Result = define(["ok", "pre"]);
     expect(is_ok(result)).toBe(true);
-    expect(get_state(result)).toEqual("live");
+    expect(get_state(result)).toEqual("available");
   });
 
   it("(use) => error", () => {
@@ -30,7 +30,7 @@ describe("lattice", () => {
   it("(define, use) => ok", () => {
     const result: Result = use(define(["ok", "pre"]));
     expect(is_ok(result)).toBe(true);
-    expect(get_state(result)).toEqual("live");
+    expect(get_state(result)).toEqual("available");
   });
 
   it("(define, free) => ok", () => {
@@ -102,7 +102,7 @@ describe("lattice", () => {
   it("(define, use, use) => ok", () => {
     const result: Result = use(use(define(["ok", "pre"])));
     expect(is_ok(result)).toBe(true);
-    expect(get_state(result)).toEqual("live");
+    expect(get_state(result)).toEqual("available");
   });
 
   it("(define, use, free) => ok", () => {
