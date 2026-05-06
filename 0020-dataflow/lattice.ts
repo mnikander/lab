@@ -11,6 +11,56 @@ export function get_state(result: Result): State {
   return result[1];
 }
 
+export function join(left: State, right: State): State {
+  if (left === "top") {
+    switch (right) {
+      case "top":
+        return "top";
+      case "dropped":
+        return "top";
+      case "defined":
+        return "top";
+      default:
+        return "bottom";
+    }
+  } else if (left === "dropped") {
+    switch (right) {
+      case "top":
+        return "top";
+      case "dropped":
+        return "dropped";
+      case "defined":
+        return "top";
+      default:
+        return "bottom";
+    }
+  } else if (left === "defined") {
+    switch (right) {
+      case "top":
+        return "top";
+      case "dropped":
+        return "top";
+      case "defined":
+        return "defined";
+      default:
+        return "bottom";
+    }
+  } else if (left === "bottom") {
+    switch (right) {
+      case "top":
+        return "top";
+      case "dropped":
+        return "top";
+      case "defined":
+        return "top";
+      default:
+        return "bottom";
+    }
+  } else {
+    throw Error("cannot join unknown states");
+  }
+}
+
 export function define(state: Result): Result {
   if (state[0] == "ok") {
     switch (state[1]) {
