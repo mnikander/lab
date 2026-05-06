@@ -53,7 +53,7 @@ export function use(state: Result): Result {
   }
 }
 
-export function free(state: Result): Result {
+export function drop(state: Result): Result {
   if (state[0] == "ok") {
     switch (state[1]) {
       case "top":
