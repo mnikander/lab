@@ -49,7 +49,7 @@ end procedure
     - 1. an entry block of straight-line code with a jump, and then a final block with straight-line code
     - 2. an entry block with a branch, left and right blocks, and a final join block
     - 3. an entry block, a loop block with a branch to itself, and a final block
-- [ ] hand-write or generate matching control-flow graphs for the example programs
+- [x] hand-write ~~or generate~~ matching control-flow graphs for the example programs
 - [ ] implement a simple work list algorithm (see pseudo-code)
 
 ### Lattice
@@ -89,6 +89,8 @@ deno test
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
+
+- handle multiple returns from a function, this requires changing how errors are accumulated
 
 ---
 **Copyright (c) 2026 Marco Nikander**
