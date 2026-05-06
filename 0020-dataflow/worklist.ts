@@ -38,3 +38,7 @@ function iota(count: number): number[] {
 export function fill<T>(count: number, value: T): T[] {
   return Array(count).map((_i) => value);
 }
+
+export function copy<T>(array: T[]): T[] {
+  return array.map((e) => e);
+}

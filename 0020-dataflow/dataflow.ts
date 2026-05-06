@@ -3,7 +3,14 @@
 import { CFG } from "./control-flow-graph.ts";
 import { Block, get_arg, get_tag, Line, Program } from "./grammar.ts";
 import { define, drop, Result, use } from "./lattice.ts";
-import { fill, make_worklist, size, try_pop, Worklist } from "./worklist.ts";
+import {
+  copy,
+  fill,
+  make_worklist,
+  size,
+  try_pop,
+  Worklist,
+} from "./worklist.ts";
 
 export function dataflow(
   program: Program,
@@ -13,16 +20,23 @@ export function dataflow(
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
   const default_state: Result[] = fill(variable_count, ["ok", "bottom"]);
-  let in_sets: Result[][] = fill(block_count, default_state);
-  let out_sets: Result[][] = fill(block_count, default_state);
+  let in_states: Result[][] = fill(block_count, default_state);
+  let out_states: Result[][] = fill(block_count, default_state);
   let worklist: Worklist = make_worklist(block_count);
   while (size(worklist) > 0) {
     const block: number = try_pop(worklist) as number;
+    // in_states[block] = join all predecessor out_states
+    // let state: Result[] = copy(in_states[block]);
+    // dataflow_block(program[block], state)
+    // if (state !== out_set[block]) { // I need element-wise inequality here
+    //     graph[block].successors.forEach(s => (s, worklist));
+    //     out_states[block] = state;
+    // }
   }
 
   // we assume there is a final block which contains all errors
   // TODO: accumulate errors from all blocks, and return them from this function
-  return out_sets.pop() as Result[];
+  return out_states.pop() as Result[];
 }
 
 export function find_errors(
