@@ -86,6 +86,16 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
+The following snippet raises the question: should a definition inside a loop be counted as a multiple-definition error?
+```
+@loop:
+    use    0    // error: is possibly dropped in the previous iteration
+    drop   0
+    define 1    // error: multiple definitions -- should this be an error?
+    branch [loop, successor]
+```
+Probably not, but how can this be modelled in the dataflow analysis?
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
