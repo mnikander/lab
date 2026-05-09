@@ -2,7 +2,7 @@
 
 import { CFG } from "./control-flow-graph.ts";
 import { Block, get_arg, get_tag, Line, Program } from "./grammar.ts";
-import { define, drop, Result, use } from "./lattice.ts";
+import { define, drop, State, use } from "./lattice.ts";
 import {
   copy,
   fill,
@@ -16,15 +16,15 @@ export function dataflow(
   program: Program,
   graph: CFG,
   variables: number[],
-): Result[] {
+): State[] {
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
-  const default_state: Result[] = fill(variable_count, ["ok", "bottom"]);
-  let out_states: Result[][] = fill(block_count, default_state);
+  const default_state: State[] = fill(variable_count, ["ok", "bottom"]);
+  let out_states: State[][] = fill(block_count, default_state);
   let worklist: Worklist = make_worklist(block_count);
   while (size(worklist) > 0) {
     const block: number = try_pop(worklist) as number;
-    // let states: Result[] = element-wise join of all predecessor out_states
+    // let states: State[] = element-wise join of all predecessor out_states
     // states = dataflow_block(program[block], states)
     // if (states !== out_set[block]) { // I need element-wise inequality here
     //     graph[block].successors.forEach(s => (s, worklist));
@@ -34,16 +34,14 @@ export function dataflow(
 
   // we assume there is a final block which contains all errors
   // TODO: accumulate errors from all blocks, and return them from this function
-  return out_states.pop() as Result[];
+  return out_states.pop() as State[];
 }
 
 export function find_errors(
-  states: Result[],
+  states: State[],
 ): number[] {
-  const zipped: [number, Result][] = states.map((s, i) => [i, s]);
-  const filtered: [number, Result][] = zipped.filter((e) =>
-    e[1][0] === "error"
-  );
+  const zipped: [number, State][] = states.map((s, i) => [i, s]);
+  const filtered: [number, State][] = zipped.filter((e) => e[1][0] === "error");
   const result: number[] = filtered.map((e) => e[0]);
   return result;
 }
@@ -51,8 +49,8 @@ export function find_errors(
 // in-place updates of 'states'
 function dataflow_block(
   block: Block,
-  states: Result[],
-): Result[] {
+  states: State[],
+): State[] {
   block.lines.forEach((line) => dataflow_line(line, states));
   return states;
 }
@@ -60,10 +58,10 @@ function dataflow_block(
 // in-place updates of 'states'
 function dataflow_line(
   line: Line,
-  states: Result[],
+  states: State[],
 ): void {
   const register: number = get_arg(line);
-  const result: undefined | Result = states[register];
+  const result: undefined | State = states[register];
 
   if (result) {
     switch (get_tag(line)) {

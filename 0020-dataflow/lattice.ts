@@ -1,17 +1,17 @@
 // Copyright (c) 2026 Marco Nikander
 
-export type State = "bottom" | "defined" | "dropped" | "top";
-export type Result = ["ok", State] | ["error", State, string];
+export type Element = "bottom" | "defined" | "dropped" | "top";
+export type State = ["ok", Element] | ["error", Element, string];
 
-export function is_ok(result: Result): boolean {
+export function is_ok(result: State): boolean {
   return result[0] === "ok";
 }
 
-export function get_state(result: Result): State {
+export function get_state(result: State): Element {
   return result[1];
 }
 
-export function join(left: State, right: State): State {
+export function join(left: Element, right: Element): Element {
   if (left === right) {
     return left;
   } else {
@@ -19,7 +19,7 @@ export function join(left: State, right: State): State {
   }
 }
 
-export function define(state: Result): Result {
+export function define(state: State): State {
   if (state[0] == "ok") {
     switch (state[1]) {
       case "top":
@@ -42,7 +42,7 @@ export function define(state: Result): Result {
   }
 }
 
-export function use(state: Result): Result {
+export function use(state: State): State {
   if (state[0] == "ok") {
     switch (state[1]) {
       case "top":
@@ -61,7 +61,7 @@ export function use(state: Result): Result {
   }
 }
 
-export function drop(state: Result): Result {
+export function drop(state: State): State {
   if (state[0] == "ok") {
     switch (state[1]) {
       case "top":

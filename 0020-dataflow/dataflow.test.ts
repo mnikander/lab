@@ -4,7 +4,7 @@ import { expect } from "@std/expect";
 import { Program } from "./grammar.ts";
 import { dataflow, find_errors } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
-import { Result } from "./lattice.ts";
+import { State } from "./lattice.ts";
 
 describe("single block", () => {
   it("must accept an empty block", () => {
@@ -19,7 +19,7 @@ describe("single block", () => {
     ];
     const graph: CFG = [{ name: "@entry", predecessors: [], successors: [] }];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -67,7 +67,7 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -113,7 +113,7 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(1);
@@ -190,7 +190,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -269,7 +269,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(4);
@@ -328,7 +328,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -390,7 +390,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);
@@ -452,7 +452,7 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -512,7 +512,7 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = [];
-    const results: Result[] = dataflow(program, graph, variables);
+    const results: State[] = dataflow(program, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);
