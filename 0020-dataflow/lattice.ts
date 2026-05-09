@@ -7,11 +7,12 @@ export type State =
   | readonly ["bottom"]
   | readonly ["defined"]
   | readonly ["dropped"]
-  | readonly ["top", string];
+  | readonly ["top"]
+  | readonly ["error", string];
 
 export function is_ok(result: State): boolean {
   return result[0] === "bottom" || result[0] === "defined" ||
-    result[0] === "dropped";
+    result[0] === "dropped" || result[0] === "top";
 }
 
 export function default_states(variable_count: number): State[] {
@@ -54,10 +55,10 @@ function join(left: State, right: State): State {
     return left;
   } else if (!is_ok(right)) {
     return right;
-  } else if (left === right) {
+  } else if (left[0] === right[0]) {
     return left;
   } else {
-    return ["top", "ambiguous join"];
+    return ["top"];
   }
 }
 
@@ -66,17 +67,17 @@ export function define(state: State): State {
     switch (state[0]) {
       case "top":
         return [
-          "top",
+          "error",
           "potential define-after-define / define-after-free",
         ];
       case "dropped":
-        return ["top", "define-after-free"];
+        return ["error", "define-after-free"];
       case "defined":
-        return ["top", "define-after-define"];
+        return ["error", "define-after-define"];
       case "bottom":
         return ["defined"];
       default:
-        return ["top", "invalid state transition"];
+        return ["error", "invalid state transition"];
     }
   } else {
     return state;
@@ -87,15 +88,15 @@ export function use(state: State): State {
   if (is_ok(state)) {
     switch (state[0]) {
       case "top":
-        return ["top", "potential use-before-define / use-after-free"];
+        return ["error", "potential use-before-define / use-after-free"];
       case "dropped":
-        return ["top", "use-after-free"];
+        return ["error", "use-after-free"];
       case "defined":
         return ["defined"];
       case "bottom":
-        return ["top", "use-before-define"];
+        return ["error", "use-before-define"];
       default:
-        return ["top", "invalid state transition"];
+        return ["error", "invalid state transition"];
     }
   } else {
     return state;
@@ -107,17 +108,17 @@ export function drop(state: State): State {
     switch (state[0]) {
       case "top":
         return [
-          "top",
+          "error",
           "potential free-before-define / free-after-free",
         ];
       case "dropped":
-        return ["top", "free-after-free"];
+        return ["error", "free-after-free"];
       case "defined":
         return ["dropped"];
       case "bottom":
-        return ["top", "free-before-define"];
+        return ["error", "free-before-define"];
       default:
-        return ["top", "invalid state transition"];
+        return ["error", "invalid state transition"];
     }
   } else {
     return state;

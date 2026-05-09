@@ -4,7 +4,7 @@ import { expect } from "@std/expect";
 import { Program } from "./grammar.ts";
 import { dataflow } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
-import { find_errors, State } from "./lattice.ts";
+import { find_errors, is_ok, State } from "./lattice.ts";
 import { iota } from "./worklist.ts";
 
 describe("single block", () => {
@@ -416,9 +416,14 @@ describe("loop", () => {
           {
             name: "@loop",
             lines: [
+              // TODO: this causes an error, because there is an incoming edge
+              // (loop,loop) on which variable 0 is undefined, because we have
+              // not yet had the opportunity to project the definition of 0
+              // through this block, into its out-set. Do I have to modify the
+              // predecessor calculation then? Or can I fix this by
+              // differentiating between bottom and undefined and being
+              // permissive when joining with bottom?
               ["use", 0],
-              ["define", 1],
-              ["use", 1],
             ],
             terminator: ["branch", [1, 2]],
           },
@@ -427,6 +432,7 @@ describe("loop", () => {
             lines: [
               ["use", 0],
               ["drop", 0],
+              ["define", 1],
               ["use", 1],
               ["drop", 1],
             ],

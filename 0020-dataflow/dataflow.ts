@@ -36,23 +36,14 @@ export function dataflow(
     const index: number = try_pop(worklist) as number;
     const node: Node = graph[index];
     const block: Block = func.blocks[index];
-    const incoming: readonly (readonly State[])[] = node.predecessors.map((p) =>
-      out_sets[p]
-    );
 
-    let out_set: readonly State[] = [];
-    if (node.predecessors.length === 0) {
-      out_set = dataflow_block(
-        block,
-        default_states(variable_count),
-      );
-    } else {
-      const in_set: readonly State[] = incoming
-        .reduce(
-          join_states,
-        );
-      out_set = dataflow_block(block, in_set);
-    }
+    const in_set: readonly State[] = compute_in_set(
+      variable_count,
+      node,
+      out_sets,
+    );
+    const out_set: readonly State[] = dataflow_block(block, in_set);
+
     if (!equal_states(out_set, out_sets[index])) {
       node.successors.forEach((s) => try_push(s, worklist));
       out_sets[index] = out_set;
@@ -64,48 +55,64 @@ export function dataflow(
   return out_sets.pop() as State[];
 }
 
-// in-place updates of 'states'
+// TODO: this function is buggy
+function compute_in_set(
+  variable_count: number,
+  node: Node,
+  out_sets: readonly (readonly State[])[],
+): readonly State[] {
+  if (node.predecessors.length === 0) {
+    return default_states(variable_count);
+  } else {
+    let in_set: State[] = out_sets[node.predecessors[0]].map((e) => e);
+    for (let i = 1; i < node.predecessors.length; ++i) {
+      const p: number = node.predecessors[i];
+      in_set = join_states(in_set, out_sets[p]);
+    }
+    return in_set;
+  }
+}
+
 function dataflow_block(
   block: Block,
   states: readonly State[],
 ): readonly State[] {
-  block.lines.forEach((line) => dataflow_line(line, states));
-  return states;
+  const updated: State[] = states.map((e) => e);
+  block.lines.forEach((line) => dataflow_line(line, updated));
+  return updated;
 }
 
 // in-place updates of 'states'
 function dataflow_line(
   line: Line,
-  states: readonly State[],
+  mutable: State[],
 ): State[] {
   const register: number = get_arg(line);
-  const state: undefined | State = states[register];
-
-  const updated: State[] = states.map((e) => e);
+  const state: undefined | State = mutable[register];
 
   if (state !== undefined) {
     switch (get_tag(line)) {
       case "define":
-        updated[register] = define(state);
+        mutable[register] = define(state);
         break;
       case "use":
-        updated[register] = use(state);
+        mutable[register] = use(state);
         break;
       case "drop":
-        updated[register] = drop(state);
+        mutable[register] = drop(state);
         break;
       default:
-        updated[register] = [
-          "top",
+        mutable[register] = [
+          "error",
           "instruction could not be processed",
         ];
         break;
     }
   } else {
-    updated[register] = [
-      "top",
+    mutable[register] = [
+      "error",
       "register could not be found",
     ];
   }
-  return updated;
+  return mutable;
 }
