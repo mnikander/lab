@@ -476,7 +476,7 @@ describe("loop", () => {
             name: "@loop_1",
             lines: [
               ["use", 0], // error: is possibly dropped in the previous iteration
-              ["drop", 0],
+              ["drop", 0], // error: multiple drops -- TODO: should this be an error?
               ["define", 1], // error: multiple definitions -- TODO: should this be an error?
             ],
             terminator: ["branch", [1, 2]],
