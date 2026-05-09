@@ -84,16 +84,14 @@ function dataflow_line(
         break;
       default:
         states[register] = [
-          "error",
-          "bottom",
+          "top",
           "instruction could not be processed",
         ];
         break;
     }
   } else {
     states[register] = [
-      "error",
-      "bottom",
+      "top",
       "register could not be found",
     ];
   }
