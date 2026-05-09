@@ -20,17 +20,15 @@ export function dataflow(
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
   const default_state: Result[] = fill(variable_count, ["ok", "bottom"]);
-  let in_states: Result[][] = fill(block_count, default_state);
   let out_states: Result[][] = fill(block_count, default_state);
   let worklist: Worklist = make_worklist(block_count);
   while (size(worklist) > 0) {
     const block: number = try_pop(worklist) as number;
-    // in_states[block] = join all predecessor out_states
-    // let state: Result[] = copy(in_states[block]);
-    // dataflow_block(program[block], state)
-    // if (state !== out_set[block]) { // I need element-wise inequality here
+    // let states: Result[] = element-wise join of all predecessor out_states
+    // states = dataflow_block(program[block], states)
+    // if (states !== out_set[block]) { // I need element-wise inequality here
     //     graph[block].successors.forEach(s => (s, worklist));
-    //     out_states[block] = state;
+    //     out_states[block] = states;
     // }
   }
 
