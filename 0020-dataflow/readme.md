@@ -187,6 +187,15 @@ Iteration is only Turing-complete if state can be carried from one iteration to 
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - handle multiple returns from a function, this requires changing how errors are accumulated
+- simplify the following:
+    ```typescript
+    export type Element = "bottom" | "defined" | "dropped" | "top";
+    export type State = ["ok", Element] | ["error", Element, string];
+    ```
+    to:
+    ```typescript
+    export type State = ["bottom"] | ["defined"] | ["dropped"] | ["top", string];
+    ```
 
 ---
 **Copyright (c) 2026 Marco Nikander**

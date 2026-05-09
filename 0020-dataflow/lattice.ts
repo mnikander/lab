@@ -11,6 +11,16 @@ export function get_state(result: State): Element {
   return result[1];
 }
 
+export function join_state(left: State, right: State): State {
+  if (left[0] === "error") {
+    return left;
+  } else if (right[0] === "error") {
+    return right;
+  } else {
+    return ["ok", join(left[1], right[1])];
+  }
+}
+
 export function join(left: Element, right: Element): Element {
   if (left === right) {
     return left;

@@ -17,7 +17,7 @@ export function try_push(index: number, worklist: Worklist) {
 // in-place update
 export function try_pop(worklist: Worklist): undefined | number {
   const value: undefined | number = worklist.queue.shift();
-  if (value) {
+  if (value !== undefined) {
     worklist.contains[value] = false;
   }
   return value;
@@ -31,12 +31,12 @@ export function make_worklist(count: number): Worklist {
   return { queue: iota(count), contains: fill(count, true) };
 }
 
-function iota(count: number): number[] {
+export function iota(count: number): number[] {
   return [...Array(count).keys()];
 }
 
 export function fill<T>(count: number, value: T): T[] {
-  return Array(count).map((_i) => value);
+  return Array(count).fill(value);
 }
 
 export function copy<T>(array: T[]): T[] {
