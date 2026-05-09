@@ -12,9 +12,9 @@ export function get_state(result: State): Element {
 }
 
 export function join_state(left: State, right: State): State {
-  if (left[0] === "error") {
+  if (!is_ok(left)) {
     return left;
-  } else if (right[0] === "error") {
+  } else if (!is_ok(right)) {
     return right;
   } else {
     return ["ok", join(left[1], right[1])];
@@ -53,7 +53,7 @@ export function define(state: State): State {
 }
 
 export function use(state: State): State {
-  if (state[0] == "ok") {
+  if (is_ok(state)) {
     switch (state[1]) {
       case "top":
         return ["error", "top", "potential use-before-define / use-after-free"];
@@ -72,7 +72,7 @@ export function use(state: State): State {
 }
 
 export function drop(state: State): State {
-  if (state[0] == "ok") {
+  if (is_ok(state)) {
     switch (state[1]) {
       case "top":
         return [
