@@ -1,5 +1,8 @@
 // Copyright (c) 2026 Marco Nikander
 
+import { assert } from "node:console";
+import { fill } from "./worklist.ts";
+
 export type Element = "bottom" | "defined" | "dropped" | "top";
 export type State = ["ok", Element] | ["error", Element, string];
 
@@ -11,7 +14,36 @@ export function get_state(result: State): Element {
   return result[1];
 }
 
-export function join_state(left: State, right: State): State {
+export function default_states(variable_count: number): State[] {
+  return fill(variable_count, ["ok", "bottom"]);
+}
+
+export function find_errors(
+  states: State[],
+): number[] {
+  const zipped: [number, State][] = states.map((s, i) => [i, s]);
+  const filtered: [number, State][] = zipped.filter((e) => e[1][0] === "error");
+  const result: number[] = filtered.map((e) => e[0]);
+  return result;
+}
+
+export function equal_states(left: State[], right: State[]): boolean {
+  const element_wise: boolean[] = left.map((_s, i) => {
+    return (left[i][0] === right[i][0] && left[i][1] === right[i][1]);
+  });
+  const all_equal: boolean = element_wise.reduce((acc: boolean, c: boolean) => {
+    return acc && c;
+  }, true);
+  return all_equal;
+}
+
+export function join_states(left: State[], right: State[]): State[] {
+  assert(left.length === right.length, "State arrays must be of equal length");
+  const result: State[] = left.map((_s, i) => join_state(left[i], right[i]));
+  return result;
+}
+
+function join_state(left: State, right: State): State {
   if (!is_ok(left)) {
     return left;
   } else if (!is_ok(right)) {
@@ -21,7 +53,7 @@ export function join_state(left: State, right: State): State {
   }
 }
 
-export function join(left: Element, right: Element): Element {
+function join(left: Element, right: Element): Element {
   if (left === right) {
     return left;
   } else {
@@ -30,7 +62,7 @@ export function join(left: Element, right: Element): Element {
 }
 
 export function define(state: State): State {
-  if (state[0] == "ok") {
+  if (is_ok(state)) {
     switch (state[1]) {
       case "top":
         return [

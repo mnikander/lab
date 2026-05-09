@@ -1,11 +1,17 @@
 // Copyright (c) 2026 Marco Nikander
 
-import { assert } from "node:console";
 import { CFG, Node } from "./control-flow-graph.ts";
 import { Block, Function, get_arg, get_tag, Line } from "./grammar.ts";
-import { define, drop, join_state, State, use } from "./lattice.ts";
 import {
-  copy,
+  default_states,
+  define,
+  drop,
+  equal_states,
+  join_states,
+  State,
+  use,
+} from "./lattice.ts";
+import {
   fill,
   make_worklist,
   size,
@@ -21,7 +27,7 @@ export function dataflow(
 ): State[] {
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
-  const out_states: State[][] = fill(
+  const out_sets: State[][] = fill(
     block_count,
     default_states(variable_count),
   );
@@ -30,49 +36,22 @@ export function dataflow(
     const index: number = try_pop(worklist) as number;
     const node: Node = graph[index];
     const block: Block = func.blocks[index];
-    const predecessor_states: State[][] = node.predecessors.map((p) =>
-      out_states[p]
-    );
-    let states: State[] = predecessor_states
+    const incoming: State[][] = node.predecessors.map((p) => out_sets[p]);
+    const in_set: State[] = incoming
       .reduce(
         join_states,
         default_states(variable_count),
       );
-    states = dataflow_block(block, states);
-    if (!equal_states(states, out_states[index])) {
+    const out_set: State[] = dataflow_block(block, in_set);
+    if (!equal_states(out_set, out_sets[index])) {
       node.successors.forEach((s) => try_push(s, worklist));
-      out_states[index] = states;
+      out_sets[index] = out_set;
     }
   }
 
   // we assume there is a final block which contains all errors
   // TODO: accumulate errors from all blocks, and return them from this function
-  return out_states.pop() as State[];
-}
-
-export function find_errors(
-  states: State[],
-): number[] {
-  const zipped: [number, State][] = states.map((s, i) => [i, s]);
-  const filtered: [number, State][] = zipped.filter((e) => e[1][0] === "error");
-  const result: number[] = filtered.map((e) => e[0]);
-  return result;
-}
-
-function equal_states(left: State[], right: State[]): boolean {
-  const element_wise: boolean[] = left.map((_s, i) => {
-    return (left[i][0] === right[i][0] && left[i][1] === right[i][1]);
-  });
-  const all_equal: boolean = element_wise.reduce((acc: boolean, c: boolean) => {
-    return acc && c;
-  }, true);
-  return all_equal;
-}
-
-function join_states(left: State[], right: State[]): State[] {
-  assert(left.length === right.length, "State arrays must be of equal length");
-  const result: State[] = left.map((_s, i) => join_state(left[i], right[i]));
-  return result;
+  return out_sets.pop() as State[];
 }
 
 // in-place updates of 'states'
@@ -118,8 +97,4 @@ function dataflow_line(
       "register could not be found",
     ];
   }
-}
-
-function default_states(variable_count: number): State[] {
-  return fill(variable_count, ["ok", "bottom"]);
 }

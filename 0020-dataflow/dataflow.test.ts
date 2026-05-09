@@ -2,9 +2,9 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
 import { Program } from "./grammar.ts";
-import { dataflow, find_errors } from "./dataflow.ts";
+import { dataflow } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
-import { State } from "./lattice.ts";
+import { find_errors, State } from "./lattice.ts";
 import { iota } from "./worklist.ts";
 
 describe("single block", () => {
