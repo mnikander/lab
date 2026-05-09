@@ -3,7 +3,11 @@
 import { assert } from "node:console";
 import { fill } from "./worklist.ts";
 
-export type State = ["bottom"] | ["defined"] | ["dropped"] | ["top", string];
+export type State =
+  | readonly ["bottom"]
+  | readonly ["defined"]
+  | readonly ["dropped"]
+  | readonly ["top", string];
 
 export function is_ok(result: State): boolean {
   return result[0] === "bottom" || result[0] === "defined" ||
@@ -15,7 +19,7 @@ export function default_states(variable_count: number): State[] {
 }
 
 export function find_errors(
-  states: State[],
+  states: readonly State[],
 ): number[] {
   const zipped: [number, State][] = states.map((s, i) => [i, s]);
   const filtered: [number, State][] = zipped.filter((e) => !is_ok(e[1]));
@@ -23,7 +27,10 @@ export function find_errors(
   return result;
 }
 
-export function equal_states(left: State[], right: State[]): boolean {
+export function equal_states(
+  left: readonly State[],
+  right: readonly State[],
+): boolean {
   const element_wise: boolean[] = left.map((_s, i) => {
     return (left[i][0] === right[i][0] && left[i][1] === right[i][1]);
   });
@@ -33,7 +40,10 @@ export function equal_states(left: State[], right: State[]): boolean {
   return all_equal;
 }
 
-export function join_states(left: State[], right: State[]): State[] {
+export function join_states(
+  left: readonly State[],
+  right: readonly State[],
+): State[] {
   assert(left.length === right.length, "State arrays must be of equal length");
   const result: State[] = left.map((_s, i) => join(left[i], right[i]));
   return result;

@@ -1,17 +1,17 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Program    = readonly Function[];
-export type Function   = { name: Label, params: number[], blocks: Block[] };
-export type Block      = { name: Label, lines: Line[], terminator: Terminator };
+export type Function   = { name: Label, params: readonly number[], blocks: readonly Block[] };
+export type Block      = { name: Label, lines: readonly Line[], terminator: Terminator };
 
 export type Line       = Define | Use | Free ;
-export type Define     = [ tag: 'define', variable: number ];
-export type Use        = [ tag: 'use',    variable: number ];
-export type Free       = [ tag: 'drop',   variable: number ];
+export type Define     = readonly [ tag: 'define', variable: number ];
+export type Use        = readonly [ tag: 'use',    variable: number ];
+export type Free       = readonly [ tag: 'drop',   variable: number ];
 
 export type Terminator = Branch | Return;
-export type Branch     = [ tag: 'branch', blocks: number[] ];
-export type Return     = [ tag: 'return' ];
+export type Branch     = readonly [ tag: 'branch', blocks: number[] ];
+export type Return     = readonly [ tag: 'return' ];
 
 export type Label      = `@${string}`;
 

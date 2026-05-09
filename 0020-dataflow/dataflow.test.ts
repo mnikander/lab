@@ -20,7 +20,7 @@ describe("single block", () => {
     ];
     const graph: CFG = [{ name: "@entry", predecessors: [], successors: [] }];
     const variables: number[] = iota(0);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -68,7 +68,7 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -114,7 +114,7 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(1);
@@ -191,7 +191,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(4);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -270,7 +270,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(4);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(4);
@@ -329,7 +329,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(3);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -391,7 +391,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(3);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);
@@ -453,7 +453,7 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -513,7 +513,7 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);

@@ -24,10 +24,10 @@ export function dataflow(
   func: Function,
   graph: CFG,
   variables: number[],
-): State[] {
+): readonly State[] {
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
-  const out_sets: State[][] = fill(
+  const out_sets: (readonly State[])[] = fill(
     block_count,
     default_states(variable_count),
   );
@@ -36,13 +36,23 @@ export function dataflow(
     const index: number = try_pop(worklist) as number;
     const node: Node = graph[index];
     const block: Block = func.blocks[index];
-    const incoming: State[][] = node.predecessors.map((p) => out_sets[p]);
-    const in_set: State[] = incoming
-      .reduce(
-        join_states,
+    const incoming: readonly (readonly State[])[] = node.predecessors.map((p) =>
+      out_sets[p]
+    );
+
+    let out_set: readonly State[] = [];
+    if (node.predecessors.length === 0) {
+      out_set = dataflow_block(
+        block,
         default_states(variable_count),
       );
-    const out_set: State[] = dataflow_block(block, in_set);
+    } else {
+      const in_set: readonly State[] = incoming
+        .reduce(
+          join_states,
+        );
+      out_set = dataflow_block(block, in_set);
+    }
     if (!equal_states(out_set, out_sets[index])) {
       node.successors.forEach((s) => try_push(s, worklist));
       out_sets[index] = out_set;
@@ -57,8 +67,8 @@ export function dataflow(
 // in-place updates of 'states'
 function dataflow_block(
   block: Block,
-  states: State[],
-): State[] {
+  states: readonly State[],
+): readonly State[] {
   block.lines.forEach((line) => dataflow_line(line, states));
   return states;
 }
@@ -66,33 +76,36 @@ function dataflow_block(
 // in-place updates of 'states'
 function dataflow_line(
   line: Line,
-  states: State[],
-): void {
+  states: readonly State[],
+): State[] {
   const register: number = get_arg(line);
-  const result: undefined | State = states[register];
+  const state: undefined | State = states[register];
 
-  if (result) {
+  const updated: State[] = states.map((e) => e);
+
+  if (state !== undefined) {
     switch (get_tag(line)) {
       case "define":
-        states[register] = define(result);
+        updated[register] = define(state);
         break;
       case "use":
-        states[register] = use(result);
+        updated[register] = use(state);
         break;
       case "drop":
-        states[register] = drop(result);
+        updated[register] = drop(state);
         break;
       default:
-        states[register] = [
+        updated[register] = [
           "top",
           "instruction could not be processed",
         ];
         break;
     }
   } else {
-    states[register] = [
+    updated[register] = [
       "top",
       "register could not be found",
     ];
   }
+  return updated;
 }
