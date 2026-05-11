@@ -55,7 +55,6 @@ export function dataflow(
   return out_sets.pop() as State[];
 }
 
-// TODO: this function is buggy
 function compute_in_set(
   variable_count: number,
   node: Node,
@@ -79,7 +78,12 @@ function dataflow_block(
 ): readonly State[] {
   const updated: State[] = states.map((e) => e);
   block.lines.forEach((line) => dataflow_line(line, updated));
-  return updated;
+
+  // this is super important: after processing a block, any remaining "bottom" entries must be changed to "undefined"
+  const no_bottom: readonly State[] = updated.map((s) => {
+    return s[0] === "bottom" ? ["undefined"] : s;
+  });
+  return no_bottom;
 }
 
 // in-place updates of 'states'
