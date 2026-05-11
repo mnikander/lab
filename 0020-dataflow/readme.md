@@ -51,6 +51,7 @@ end procedure
     - 3. an entry block, a loop block with a branch to itself, and a final block
 - [x] hand-write ~~or generate~~ matching control-flow graphs for the example programs
 - [x] implement a work list algorithm (see pseudo-code)
+- [x] refactored error logging
 
 ### Lattice
 ```
@@ -131,12 +132,11 @@ It makes program concerns more intertwined, so it makes it more complex to reaso
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-- handle multiple returns from a function, this requires changing how errors are accumulated
-- cleanly separate the accumulation of errors from the state, there should not be an annotated "error" state which is above "top" in the lattice, that is mixing concerns
 - investigate where most of the complexity in the code arises and see if there are ways to simplify the code
 - define clear models for how stack and heap semantics work, and how they differ
 - prototype the heap semantics
 - clearly define the desired semantics regarding `define` and `drop` in loops, i.e. when there are cycles in the control-flow graph
+- are there easier ways of doing the error handling? Would the codebase be simpler if I just return / throw an exception on the first error?
 
 
 ### The Challenges of Loops
