@@ -1,18 +1,19 @@
 // Copyright (c) 2026 Marco Nikander
 
-import { assert } from "node:console";
 import { fill } from "./worklist.ts";
 
+export type Error = readonly ["error", string];
+
 export type State =
-  | readonly ["error", string]
   | readonly ["top"]
   | readonly ["dropped"]
   | readonly ["defined"]
   | readonly ["undefined"]
   | readonly ["bottom"];
 
-export function is_ok(result: State): boolean {
-  return result[0] === "top" || result[0] === "dropped" ||
+export function is_state(result: Error | State): result is State {
+  return result[0] === "top" ||
+    result[0] === "dropped" ||
     result[0] === "defined" || result[0] === "undefined" ||
     result[0] === "bottom";
 }
@@ -21,21 +22,12 @@ export function default_states(variable_count: number): State[] {
   return fill(variable_count, ["bottom"]);
 }
 
-export function find_errors(
-  states: readonly State[],
-): number[] {
-  const zipped: [number, State][] = states.map((s, i) => [i, s]);
-  const filtered: [number, State][] = zipped.filter((e) => !is_ok(e[1]));
-  const result: number[] = filtered.map((e) => e[0]);
-  return result;
-}
-
 export function equal_states(
   left: readonly State[],
   right: readonly State[],
 ): boolean {
   const element_wise: boolean[] = left.map((_s, i) => {
-    return (left[i][0] === right[i][0] && left[i][1] === right[i][1]);
+    return (left[i][0] === right[i][0]);
   });
   const all_equal: boolean = element_wise.reduce((acc: boolean, c: boolean) => {
     return acc && c;
@@ -47,7 +39,6 @@ export function join_states(
   left: readonly State[],
   right: readonly State[],
 ): State[] {
-  assert(left.length === right.length, "State arrays must be of equal length");
   const result: State[] = left.map((_s, i) => join(left[i], right[i]));
   return result;
 }
@@ -66,8 +57,8 @@ function join(left: State, right: State): State {
   }
 }
 
-export function define(state: State): State {
-  if (is_ok(state)) {
+export function define(state: State): Error | State {
+  if (is_state(state)) {
     switch (state[0]) {
       case "top":
         return [
@@ -90,8 +81,8 @@ export function define(state: State): State {
   }
 }
 
-export function use(state: State): State {
-  if (is_ok(state)) {
+export function use(state: State): Error | State {
+  if (is_state(state)) {
     switch (state[0]) {
       case "top":
         return ["error", "potential use-before-define / use-after-free"];
@@ -111,8 +102,8 @@ export function use(state: State): State {
   }
 }
 
-export function drop(state: State): State {
-  if (is_ok(state)) {
+export function drop(state: State): Error | State {
+  if (is_state(state)) {
     switch (state[0]) {
       case "top":
         return [

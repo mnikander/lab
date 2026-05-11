@@ -7,6 +7,8 @@ import {
   define,
   drop,
   equal_states,
+  Error,
+  is_state,
   join_states,
   State,
   use,
@@ -20,11 +22,13 @@ import {
   Worklist,
 } from "./worklist.ts";
 
+export type IndexedError = [number, string];
+
 export function dataflow(
   func: Function,
   graph: CFG,
   variables: number[],
-): readonly State[] {
+): readonly IndexedError[] {
   const variable_count: number = variables.length;
   const block_count: number = graph.length;
   const out_sets: (readonly State[])[] = fill(
@@ -32,6 +36,7 @@ export function dataflow(
     default_states(variable_count),
   );
   const worklist: Worklist = make_worklist(block_count);
+  const error_log: IndexedError[] = [];
   while (size(worklist) > 0) {
     const index: number = try_pop(worklist) as number;
     const node: Node = graph[index];
@@ -42,17 +47,14 @@ export function dataflow(
       node,
       out_sets,
     );
-    const out_set: readonly State[] = dataflow_block(block, in_set);
+    const out_set: readonly State[] = dataflow_block(block, in_set, error_log);
 
     if (!equal_states(out_set, out_sets[index])) {
       node.successors.forEach((s) => try_push(s, worklist));
       out_sets[index] = out_set;
     }
   }
-
-  // we assume there is a final block which contains all errors
-  // TODO: accumulate errors from all blocks, and return them from this function
-  return out_sets.pop() as State[];
+  return error_log;
 }
 
 function compute_in_set(
@@ -75,9 +77,10 @@ function compute_in_set(
 function dataflow_block(
   block: Block,
   states: readonly State[],
+  error_log: IndexedError[],
 ): readonly State[] {
   const updated: State[] = states.map((e) => e);
-  block.lines.forEach((line) => dataflow_line(line, updated));
+  block.lines.forEach((line) => dataflow_line(line, updated, error_log));
 
   // this is super important: after processing a block, any remaining "bottom" entries must be changed to "undefined"
   const no_bottom: readonly State[] = updated.map((s) => {
@@ -90,31 +93,38 @@ function dataflow_block(
 function dataflow_line(
   line: Line,
   mutable: State[],
+  error_log: IndexedError[],
 ): State[] {
   const register: number = get_arg(line);
   if (mutable[register] !== undefined) {
+    let result: Error | State = ["bottom"];
     switch (get_tag(line)) {
       case "define":
-        mutable[register] = define(mutable[register]);
+        result = define(mutable[register]);
         break;
       case "use":
-        mutable[register] = use(mutable[register]);
+        result = use(mutable[register]);
         break;
       case "drop":
-        mutable[register] = drop(mutable[register]);
+        result = drop(mutable[register]);
         break;
       default:
-        mutable[register] = [
+        result = [
           "error",
           "instruction could not be processed",
         ];
         break;
     }
+    if (is_state(result)) {
+      mutable[register] = result;
+    } else {
+      mutable[register] = ["top"];
+      error_log.push([register, result[1]]);
+    }
   } else {
-    mutable[register] = [
-      "error",
-      "register could not be found",
-    ];
+    error_log.push(
+      [register, "register could not be found"],
+    );
   }
   return mutable;
 }
