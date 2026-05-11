@@ -310,8 +310,7 @@ describe("branch", () => {
     expect(errors.length).toBe(0);
   });
 
-  // TODO: error accumulation in the dataflow algorithm needs to be done differently to pass this test
-  it.skip("must reject programs with an error on any of its return paths", () => {
+  it("must reject programs with an error on any of its return paths", () => {
     const func: Function = {
       name: "@main",
       params: [],
