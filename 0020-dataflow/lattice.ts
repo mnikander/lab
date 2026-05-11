@@ -4,17 +4,17 @@ import { assert } from "node:console";
 import { fill } from "./worklist.ts";
 
 export type State =
-  | readonly ["bottom"]
-  | readonly ["undefined"]
-  | readonly ["defined"]
-  | readonly ["dropped"]
+  | readonly ["error", string]
   | readonly ["top"]
-  | readonly ["error", string];
+  | readonly ["dropped"]
+  | readonly ["defined"]
+  | readonly ["undefined"]
+  | readonly ["bottom"];
 
 export function is_ok(result: State): boolean {
-  return result[0] === "bottom" || result[0] === "undefined" ||
-    result[0] === "defined" ||
-    result[0] === "dropped" || result[0] === "top";
+  return result[0] === "top" || result[0] === "dropped" ||
+    result[0] === "defined" || result[0] === "undefined" ||
+    result[0] === "bottom";
 }
 
 export function default_states(variable_count: number): State[] {
