@@ -5,13 +5,15 @@ import { fill } from "./worklist.ts";
 
 export type State =
   | readonly ["bottom"]
+  | readonly ["undefined"]
   | readonly ["defined"]
   | readonly ["dropped"]
   | readonly ["top"]
   | readonly ["error", string];
 
 export function is_ok(result: State): boolean {
-  return result[0] === "bottom" || result[0] === "defined" ||
+  return result[0] === "bottom" || result[0] === "undefined" ||
+    result[0] === "defined" ||
     result[0] === "dropped" || result[0] === "top";
 }
 
@@ -51,10 +53,12 @@ export function join_states(
 }
 
 function join(left: State, right: State): State {
-  if (!is_ok(left)) {
-    return left;
-  } else if (!is_ok(right)) {
+  if (left[0] === "top" || right[0] === "top") {
+    return ["top"];
+  } else if (left[0] === "bottom") {
     return right;
+  } else if (right[0] === "bottom") {
+    return left;
   } else if (left[0] === right[0]) {
     return left;
   } else {
@@ -74,6 +78,8 @@ export function define(state: State): State {
         return ["error", "define-after-free"];
       case "defined":
         return ["error", "define-after-define"];
+      case "undefined":
+        return ["defined"];
       case "bottom":
         return ["defined"];
       default:
@@ -93,6 +99,8 @@ export function use(state: State): State {
         return ["error", "use-after-free"];
       case "defined":
         return ["defined"];
+      case "undefined":
+        return ["error", "use-before-define"];
       case "bottom":
         return ["error", "use-before-define"];
       default:
@@ -115,6 +123,8 @@ export function drop(state: State): State {
         return ["error", "free-after-free"];
       case "defined":
         return ["dropped"];
+      case "undefined":
+        return ["error", "free-before-define"];
       case "bottom":
         return ["error", "free-before-define"];
       default:
