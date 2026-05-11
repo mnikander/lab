@@ -336,7 +336,7 @@ describe("branch", () => {
   });
 
   // TODO: error accumulation in the dataflow algorithm needs to be done differently to pass this test
-  it.skip("must reject use of invalid variables in multiple returns", () => {
+  it.skip("must reject programs with an error on any of its return paths", () => {
     const program: Program = [
       {
         name: "@main",
@@ -476,7 +476,7 @@ describe("loop", () => {
         params: [],
         blocks: [
           {
-            name: "@entry_0",
+            name: "@entry",
             lines: [
               ["define", 0],
               ["use", 0],
@@ -484,7 +484,7 @@ describe("loop", () => {
             terminator: ["branch", [1]],
           },
           {
-            name: "@loop_1",
+            name: "@loop",
             lines: [
               ["use", 0], // error: is possibly dropped in the previous iteration
               ["drop", 0], // error: multiple drops -- TODO: should this be an error?
@@ -493,7 +493,7 @@ describe("loop", () => {
             terminator: ["branch", [1, 2]],
           },
           {
-            name: "@final_2",
+            name: "@final",
             lines: [
               ["use", 0], // error: possibly dropped
               ["drop", 0], // error: possibly dropped
