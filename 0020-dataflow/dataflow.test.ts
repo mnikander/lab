@@ -528,4 +528,56 @@ describe("loop", () => {
 
     expect(error_indices.length).toBe(2);
   });
+
+  it("must reject use of invalid variables in loops", () => {
+    const program: Program = [
+      {
+        name: "@main",
+        params: [],
+        blocks: [
+          {
+            name: "@entry",
+            lines: [],
+            terminator: ["branch", [1]],
+          },
+          {
+            name: "@loop",
+            lines: [
+              ["define", 0], // error: possibly multiple defines -- TODO: should this be an error?
+              ["use", 0],
+              ["drop", 0], // error: possibly multiple drops -- TODO: should this be an error?
+            ],
+            terminator: ["branch", [1, 2]],
+          },
+          {
+            name: "@final",
+            lines: [],
+            terminator: ["return"],
+          },
+        ],
+      },
+    ];
+    const graph: CFG = [
+      {
+        name: "@entry",
+        predecessors: [],
+        successors: [1],
+      },
+      {
+        name: "@loop",
+        predecessors: [0, 1],
+        successors: [1, 2],
+      },
+      {
+        name: "@final",
+        predecessors: [1],
+        successors: [],
+      },
+    ];
+    const variables: number[] = iota(1);
+    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const error_indices: number[] = find_errors(results);
+
+    expect(error_indices.length).toBe(1);
+  });
 });
