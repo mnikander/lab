@@ -4,7 +4,7 @@
 Can a dataflow analysis check lifetimes of SSA variables in a function?
 
 Date:   2026-05-06
-Status: Doing
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
