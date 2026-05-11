@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
-import { Program } from "./grammar.ts";
+import { Function } from "./grammar.ts";
 import { dataflow } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
 import { find_errors, is_ok, State } from "./lattice.ts";
@@ -9,18 +9,16 @@ import { iota } from "./worklist.ts";
 
 describe("single block", () => {
   it("must accept an empty block", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          { name: "@entry", lines: [], terminator: ["return"] },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        { name: "@entry", lines: [], terminator: ["return"] },
+      ],
+    };
     const graph: CFG = [{ name: "@entry", predecessors: [], successors: [] }];
     const variables: number[] = iota(0);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -29,32 +27,30 @@ describe("single block", () => {
 
 describe("jump", () => {
   it("must accept use of valid variables in another block", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1]],
-          },
-          {
-            name: "@final",
-            lines: [
-              ["use", 0],
-              ["drop", 0],
-              ["define", 1],
-              ["use", 1],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1]],
+        },
+        {
+          name: "@final",
+          lines: [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["use", 1],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -68,39 +64,37 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
   });
 
   it("must reject use of invalid variables in another block", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-              ["drop", 0],
-            ],
-            terminator: ["branch", [1]],
-          },
-          {
-            name: "@final",
-            lines: [
-              ["use", 0], // error: use after drop
-              ["define", 1],
-              ["use", 1],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+            ["drop", 0],
+          ],
+          terminator: ["branch", [1]],
+        },
+        {
+          name: "@final",
+          lines: [
+            ["use", 0], // error: use after drop
+            ["define", 1],
+            ["use", 1],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -114,7 +108,7 @@ describe("jump", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(1);
@@ -123,51 +117,49 @@ describe("jump", () => {
 
 describe("branch", () => {
   it("must accept use of valid variables in other blocks", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry_0",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@left_1",
-            lines: [
-              ["use", 0],
-              ["define", 1],
-              ["use", 1],
-            ],
-            terminator: ["branch", [3]],
-          },
-          {
-            name: "@right_2",
-            lines: [
-              ["use", 0],
-              ["define", 2],
-              ["use", 2],
-            ],
-            terminator: ["branch", [3]],
-          },
-          {
-            name: "@final_3",
-            lines: [
-              ["use", 0],
-              ["drop", 0],
-              ["define", 3],
-              ["use", 3],
-              ["drop", 3],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry_0",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@left_1",
+          lines: [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+          ],
+          terminator: ["branch", [3]],
+        },
+        {
+          name: "@right_2",
+          lines: [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+          ],
+          terminator: ["branch", [3]],
+        },
+        {
+          name: "@final_3",
+          lines: [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 3],
+            ["use", 3],
+            ["drop", 3],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry_0",
@@ -191,62 +183,60 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(4);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
   });
 
   it("must reject use of invalid variables in another block", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry_0",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@left_1",
-            lines: [
-              ["use", 0],
-              ["drop", 0],
-              ["define", 1],
-              ["use", 1],
-            ],
-            terminator: ["branch", [3]],
-          },
-          {
-            name: "@right_2",
-            lines: [
-              ["use", 0],
-              ["define", 2],
-              ["use", 2],
-            ],
-            terminator: ["branch", [3]],
-          },
-          {
-            name: "@final_3",
-            lines: [
-              ["use", 0], // error: dropped in @left but not in @right
-              ["drop", 0], // error: dropped in @left but not in @right
-              ["use", 1], // error: defined in @left but not in @right
-              ["use", 2], // error: defined in @right but not in @left
-              ["define", 2], // error: already defined in @right
-              ["define", 3],
-              ["drop", 3],
-              ["use", 3], // error: use-after free
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry_0",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@left_1",
+          lines: [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["use", 1],
+          ],
+          terminator: ["branch", [3]],
+        },
+        {
+          name: "@right_2",
+          lines: [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+          ],
+          terminator: ["branch", [3]],
+        },
+        {
+          name: "@final_3",
+          lines: [
+            ["use", 0], // error: dropped in @left but not in @right
+            ["drop", 0], // error: dropped in @left but not in @right
+            ["use", 1], // error: defined in @left but not in @right
+            ["use", 2], // error: defined in @right but not in @left
+            ["define", 2], // error: already defined in @right
+            ["define", 3],
+            ["drop", 3],
+            ["use", 3], // error: use-after free
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry_0",
@@ -270,47 +260,45 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(4);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(4);
   });
 
   it("must accept use of valid variables in multiple returns", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@left",
-            lines: [
-              ["use", 0],
-              ["define", 1],
-              ["use", 1],
-            ],
-            terminator: ["return"],
-          },
-          {
-            name: "@right",
-            lines: [
-              ["use", 0],
-              ["define", 2],
-              ["use", 2],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@left",
+          lines: [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+          ],
+          terminator: ["return"],
+        },
+        {
+          name: "@right",
+          lines: [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -329,7 +317,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(3);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
@@ -337,42 +325,40 @@ describe("branch", () => {
 
   // TODO: error accumulation in the dataflow algorithm needs to be done differently to pass this test
   it.skip("must reject programs with an error on any of its return paths", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@left",
-            lines: [
-              ["use", 0],
-              ["define", 1],
-              ["use", 1],
-              ["use", 2],
-            ],
-            terminator: ["return"],
-          },
-          {
-            name: "@right",
-            lines: [
-              ["use", 0],
-              ["define", 2],
-              ["use", 1],
-              ["use", 2],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@left",
+          lines: [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+            ["use", 2],
+          ],
+          terminator: ["return"],
+        },
+        {
+          name: "@right",
+          lines: [
+            ["use", 0],
+            ["define", 2],
+            ["use", 1],
+            ["use", 2],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -391,7 +377,7 @@ describe("branch", () => {
       },
     ];
     const variables: number[] = iota(3);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);
@@ -400,51 +386,49 @@ describe("branch", () => {
 
 describe("loop", () => {
   it("must accept use of valid variables in loops", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1]],
-          },
-          {
-            name: "@loop",
-            lines: [
-              // TODO: this causes an error, because there is an incoming edge
-              // (loop,loop) on which variable 0 is undefined, because we have
-              // not yet had the opportunity to project the definition of 0
-              // through this block, into its out-set. Do I have to modify the
-              // predecessor calculation then? Or can I fix this by
-              // differentiating between bottom and undefined and being
-              // permissive when joining with bottom?
-              // Probably not because then then the left/right defined/undefined
-              // case is not detected. I may actually have to keep track of which
-              // nodes I have visited at least once, and only join information
-              // from those nodes.
-              ["use", 0],
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@final",
-            lines: [
-              ["use", 0],
-              ["drop", 0],
-              ["define", 1],
-              ["use", 1],
-              ["drop", 1],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1]],
+        },
+        {
+          name: "@loop",
+          lines: [
+            // TODO: this causes an error, because there is an incoming edge
+            // (loop,loop) on which variable 0 is undefined, because we have
+            // not yet had the opportunity to project the definition of 0
+            // through this block, into its out-set. Do I have to modify the
+            // predecessor calculation then? Or can I fix this by
+            // differentiating between bottom and undefined and being
+            // permissive when joining with bottom?
+            // Probably not because then then the left/right defined/undefined
+            // case is not detected. I may actually have to keep track of which
+            // nodes I have visited at least once, and only join information
+            // from those nodes.
+            ["use", 0],
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@final",
+          lines: [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["use", 1],
+            ["drop", 1],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -463,48 +447,46 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(0);
   });
 
   it("must reject use of invalid variables in loops", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [
-              ["define", 0],
-              ["use", 0],
-            ],
-            terminator: ["branch", [1]],
-          },
-          {
-            name: "@loop",
-            lines: [
-              ["use", 0], // error: is possibly dropped in the previous iteration
-              ["drop", 0], // error: multiple drops -- TODO: should this be an error?
-              ["define", 1], // error: multiple definitions -- TODO: should this be an error?
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@final",
-            lines: [
-              ["use", 0], // error: possibly dropped
-              ["drop", 0], // error: possibly dropped
-              ["use", 1],
-              ["drop", 1],
-            ],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [
+            ["define", 0],
+            ["use", 0],
+          ],
+          terminator: ["branch", [1]],
+        },
+        {
+          name: "@loop",
+          lines: [
+            ["use", 0], // error: is possibly dropped in the previous iteration
+            ["drop", 0], // error: multiple drops -- TODO: should this be an error?
+            ["define", 1], // error: multiple definitions -- TODO: should this be an error?
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@final",
+          lines: [
+            ["use", 0], // error: possibly dropped
+            ["drop", 0], // error: possibly dropped
+            ["use", 1],
+            ["drop", 1],
+          ],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -523,40 +505,38 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = iota(2);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(2);
   });
 
   it("must reject use of invalid variables in loops", () => {
-    const program: Program = [
-      {
-        name: "@main",
-        params: [],
-        blocks: [
-          {
-            name: "@entry",
-            lines: [],
-            terminator: ["branch", [1]],
-          },
-          {
-            name: "@loop",
-            lines: [
-              ["define", 0], // error: possibly multiple defines -- TODO: should this be an error?
-              ["use", 0],
-              ["drop", 0], // error: possibly multiple drops -- TODO: should this be an error?
-            ],
-            terminator: ["branch", [1, 2]],
-          },
-          {
-            name: "@final",
-            lines: [],
-            terminator: ["return"],
-          },
-        ],
-      },
-    ];
+    const func: Function = {
+      name: "@main",
+      params: [],
+      blocks: [
+        {
+          name: "@entry",
+          lines: [],
+          terminator: ["branch", [1]],
+        },
+        {
+          name: "@loop",
+          lines: [
+            ["define", 0], // error: possibly multiple defines -- TODO: should this be an error?
+            ["use", 0],
+            ["drop", 0], // error: possibly multiple drops -- TODO: should this be an error?
+          ],
+          terminator: ["branch", [1, 2]],
+        },
+        {
+          name: "@final",
+          lines: [],
+          terminator: ["return"],
+        },
+      ],
+    };
     const graph: CFG = [
       {
         name: "@entry",
@@ -575,7 +555,7 @@ describe("loop", () => {
       },
     ];
     const variables: number[] = iota(1);
-    const results: readonly State[] = dataflow(program[0], graph, variables);
+    const results: readonly State[] = dataflow(func, graph, variables);
     const error_indices: number[] = find_errors(results);
 
     expect(error_indices.length).toBe(1);
