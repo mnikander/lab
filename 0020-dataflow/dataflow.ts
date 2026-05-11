@@ -88,18 +88,16 @@ function dataflow_line(
   mutable: State[],
 ): State[] {
   const register: number = get_arg(line);
-  const state: undefined | State = mutable[register];
-
-  if (state !== undefined) {
+  if (mutable[register] !== undefined) {
     switch (get_tag(line)) {
       case "define":
-        mutable[register] = define(state);
+        mutable[register] = define(mutable[register]);
         break;
       case "use":
-        mutable[register] = use(state);
+        mutable[register] = use(mutable[register]);
         break;
       case "drop":
-        mutable[register] = drop(state);
+        mutable[register] = drop(mutable[register]);
         break;
       default:
         mutable[register] = [
