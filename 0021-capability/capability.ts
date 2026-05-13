@@ -1,15 +1,19 @@
 // Copyright (c) 2026 Marco Nikander
 
-export interface Log {
+export interface ConsoleOutput {
   log: (s: string) => void;
 }
 
-export interface KeyValueStore<K, V> {
-  store: (key: K, value: V) => void;
-  load: (key: K) => undefined | V;
+// this is a crude approximation of disk IO, where we treat data as an array of numbers
+export interface DiskInput<T> {
+  load: (filename: string) => undefined | T[];
 }
 
-export function make_console_logger(): Log {
+export interface DiskOutput<T> {
+  store: (filename: string, data: T[]) => void;
+}
+
+export function make_console_logger(): ConsoleOutput {
   return {
     log: (s: string) => {
       return console.log(s);
@@ -17,14 +21,14 @@ export function make_console_logger(): Log {
   };
 }
 
-export function make_local_kv_store<K, V>(): KeyValueStore<K, V> {
-  const data = new Map<K, V>();
+export function make_mock_disk_io<T>(): DiskInput<T> & DiskOutput<T> {
+  const internal_storage = new Map<string, T[]>();
   return {
-    store: (key, value) => {
-      data.set(key, value);
+    store: (filename: string, data: T[]) => {
+      internal_storage.set(filename, data);
     },
-    load: (key) => {
-      const value = data.get(key);
+    load: (filename: string) => {
+      const value = internal_storage.get(filename);
       return value;
     },
   };
