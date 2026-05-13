@@ -2,7 +2,9 @@
 
 import * as Capability from "./capability.ts";
 
-export function pretty_printer_module(console_out: Capability.ConsoleOutput) {
+export function import_pretty_printer_module(
+  console_out: Capability.ConsoleOutput,
+) {
   return {
     // functions exported by this module:
     pretty_print: (array: number[]) => {

@@ -2,7 +2,7 @@
 
 import * as Capability from "./capability.ts";
 
-export function file_printing_module(
+export function import_file_printing_module(
   disk_in: Capability.DiskInput<number>,
   console_out: Capability.ConsoleOutput,
 ) {
