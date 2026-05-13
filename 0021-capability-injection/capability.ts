@@ -13,7 +13,7 @@ export interface DiskOutput<T> {
   store: (filename: string, data: T[]) => void;
 }
 
-export function make_console_logger(): ConsoleOutput {
+export function console_logger(): ConsoleOutput {
   return {
     log: (s: string) => {
       return console.log(s);
@@ -21,7 +21,7 @@ export function make_console_logger(): ConsoleOutput {
   };
 }
 
-export function make_mock_disk_io<T>(): DiskInput<T> & DiskOutput<T> {
+export function mock_disk_io<T>(): DiskInput<T> & DiskOutput<T> {
   const internal_storage = new Map<string, T[]>();
   return {
     store: (filename: string, data: T[]) => {
