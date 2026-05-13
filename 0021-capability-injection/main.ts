@@ -5,11 +5,12 @@ import { import_file_printing_module } from "./file_printing_module.ts";
 import { import_pretty_printer_module } from "./pretty_printer_module.ts";
 
 function main(): void {
-  const disk_module = import_file_printing_module(
-    Capability.make_mock_disk_io<number>(),
+  // function calls are used to 'import' a module which requires capabilities
+  const printer_module = import_pretty_printer_module(
     Capability.make_console_logger(),
   );
-  const printer_module = import_pretty_printer_module(
+  const disk_module = import_file_printing_module(
+    Capability.make_mock_disk_io<number>(),
     Capability.make_console_logger(),
   );
 

@@ -35,6 +35,9 @@ This is a permission system for modules, which controls which modules are allowe
 Dependency injection is a very explicit notation and relatively simple to implement, but its use may become cumbersome at scale.
 It may be possible to refactor the code a bit so that a 'module' is like a ReaderT monad from Haskell, which provides some syntactic sugar for the access to the environment, i.e. injected capabilities.
 
+In this prototype, the `import` of such a restricted module, is implemented via a function call.
+You pass the function the Capabilities, and you receive a 'module object' which has the functions it exports.
+
 ### Prototyping steps
 - [x] define a log capability
 - [x] define a second capability like file read or state
