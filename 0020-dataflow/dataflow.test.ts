@@ -385,17 +385,6 @@ describe("loop", () => {
         {
           name: "@loop",
           lines: [
-            // TODO: this causes an error, because there is an incoming edge
-            // (loop,loop) on which variable 0 is undefined, because we have
-            // not yet had the opportunity to project the definition of 0
-            // through this block, into its out-set. Do I have to modify the
-            // predecessor calculation then? Or can I fix this by
-            // differentiating between bottom and undefined and being
-            // permissive when joining with bottom?
-            // Probably not because then then the left/right defined/undefined
-            // case is not detected. I may actually have to keep track of which
-            // nodes I have visited at least once, and only join information
-            // from those nodes.
             ["use", 0],
           ],
           terminator: ["branch", [1, 2]],
