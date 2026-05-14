@@ -115,7 +115,7 @@ describe("branch", () => {
       params: [],
       blocks: [
         {
-          name: "@entry_0",
+          name: "@entry",
           lines: [
             ["define", 0],
             ["use", 0],
@@ -123,7 +123,7 @@ describe("branch", () => {
           terminator: ["branch", [1, 2]],
         },
         {
-          name: "@left_1",
+          name: "@left",
           lines: [
             ["use", 0],
             ["define", 1],
@@ -132,7 +132,7 @@ describe("branch", () => {
           terminator: ["branch", [3]],
         },
         {
-          name: "@right_2",
+          name: "@right",
           lines: [
             ["use", 0],
             ["define", 2],
@@ -141,7 +141,7 @@ describe("branch", () => {
           terminator: ["branch", [3]],
         },
         {
-          name: "@final_3",
+          name: "@final",
           lines: [
             ["use", 0],
             ["drop", 0],
@@ -155,22 +155,22 @@ describe("branch", () => {
     };
     const graph: CFG = [
       {
-        name: "@entry_0",
+        name: "@entry",
         predecessors: [],
         successors: [1, 2],
       },
       {
-        name: "@left_1",
+        name: "@left",
         predecessors: [0],
         successors: [3],
       },
       {
-        name: "@right_2",
+        name: "@right",
         predecessors: [0],
         successors: [3],
       },
       {
-        name: "@final_3",
+        name: "@final",
         predecessors: [1, 2],
         successors: [],
       },
@@ -186,7 +186,7 @@ describe("branch", () => {
       params: [],
       blocks: [
         {
-          name: "@entry_0",
+          name: "@entry",
           lines: [
             ["define", 0],
             ["use", 0],
@@ -194,7 +194,7 @@ describe("branch", () => {
           terminator: ["branch", [1, 2]],
         },
         {
-          name: "@left_1",
+          name: "@left",
           lines: [
             ["use", 0],
             ["drop", 0],
@@ -204,7 +204,7 @@ describe("branch", () => {
           terminator: ["branch", [3]],
         },
         {
-          name: "@right_2",
+          name: "@right",
           lines: [
             ["use", 0],
             ["define", 2],
@@ -213,7 +213,7 @@ describe("branch", () => {
           terminator: ["branch", [3]],
         },
         {
-          name: "@final_3",
+          name: "@final",
           lines: [
             ["use", 0], // error: dropped in @left but not in @right
             ["drop", 0], // error: dropped in @left but not in @right
@@ -229,22 +229,22 @@ describe("branch", () => {
     };
     const graph: CFG = [
       {
-        name: "@entry_0",
+        name: "@entry",
         predecessors: [],
         successors: [1, 2],
       },
       {
-        name: "@left_1",
+        name: "@left",
         predecessors: [0],
         successors: [3],
       },
       {
-        name: "@right_2",
+        name: "@right",
         predecessors: [0],
         successors: [3],
       },
       {
-        name: "@final_3",
+        name: "@final",
         predecessors: [1, 2],
         successors: [],
       },
