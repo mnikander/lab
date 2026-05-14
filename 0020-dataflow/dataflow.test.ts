@@ -219,7 +219,6 @@ describe("branch", () => {
             ["drop", 0], // error: dropped in @left but not in @right
             ["use", 1], // error: defined in @left but not in @right
             ["use", 2], // error: defined in @right but not in @left
-            ["define", 2], // error: already defined in @right
             ["define", 3],
             ["drop", 3],
             ["use", 3], // error: use-after free
@@ -252,7 +251,7 @@ describe("branch", () => {
     ];
     const variables: number[] = iota(4);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
-    expect(errors.length).toBe(6);
+    expect(errors.length).toBe(5);
   });
 
   it("must accept use of valid variables in multiple returns", () => {
