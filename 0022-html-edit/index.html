@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width" />
     <title>Editable HTML</title>
     <style>
-        html { background-color: #fffad6; }
-        #editor { font-family: "Courier New", monospace; }
+        html, textarea { background-color: #fffad6; }
+        textarea { border: 0; padding: 0; width: 100%; height: 100%;}
+        #viewer, #editor { font-size: medium; font-family: "Courier New", monospace }
         .keyword { color: blue }
     </style>
   </head>
   <body>
-    <paragraph id="editor" contenteditable="true" autofocus>
+    <h1>Viewer</h1>
+    <paragraph id="viewer">
         <div>Hello!</div>
         <div>How are <span class="keyword">you</span> doing?</div>
     </paragraph>
+    <h1>Editor</h1>
+    <textarea id="editor" autofocus>hello world</textarea>
   </body>
 </html>
