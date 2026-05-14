@@ -57,18 +57,18 @@ function join(left: State, right: State): State {
   }
 }
 
+// Note that the SSA property ensures there is only one definition in the
+// source code, so multiple passes over define must be due to loops.
+// Thus, we just treat 'define' as a reset of the variable state.
 export function define(state: State): Error | State {
   if (is_state(state)) {
     switch (state[0]) {
       case "top":
-        return [
-          "error",
-          "potential define-after-define / define-after-free",
-        ];
+        return ["defined"];
       case "dropped":
-        return ["error", "define-after-free"];
+        return ["defined"];
       case "defined":
-        return ["error", "define-after-define"];
+        return ["defined"];
       case "undefined":
         return ["defined"];
       case "bottom":
