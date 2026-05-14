@@ -10,18 +10,19 @@ Each lab is phrased as a question.
 The tables below provide an overview of those questions.
 **Open** questions are sorted by priority (highest at the top).
 **Resolved** questions are sorted by their resolution date (most recent at the top).
+If a question is marked with ~~strikethrough~~ it was either aborted or done as part of a another lab.
 
 ## Open
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0014 |        | 2026-02-20 | ssa, graphs          | How can an iterative fixed-point solver compute the availabilty of SSA variables? |
 |      |        | 2026-0- | | |
 
 ## Resolved
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0014 |        | 2026-02-20 | ssa, graphs          | ~~How can an iterative fixed-point solver compute the availabilty of SSA variables?~~ |
 | 0021 |        | 2026-05-13 | capability, io       | How can a side-effect capabilities be injected into modules? |
 | 0020 |        | 2026-05-06 | ssa, ownership       | Can a dataflow analysis check lifetimes of SSA variables in a function? |
 | 0019 |        | 2026-05-05 | ssa, graphs          | How can a control flow graph be constructed from SSA code? |

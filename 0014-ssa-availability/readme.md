@@ -4,7 +4,7 @@
 How can an iterative fixed-point solver compute the availabilty of SSA variables?
 
 Date:   2026-02-20
-Status: Incomplete, as of 2026-03-21
+Status: Aborted on 2026-05-14
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -51,7 +51,7 @@ deno test
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-
+- try this again
 
 ---
 **Copyright (c) 2026 Marco Nikander**
