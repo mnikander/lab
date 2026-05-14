@@ -6,6 +6,78 @@ import { dataflow, IndexedError } from "./dataflow.ts";
 import { CFG } from "./control-flow-graph.ts";
 import { iota } from "./worklist.ts";
 
+const line: CFG = [
+  {
+    name: "@entry",
+    predecessors: [],
+    successors: [1],
+  },
+  {
+    name: "@final",
+    predecessors: [0],
+    successors: [],
+  },
+];
+
+const diamond: CFG = [
+  {
+    name: "@entry",
+    predecessors: [],
+    successors: [1, 2],
+  },
+  {
+    name: "@left",
+    predecessors: [0],
+    successors: [3],
+  },
+  {
+    name: "@right",
+    predecessors: [0],
+    successors: [3],
+  },
+  {
+    name: "@final",
+    predecessors: [1, 2],
+    successors: [],
+  },
+];
+
+const split: CFG = [
+  {
+    name: "@entry",
+    predecessors: [],
+    successors: [1, 2],
+  },
+  {
+    name: "@left",
+    predecessors: [0],
+    successors: [3],
+  },
+  {
+    name: "@right",
+    predecessors: [0],
+    successors: [3],
+  },
+];
+
+const loop: CFG = [
+  {
+    name: "@entry",
+    predecessors: [],
+    successors: [1],
+  },
+  {
+    name: "@loop",
+    predecessors: [0, 1],
+    successors: [1, 2],
+  },
+  {
+    name: "@final",
+    predecessors: [1],
+    successors: [],
+  },
+];
+
 describe("single block", () => {
   it("must accept an empty block", () => {
     const func: Function = {
@@ -48,18 +120,7 @@ describe("jump", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1],
-      },
-      {
-        name: "@final",
-        predecessors: [0],
-        successors: [],
-      },
-    ];
+    const graph: CFG = line;
     const variables: number[] = iota(2);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(0);
@@ -90,18 +151,7 @@ describe("jump", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1],
-      },
-      {
-        name: "@final",
-        predecessors: [0],
-        successors: [],
-      },
-    ];
+    const graph: CFG = line;
     const variables: number[] = iota(2);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(1);
@@ -153,28 +203,7 @@ describe("branch", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1, 2],
-      },
-      {
-        name: "@left",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@right",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@final",
-        predecessors: [1, 2],
-        successors: [],
-      },
-    ];
+    const graph: CFG = diamond;
     const variables: number[] = iota(4);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(0);
@@ -227,28 +256,7 @@ describe("branch", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1, 2],
-      },
-      {
-        name: "@left",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@right",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@final",
-        predecessors: [1, 2],
-        successors: [],
-      },
-    ];
+    const graph: CFG = diamond;
     const variables: number[] = iota(4);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(5);
@@ -287,23 +295,7 @@ describe("branch", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1, 2],
-      },
-      {
-        name: "@left",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@right",
-        predecessors: [0],
-        successors: [3],
-      },
-    ];
+    const graph: CFG = split;
     const variables: number[] = iota(3);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(0);
@@ -344,23 +336,7 @@ describe("branch", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1, 2],
-      },
-      {
-        name: "@left",
-        predecessors: [0],
-        successors: [3],
-      },
-      {
-        name: "@right",
-        predecessors: [0],
-        successors: [3],
-      },
-    ];
+    const graph: CFG = split;
     const variables: number[] = iota(3);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(2);
@@ -401,23 +377,7 @@ describe("loop", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1],
-      },
-      {
-        name: "@loop",
-        predecessors: [0, 1],
-        successors: [1, 2],
-      },
-      {
-        name: "@final",
-        predecessors: [1],
-        successors: [],
-      },
-    ];
+    const graph: CFG = loop;
     const variables: number[] = iota(2);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBe(0);
@@ -457,23 +417,7 @@ describe("loop", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1],
-      },
-      {
-        name: "@loop",
-        predecessors: [0, 1],
-        successors: [1, 2],
-      },
-      {
-        name: "@final",
-        predecessors: [1],
-        successors: [],
-      },
-    ];
+    const graph: CFG = loop;
     const variables: number[] = iota(2);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBeGreaterThanOrEqual(4);
@@ -505,23 +449,7 @@ describe("loop", () => {
         },
       ],
     };
-    const graph: CFG = [
-      {
-        name: "@entry",
-        predecessors: [],
-        successors: [1],
-      },
-      {
-        name: "@loop",
-        predecessors: [0, 1],
-        successors: [1, 2],
-      },
-      {
-        name: "@final",
-        predecessors: [1],
-        successors: [],
-      },
-    ];
+    const graph: CFG = loop;
     const variables: number[] = iota(1);
     const errors: readonly IndexedError[] = dataflow(func, graph, variables);
     expect(errors.length).toBeGreaterThanOrEqual(0);
