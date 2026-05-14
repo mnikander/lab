@@ -5,19 +5,80 @@
     <meta name="viewport" content="width=device-width" />
     <title>Editable HTML</title>
     <style>
-        html, textarea { background-color: #fffad6; }
-        textarea { border: 0; padding: 0; width: 100%; height: 100%;}
-        #viewer, #editor { font-size: medium; font-family: "Courier New", monospace }
+        html { background-color: #fffad6; }
+        #surface { display: grid; }
+        #viewer, #editor {
+          grid-area: 1 / 1;
+          box-sizing: border-box;
+          width: 100%;
+          min-height: 12rem;
+          border: 0;
+          margin: 0;
+          padding: 0;
+          font-size: medium;
+          font-family: "Courier New", monospace;
+          line-height: 1.4;
+          white-space: pre-wrap;
+        }
+        #viewer { pointer-events: none; z-index: 1; }
+        #editor {
+          z-index: 0;
+          overflow: hidden;
+          resize: none;
+          color: transparent;
+          caret-color: black;
+          background: transparent;
+        }
         .keyword { color: blue }
     </style>
   </head>
   <body>
-    <h1>Viewer</h1>
-    <paragraph id="viewer">
-        <div>Hello!</div>
-        <div>How are <span class="keyword">you</span> doing?</div>
-    </paragraph>
-    <h1>Editor</h1>
-    <textarea id="editor" autofocus>hello world</textarea>
+    <div id="surface">
+      <textarea id="editor" autofocus>
+let x = 1
+if (x >= 0) {
+  x
+}
+else {
+  -x
+}
+</textarea>
+      <div id="viewer"></div>
+    </div>
+    <script>
+      const viewer = document.querySelector("#viewer");
+      const editor = document.querySelector("#editor");
+      const keywords = /\b(let|if|else)\b/g;
+
+      function escapeHtml(text) {
+        return text
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+      }
+
+      function highlightKeywords(text) {
+        return escapeHtml(text).replace(
+          keywords,
+          '<span class="keyword">$1</span>',
+        );
+      }
+
+      function updateViewer() {
+        viewer.innerHTML = highlightKeywords(editor.value);
+      }
+
+      function resizeEditor() {
+        editor.style.height = "auto";
+        editor.style.height = `${editor.scrollHeight}px`;
+      }
+
+      editor.addEventListener("input", () => {
+        updateViewer();
+        resizeEditor();
+      });
+      updateViewer();
+      resizeEditor();
+    </script>
   </body>
 </html>
