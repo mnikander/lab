@@ -16,6 +16,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0022 |        | 2026-05-14 | web                  | How can the content and structure of an HTML page be edited in place? |
 |      |        | 2026-0- | | |
 
 ## Resolved
