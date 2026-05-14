@@ -1,8 +1,13 @@
-# Questions
+# Lab
 
-Can reading, coding, and note-taking be combined to learn quickly and in a lasting way?
-This repo is a place to ask questions, read, experiment, and find the answers.
-The tables below collect those questions.
+This is a collection of coding exercises and experiments.
+Some basic configs such as the and git-related settings are shared across labs.
+Most labs use TypeScript and Deno, but other programming langauges and tools are used as well.
+Each lab has its own directory which is like a standalone mini-repository.
+There are no code dependencies between labs.
+
+Each lab is phrased as a question.
+The tables below provide an overview of those questions.
 **Open** questions are sorted by priority (highest at the top).
 **Resolved** questions are sorted by their resolution date (most recent at the top).
 
