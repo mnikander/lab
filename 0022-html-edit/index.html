@@ -35,12 +35,10 @@
   <body>
     <div id="surface">
       <textarea id="editor" autofocus>
-let x = 1
-if (x >= 0) {
-  x
-}
-else {
-  -x
+function main() int {
+  let x = 1
+  let y = if (x >= 0) { x } else { -x }
+  y
 }
 </textarea>
       <div id="viewer"></div>
@@ -48,7 +46,7 @@ else {
     <script>
       const viewer = document.querySelector("#viewer");
       const editor = document.querySelector("#editor");
-      const keywords = /\b(let|if|else)\b/g;
+      const keywords = /\b(function|let|if|else)\b/g;
 
       function escapeHtml(text) {
         return text
