@@ -3,7 +3,7 @@
 
 Can ownership be modelled within functions and across function boundaries with a small DSL?
 
-Date:   2026-05-23
+Date:   2026-05-15
 Status: Doing
 
 ## Resources

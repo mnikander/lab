@@ -16,7 +16,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0023 |        | 2026-05-23 | memory               | Can ownership be modelled within functions and across function boundaries with a small DSL? |
+| 0023 |        | 2026-05-15 | memory               | Can ownership be modelled within functions and across function boundaries with a small DSL? |
 |      |        | 2026-0- | | |
 
 ## Resolved
