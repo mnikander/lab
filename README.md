@@ -16,6 +16,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0023 |        | 2026-05-23 | memory               | Can ownership be modelled within functions and across function boundaries with a small DSL? |
 |      |        | 2026-0- | | |
 
 ## Resolved
@@ -25,9 +26,9 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 | 0022 |        | 2026-05-14 | web                  | How can the content and structure of an HTML page be edited in place? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | ~~How can an iterative fixed-point solver compute the availabilty of SSA variables?~~ |
 | 0021 |        | 2026-05-13 | capability, io       | How can a side-effect capabilities be injected into modules? |
-| 0020 |        | 2026-05-06 | ssa, ownership       | Can a dataflow analysis check lifetimes of SSA variables in a function? |
+| 0020 |        | 2026-05-06 | ssa, memory          | Can a dataflow analysis check lifetimes of SSA variables in a function? |
 | 0019 |        | 2026-05-05 | ssa, graphs          | How can a control flow graph be constructed from SSA code? |
-| 0018 |        | 2026-05-03 | ownership            | Can variable lifetimes be verified with a domain specific language (DSL)? |
+| 0018 |        | 2026-05-03 | memory               | Can variable lifetimes be verified with a domain specific language (DSL)? |
 | 0017 |        | 2026-05-02 | ast, grammar         | Can an ANF-inspired grammar be relaxed to support nested expressions like Scheme? |
 | 0015 |        | 2026-03-16 | backend              | How can Hono be used to accept GET and POST requests? |
 | 0016 |        | 2026-03-21 | types                | How can a simple type system be defined and checked? |
