@@ -54,7 +54,10 @@ describe("jump", () => {
         "func",
         ["result", "i64"],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
         [
           ["block", [
             ["define", 0],
@@ -79,7 +82,10 @@ describe("jump", () => {
         "func",
         ["result", "i64"],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
         [
           ["block", [
             ["define", 0],
@@ -106,7 +112,12 @@ describe("split and join", () => {
         "func",
         ["result", "i64"],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
         [
           ["block", [
             ["define", 0],
@@ -143,7 +154,11 @@ describe("split and join", () => {
         "func",
         ["result", "i64"],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
         [
           ["block", [
             ["define", 0],
