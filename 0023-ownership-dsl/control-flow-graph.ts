@@ -2,15 +2,9 @@
 
 import { assert } from "node:console";
 import * as G from "./grammar.ts";
+import { Graph, Node } from "./graph.ts";
 
-export type CFG = Node[];
-
-export type Node = {
-  pred: number[];
-  succ: number[];
-};
-
-export function make_cfg(func: undefined | G.Function): CFG {
+export function make_cfg(func: undefined | G.Function): Graph {
   if (func === undefined) {
     return [];
   } else {
@@ -26,11 +20,12 @@ export function make_cfg(func: undefined | G.Function): CFG {
     }
 
     // zip
-    const result: CFG = blocks.map((_b, i) => {
-      return {
+    const result: Graph = blocks.map((_b, i) => {
+      const node: Node = {
         pred: predecessors[i],
         succ: successors[i],
       };
+      return node;
     });
     return result;
   }
