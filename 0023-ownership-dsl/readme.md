@@ -46,18 +46,20 @@ deno test
 - [x] fixed and activated tests cases (7 steps pass, 6 steps fail)
 - [x] copy, adapt, and test the datatype and function to compute CFGs
 - [x] factor the Graph into its own file so the CFG and Solver functions can both use it
-- [x] define / look up an API for a worklist algorithm
-- [x] implement the worklist algorithm as a stand-alone component to separate concerns
+- [x] define / look up an API for a iterative solver
+- [x] implement the iterative solver algorithm as a stand-alone component to separate concerns
 - [x] define a trivial two-element lattice (or boolean lattice with four elements) which can be used on a CFG
-- [x] test the worklist algorithm on CFGs
-- [ ] test that the worklist algorithm to is not doing in-place mutation via `join` and producing incorrect results somewhere
-- [ ] refactor the syntax / grammar until it is _not_ painful to write DSL programs
+- [x] test the iterative solver on CFGs
+- [x] refactor the syntax / grammar until it is _not_ painful to write DSL programs and analyses
+- [x] define a datatype to hold meta-data about a variable
+- [x] define lattice type, update functions, and join
+- [x] decide whether to fail on the first error, or to return a list of (success | error) entries for every DSL line
+- [ ] implement dataflow analysis on the DSL
+- [ ] investigate dataflow analysis with debugger
+- [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
+- [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
 - [ ] write down `return` semantics for different kinds of values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
-- [ ] define a datatype to hold meta-data about a variable
-- [ ] define lattice type, update functions, and join
-- [ ] decide whether to fail on the first error, or to return a list of (success | error) entries for every DSL line
-- [ ] implement dataflow analysis on the DSL
 - [ ] extend the test-cases: find cases where it breaks! 
 - [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
 
@@ -65,7 +67,8 @@ deno test
 <!-- What did I learn? -->
 
 - The new symbolic-expression syntax always starts with a tag. This is inspired by the sybolic expression syntax in WASM. I think it is simple, compact, and easy to read. I think the tags give a lot more information about what is what, which massively decreases the cognitive load of reading the code. I _really_ like this new syntax!
-- The generic worklist algorithm was pretty straight-forward to implement. The only real stumbling block was the computation of the `in_state` via reduce. That doesn't work for entry nodes with no incoming edges, so a in_state for the entry node is passed in explicitly. Note that reduce uses this value as it's accumulator, so you have to be really careful about avoiding in-place mutation. This is problematic because I don't know of any universal mechanism to do a deep-copy of any primitive or object value in JavaScript/TypeScript. This requires caution when implementing join.
+- The generic iterative solver was pretty straight-forward to implement. The only real stumbling block was the computation of the `in_state` via reduce. That doesn't work for entry nodes with no incoming edges, so a in_state for the entry node is passed in explicitly. Note that reduce uses this value as it's accumulator, so you have to be really careful about avoiding in-place mutation. This is problematic because I don't know of any universal mechanism to do a deep-copy of any primitive or object value in JavaScript/TypeScript. This requires caution when implementing join.
+- When writing the code, it's very easy to get confused between the out state of one  node, i.e. `LatticeElement[]` and the set of such out-states, i.e. `LatticeElement[][]`.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
