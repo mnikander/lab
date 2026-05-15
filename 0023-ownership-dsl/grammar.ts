@@ -25,3 +25,11 @@ export type Basic       = "unit" | "i64";
 
 export type Register    = number;
 export type Label       = number;
+
+export function get_blocks(func: Function): Block[] {
+    return func[4];
+}
+
+export function get_lines(block: Block): Line[] {
+    return block[1];
+}

@@ -18,8 +18,8 @@ Status: Doing
 <!-- What do I think is going to happen? -->
 
 - [x] define the DSL grammar via types, but in symbolic expression style
-- [ ] copy and adapt the datatype and function to compute CFGs
 - [x] write several example programs in unit tests
+- [x] copy, adapt, and test the datatype and function to compute CFGs
 - [ ] refactor the syntax / grammar until it is _not_ painful to write DSL programs
 - [ ] write down `return` semantics for different kinds of values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
