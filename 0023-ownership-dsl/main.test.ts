@@ -9,13 +9,31 @@ describe("naive programs", () => {
     expect(check(program)).toBe(true);
   });
 
-  it("must accept a main function which returns a defined register", () => {
+  it("must accept a function which returns a defined register", () => {
     const program: G.Program = [
       [
         "func",
         ["result", "i64"],
         [],
         [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject a function which does not allocate all of its registers", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [], // error: missing alloca
         [
           ["block", [
             ["define", 0],
