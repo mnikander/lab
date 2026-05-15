@@ -17,8 +17,12 @@ describe("programs with one function", () => {
   }
 
   function join(left: State, right: State): State {
-    // TODO: I'm concerned the following line may allow the caller to mutate 'left' in-place
-    return equal(left, right) ? left : ["top"];
+    // ensure that a fresh copy is created
+    if (equal(left, right)) {
+      return left[0] === "bottom" ? ["bottom"] : ["top"];
+    } else {
+      return ["top"];
+    }
   }
 
   function update(index: number, _node: Node, in_state: State): State {
