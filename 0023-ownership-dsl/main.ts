@@ -2,6 +2,6 @@
 
 import * as G from "./grammar.ts";
 
-export function check(_program: G.Program): boolean {
+export function check_function(func: G.Function): boolean {
   return true;
 }

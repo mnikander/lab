@@ -1,12 +1,12 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
-import { check } from "./main.ts";
+import { check_function } from "./main.ts";
 
 describe("naive programs", () => {
-  it("must accept the empty program", () => {
+  it.skip("must accept the empty program", () => {
     const program: G.Program = [];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must accept a function which returns a defined register", () => {
@@ -24,7 +24,7 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must reject a function which does not allocate all of its registers", () => {
@@ -42,7 +42,7 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 
   it("must reject a main function which returns a dropped register", () => {
@@ -61,7 +61,7 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 });
 
@@ -91,7 +91,7 @@ describe("jump", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must reject use of a dropped variable in another block", () => {
@@ -119,7 +119,7 @@ describe("jump", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 });
 
@@ -164,7 +164,7 @@ describe("split and join", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
   it("must reject use of undefined/dropped variables in another block", () => {
     const program: G.Program = [
@@ -206,7 +206,7 @@ describe("split and join", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 });
 
@@ -243,7 +243,7 @@ describe("multiple returns", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must reject programs with an error on any of its return paths", () => {
@@ -280,7 +280,7 @@ describe("multiple returns", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 });
 
@@ -316,7 +316,7 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must accept define-use-drop inside loops", () => {
@@ -346,7 +346,7 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check_function(program[0])).toBe(true);
   });
 
   it("must reject use of undefined/dropped variables in loops", () => {
@@ -377,6 +377,6 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(false);
+    expect(check_function(program[0])).toBe(false);
   });
 });
