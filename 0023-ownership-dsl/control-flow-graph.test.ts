@@ -3,13 +3,13 @@ import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
 import { make_cfg } from "./control-flow-graph.ts";
 
-describe("programs with one function", () => {
-  it("must compute CFG for the empty program", () => {
-    const program: G.Program = [];
+describe("must compute control flow graphs for programs with one function", () => {
+  it("which is empty", () => {
+    const program: G.Program = [["func", ["result", "unit"], [], [], []]];
     expect(make_cfg(program[0])).toEqual([]);
   });
 
-  it("must compute CFG for a function with one block", () => {
+  it("with one block", () => {
     const program: G.Program = [
       [
         "func",
@@ -26,7 +26,7 @@ describe("programs with one function", () => {
     expect(make_cfg(program[0])).toEqual([{ pred: [], succ: [] }]);
   });
 
-  it("must compute CFG for a function with two sequential blocks", () => {
+  it("with two sequential blocks", () => {
     const program: G.Program = [
       [
         "func",
@@ -49,7 +49,7 @@ describe("programs with one function", () => {
     ]);
   });
 
-  it("must compute CFG for a function with four blocks which form a diamond", () => {
+  it("with four blocks which form a diamond", () => {
     const program: G.Program = [
       [
         "func",
@@ -80,7 +80,7 @@ describe("programs with one function", () => {
     ]);
   });
 
-  it("must compute CFG for a function with three blocks which split into two separate return blocks", () => {
+  it("with three blocks which split into two separate return blocks", () => {
     const program: G.Program = [
       [
         "func",
@@ -107,7 +107,7 @@ describe("programs with one function", () => {
     ]);
   });
 
-  it("must compute CFG for a function with an entry block, loop block, and final block", () => {
+  it("with an entry block, loop block, and final block", () => {
     const program: G.Program = [
       [
         "func",
