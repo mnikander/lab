@@ -1,16 +1,23 @@
-# Question
+# Question and Hypothesis
 <!-- What am I figuring out? -->
+<!-- What do I think is going to happen? -->
 
-Can ownership be modelled within functions and across function boundaries with a small DSL?
+1. **Can ownership be modelled within functions and across function boundaries with a small DSL?**
+- Probably to an extent
+- I am unsure if constructs like pointers can really be lowered cleanly into the DSL
+- I am also unsure if the _intra_-function and _inter_-function analysis can really be done well in a single run
+- I will find tricky corner-cases which I have not considered before
+
+2. **Can symbolic expressions be used to express the ownership DSL in a compact and readable form?**
+- I'm skeptical, there will be a lot of parentheses and nesting
+- WASM-like symbolic expressions have a tag in every expression, that may help readability
+
+3. **Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?**
+- I think yes
+- the generic implementation of the solver may be very difficult, because it needs a lot of functionality which is specific to the problem
 
 Date:   2026-05-15
 Status: Doing
-
-## Hypothesis
-<!-- What do I want to do? -->
-<!-- What do I think is going to happen? -->
-
-
 
 ## Resources
 <!-- Where can I find relevant information? -->
