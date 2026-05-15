@@ -25,7 +25,7 @@ describe("programs with one function", () => {
     }
   }
 
-  function update(index: number, _node: Node, in_state: State): State {
+  function update(index: number, in_state: State): State {
     if (in_state[0] === "bottom") {
       return index > 0 ? ["top"] : ["bottom"];
     } else {

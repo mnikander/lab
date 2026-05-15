@@ -8,7 +8,7 @@ export function iterate_to_fixed_point<State>(
   out_states: State[],
   equal: (left: State, right: State) => boolean,
   join: (left: State, right: State) => State, // must return a COPY to avoid in-place mutation of left/right
-  update: (index: number, node: Node, in_state: State) => State,
+  update: (index: number, in_state: State) => State,
 ): State[] {
   const worklist: Worklist = initialize_worklist(graph.length);
   while (!is_empty(worklist)) {
@@ -20,7 +20,7 @@ export function iterate_to_fixed_point<State>(
         left,
         right,
       ) => join(left, right));
-    const updated_out_state = update(index, node, in_state);
+    const updated_out_state = update(index, in_state);
     if (!equal(out_states[index], updated_out_state)) {
       out_states[index] = updated_out_state;
       node.succ.forEach((s) => {
