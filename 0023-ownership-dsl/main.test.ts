@@ -9,19 +9,173 @@ describe("naive programs", () => {
     expect(check(program)).toBe(true);
   });
 
-  it("must accept a main function which returns an integer", () => {
+  it("must accept a main function which returns a defined register", () => {
     const program: G.Program = [
       [
         "func",
         ["result", "i64"],
         [],
         [["alloca", ["local", "affine", "i64"]]],
-        [["block", [
-          ["define", 0],
-          ["return", 0],
-        ]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject a main function which returns a dropped register", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["drop", 0],
+            ["return", 0], // error: return-after-drop
+          ]],
+        ],
       ],
     ];
     expect(check(program)).toBe(true);
   });
 });
+
+describe("jump", () => {
+  it("must accept use of a defined variable in another block", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject use of a dropped variable in another block", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["drop", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["use", 0], // error: use-after-drop
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+});
+
+describe("branch", () => {
+  it("must accept use of defined variables in other blocks", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+            ["branch", [3]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+            ["branch", [3]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 3],
+            ["use", 3],
+            ["drop", 3],
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+  it("must reject use of undefined/dropped variables in another block", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [["alloca", ["local", "affine", "i64"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["use", 1],
+            ["branch", [3]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+            ["branch", [3]],
+          ]],
+          ["block", [
+            ["use", 0], // error: possible use-after-drop
+            ["drop", 0], // error: possible use-after-drop
+            ["use", 1], // error: possible use-before-define
+            ["use", 2], // error: possible use-before-define
+            ["return", 0], // error: possible return-after-drop
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+});
+
+// TODO: transfer the 2 diamond test-cases for multiple returns from lab-0020
+// TODO: transfer the 3 loop test-cases from lab-0020
