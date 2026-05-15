@@ -1,7 +1,9 @@
-# Question
+# Question and Hypothesis
 <!-- What am I figuring out? -->
+<!-- What do I think is going to happen? -->
 
-
+**question**
+- 
 
 Date:   2026-0
 Status: 
@@ -11,20 +13,13 @@ Status:
 
 
 
-## Plan
-<!-- What do I want to do? -->
-<!-- What do I think is going to happen? -->
-
-
-
 ## Running the Code
 <!-- What steps are required to run the code? -->
 
 
 
-## Experiment
+## Steps
 <!-- What did I do? -->
-<!-- How do you run the code? -->
 
 
 
