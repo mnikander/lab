@@ -286,40 +286,6 @@ describe("loop", () => {
     expect(check(program)).toBe(true);
   });
 
-  it("must reject use of undefined/dropped variables in loops", () => {
-    const program: G.Program = [
-      [
-        "func",
-        ["result", "i64"],
-        [],
-        [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-        ],
-        [
-          ["block", [
-            ["define", 0],
-            ["use", 0],
-            ["branch", [1]],
-          ]],
-          ["block", [
-            ["use", 0], // error: possibly dropped in the previous iteration
-            ["drop", 0], // error: multiple drops
-            ["define", 1],
-            ["branch", [1, 2]],
-          ]],
-          ["block", [
-            ["use", 0], // error: possibly dropped
-            ["drop", 0], // error: possibly dropped
-            ["use", 1],
-            ["return", 1],
-          ]],
-        ],
-      ],
-    ];
-    expect(check(program)).toBe(true);
-  });
-
   it("must accept define-use-drop inside loops", () => {
     const program: G.Program = [
       [
@@ -343,6 +309,37 @@ describe("loop", () => {
           ["block", [
             ["define", 1],
             ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject use of undefined/dropped variables in loops", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["use", 0], // error: possible use-after-drop
+            ["drop", 0], // error: possible double-drop
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0], // error: possible use-after-drop
+            ["drop", 0], // error: possible use-after-drop
+            ["return", 0], // error: possible return-after-drop
           ]],
         ],
       ],
