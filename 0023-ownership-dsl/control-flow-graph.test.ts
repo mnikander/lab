@@ -1,7 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
-import { check } from "./main.ts";
 import { make_cfg } from "./control-flow-graph.ts";
 
 describe("programs with one function", () => {

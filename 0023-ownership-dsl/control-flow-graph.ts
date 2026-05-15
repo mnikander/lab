@@ -33,14 +33,17 @@ export function make_cfg(func: undefined | G.Function): Graph {
 
 function extract_successors(block: G.Block): G.Register[] {
   const lines: G.Line[] = G.get_lines(block);
-  const last_index: number = lines.length - 1;
-  assert(last_index > 0, "block must have at least one instruction");
-  const line: G.Line = lines[last_index];
-  if (line[0] === "return") {
+  if (lines.length <= 0) {
     return [];
-  } else if (line[0] === "branch") {
-    return line[1];
   } else {
-    throw Error("Unexpected error while extracting successor blocks");
+    const last_index: number = lines.length - 1;
+    const line: G.Line = lines[last_index];
+    if (line[0] === "return") {
+      return [];
+    } else if (line[0] === "branch") {
+      return line[1];
+    } else {
+      throw Error("Unexpected error while extracting successor blocks");
+    }
   }
 }
