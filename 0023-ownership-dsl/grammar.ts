@@ -23,6 +23,7 @@ export type Type        = Basic | Pointer;
 export type Pointer     = ["pointer", address: number, target_type: Type];
 export type Basic       = "unit" | "i64";
 
+export type Metadata    = (Parameter | Alloca)[];
 export type Register    = number;
 export type Label       = number;
 
@@ -32,4 +33,16 @@ export function get_blocks(func: Function): Block[] {
 
 export function get_lines(block: Block): Line[] {
     return block[1];
+}
+
+export function is_body(line: Line): line is Define | Use | Drop {
+    return line[0] === "define" || line[0] === "use" || line[0] === "drop";
+}
+
+export function is_return(line: Line): line is Return {
+    return line[0] === "return";
+}
+
+export function is_branch(line: Line): line is Branch {
+    return line[0] === "branch";
 }
