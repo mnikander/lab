@@ -5,6 +5,6 @@
   },
   "fmt": {
     "include": ["**/*.ts"],
-    "exclude": ["*.md"]
+    "exclude": ["*.md", "**/grammar.ts"]
   }
 }
