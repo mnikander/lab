@@ -99,7 +99,7 @@ describe("jump", () => {
   });
 });
 
-describe("branch", () => {
+describe("split and join", () => {
   it("must accept use of defined variables in other blocks", () => {
     const program: G.Program = [
       [
@@ -177,5 +177,176 @@ describe("branch", () => {
   });
 });
 
-// TODO: transfer the 2 diamond test-cases for multiple returns from lab-0020
-// TODO: transfer the 3 loop test-cases from lab-0020
+describe("multiple returns", () => {
+  it("must accept use of defined variables in multiple returns", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+            ["return", 1],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 2],
+            ["use", 2],
+            ["return", 2],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject programs with an error on any of its return paths", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 1],
+            ["use", 1],
+            ["use", 2], // error: use-before-define
+            ["return", 1],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["define", 2],
+            ["use", 1], // error: use-before-define
+            ["use", 2],
+            ["return", 2],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+});
+
+describe("loop", () => {
+  it("must accept use of defined variables in loops", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0],
+            ["drop", 0],
+            ["define", 1],
+            ["use", 1],
+            ["drop", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must reject use of undefined/dropped variables in loops", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["use", 0], // error: possibly dropped in the previous iteration
+            ["drop", 0], // error: multiple drops
+            ["define", 1],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["use", 0], // error: possibly dropped
+            ["drop", 0], // error: possibly dropped
+            ["use", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+
+  it("must accept define-use-drop inside loops", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", "i64"],
+        [],
+        [
+          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "i64"]],
+        ],
+        [
+          ["block", [
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["drop", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    expect(check(program)).toBe(true);
+  });
+});
