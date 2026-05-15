@@ -42,7 +42,7 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 
   it("must reject a main function which returns a dropped register", () => {
@@ -61,7 +61,7 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 });
 
@@ -119,7 +119,7 @@ describe("jump", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 });
 
@@ -206,7 +206,7 @@ describe("split and join", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 });
 
@@ -280,7 +280,7 @@ describe("multiple returns", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 });
 
@@ -377,6 +377,6 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check(program)).toBe(true);
+    expect(check(program)).toBe(false);
   });
 });
