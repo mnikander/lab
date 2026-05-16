@@ -3,7 +3,7 @@
 export type Program     = Function[];
 
 export type Function    = ["func",   Result, Parameter[], Alloca[], Block[]];
-export type Result      = ["result", Type];
+export type Result      = ["result", Local | Escape | Global];
 export type Parameter   = ["param",  Local | Escape];
 export type Alloca      = ["alloca", Local | Global];
 export type Local       = ["local",  "affine"           , Type];

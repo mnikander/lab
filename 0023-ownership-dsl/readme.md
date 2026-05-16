@@ -56,6 +56,7 @@ deno test
 - [x] decide whether to fail on the first error, or to return a list of (success | error) entries for every DSL line
 - [x] decided to remove the test cases for `alloca` from this lab and make them future work
 - [x] re-implement dataflow analysis on the DSL, using the code from lab 0020 as a starting point
+- [x] add semantic annotations to the function return type as well
 - [ ] write down `return` semantics for different kinds of values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
 - [ ] implement the dataflow analysis for `return`
