@@ -2,19 +2,19 @@
 <!-- What am I figuring out? -->
 <!-- What do I think is going to happen? -->
 
-1. **Can ownership be modelled within functions and across function boundaries with a small DSL?**
-- Probably to an extent
-- I am unsure if constructs like pointers can really be lowered cleanly into the DSL
-- I am also unsure if the _intra_-function and _inter_-function analysis can really be done well in a single run
-- I will find tricky corner-cases which I have not considered before
+1. Can ownership be modelled within functions with a small DSL?
+2. Can ownership be modelled across function boundaries, with an extension of that DSL?
+3. Can symbolic expressions be used to express the ownership DSL in a compact and readable form?
+4. Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?
 
-2. **Can symbolic expressions be used to express the ownership DSL in a compact and readable form?**
-- I'm skeptical, there will be a lot of parentheses and nesting
-- WASM-like symbolic expressions have a tag in every expression, that may help readability
+Many memory operations and constructs can probably be modelled with a simple DSL.
+There may be corner-cases which are very difficult or impossible to model, however.
+It's unclear if the _intra_-function and _inter_-function analysis can be done well in a dataflow run.
 
-3. **Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?**
-- I think yes
-- the generic implementation of the solver may be very difficult, because it needs a lot of functionality which is specific to the problem
+Regarding the syntax, there will probably be a lot of parentheses and nesting.
+WASM-like symbolic expressions have a tag in every expression, which may help readability.
+
+The generic implementation of the iterative fixed point solver may help separate concerns, but could be very difficult to implement because it needs a lot of functionality which is specific to the problem.
 
 Date:   2026-05-15
 Status: Doing
