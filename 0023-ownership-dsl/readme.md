@@ -1,20 +1,10 @@
 # Question and Hypothesis
 <!-- What am I figuring out? -->
-<!-- What do I think is going to happen? -->
 
 1. Can ownership be modelled within functions with a small DSL?
 2. Can ownership be modelled across function boundaries, with an extension of that DSL?
 3. Can symbolic expressions be used to express the ownership DSL in a compact and readable form?
 4. Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?
-
-Many memory operations and constructs can probably be modelled with a simple DSL.
-There may be corner-cases which are very difficult or impossible to model, however.
-It's unclear if the _intra_-function and _inter_-function analysis can be done well in a dataflow run.
-
-Regarding the syntax, there will probably be a lot of parentheses and nesting.
-WASM-like symbolic expressions have a tag in every expression, which may help readability.
-
-The generic implementation of the iterative fixed point solver may help separate concerns, but could be very difficult to implement because it needs a lot of functionality which is specific to the problem.
 
 Date:   2026-05-15
 Status: Doing
@@ -32,6 +22,18 @@ Status: Doing
 ```bash
 deno test
 ```
+
+## Hypothesis
+<!-- What do I think is going to happen? -->
+
+Many memory operations and constructs can probably be modelled with a simple DSL.
+There may be corner-cases which are very difficult or impossible to model, however.
+It's unclear if the _intra_-function and _inter_-function analysis can be done well in a dataflow run.
+
+Regarding the syntax, there will probably be a lot of parentheses and nesting.
+WASM-like symbolic expressions have a tag in every expression, which may help readability.
+
+The generic implementation of the iterative fixed point solver may help separate concerns, but could be very difficult to implement because it needs a lot of functionality which is specific to the problem.
 
 ## Steps
 <!-- What did I do? -->
@@ -57,6 +59,7 @@ deno test
 - [x] decided to remove the test cases for `alloca` from this lab and make them future work
 - [x] re-implement dataflow analysis on the DSL, using the code from lab 0020 as a starting point
 - [x] add semantic annotations to the function return type as well
+- [ ] decide whether or not to reduce the scope of the lab (to a cleaner syntax and worklist algorithm, but not inter-function checks)
 - [ ] write down `return` semantics for different kinds of values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
 - [ ] implement the dataflow analysis for `return`
@@ -82,6 +85,7 @@ deno test
 - [ ] activate `alloca` test-cases -- it's very easy to make mistakes when writing the code
 - [ ] write a pass to check that all variables have actually been allocated
 - [ ] write a pass to check that all allocated variables are actually referenced at least once
+- [ ] add a `call` instruction to the language, and analyze the lifetime and ownership semantics of argument passing and return values
 
 
 ---
