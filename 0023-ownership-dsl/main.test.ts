@@ -27,24 +27,6 @@ describe("naive programs", () => {
     expect(check_function(program[0])).toBe(true);
   });
 
-  it("must reject a function which does not allocate all of its registers", () => {
-    const program: G.Program = [
-      [
-        "func",
-        ["result", "i64"],
-        [],
-        [], // error: missing alloca
-        [
-          ["block", [
-            ["define", 0],
-            ["return", 0],
-          ]],
-        ],
-      ],
-    ];
-    expect(check_function(program[0])).toBe(false);
-  });
-
   it("must reject a main function which returns a dropped register", () => {
     const program: G.Program = [
       [

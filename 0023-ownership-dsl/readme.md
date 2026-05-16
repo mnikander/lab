@@ -54,12 +54,15 @@ deno test
 - [x] define a datatype to hold meta-data about a variable
 - [x] define lattice type, update functions, and join
 - [x] decide whether to fail on the first error, or to return a list of (success | error) entries for every DSL line
-- [ ] implement dataflow analysis on the DSL
+- [x] decided to remove the test cases for `alloca` from this lab and make them future work
+- [x] re-implement dataflow analysis on the DSL, using the code from lab 0020 as a starting point
+- [ ] write down `return` semantics for different kinds of values
+- [ ] write down function argument and function return value semantics regarding life-time and ownership
+- [ ] implement the dataflow analysis for `return`
 - [ ] investigate dataflow analysis with debugger
 - [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
 - [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
-- [ ] write down `return` semantics for different kinds of values
-- [ ] write down function argument and function return value semantics regarding life-time and ownership
+- [ ] is the new implementation noticably slower than the original implementation in lab-0020?
 - [ ] extend the test-cases: find cases where it breaks! 
 - [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
 
@@ -69,11 +72,15 @@ deno test
 - The new symbolic-expression syntax always starts with a tag. This is inspired by the sybolic expression syntax in WASM. I think it is simple, compact, and easy to read. I think the tags give a lot more information about what is what, which massively decreases the cognitive load of reading the code. I _really_ like this new syntax!
 - The generic iterative solver was pretty straight-forward to implement. The only real stumbling block was the computation of the `in_state` via reduce. That doesn't work for entry nodes with no incoming edges, so a in_state for the entry node is passed in explicitly. Note that reduce uses this value as it's accumulator, so you have to be really careful about avoiding in-place mutation. This is problematic because I don't know of any universal mechanism to do a deep-copy of any primitive or object value in JavaScript/TypeScript. This requires caution when implementing join.
 - When writing the code, it's very easy to get confused between the out state of one  node, i.e. `LatticeElement[]` and the set of such out-states, i.e. `LatticeElement[][]`.
+- It is easy to forget `alloca` slots when typing in the symbolic expressions for the code. Having an analysis pass to check that enough slots are allocated, and that all allocated slots are actually needed, is important for execution / evaluation. For analysis it leads to missing or excessive meta-data.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+- [ ] activate `alloca` test-cases -- it's very easy to make mistakes when writing the code
+- [ ] write a pass to check that all variables have actually been allocated
+- [ ] write a pass to check that all allocated variables are actually referenced at least once
 
 
 ---
