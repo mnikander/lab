@@ -13,9 +13,9 @@ describe("naive programs", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [["alloca", ["local", "affine", "basic"]]],
         [
           ["block", [
             ["define", 0],
@@ -31,9 +31,9 @@ describe("naive programs", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [["alloca", ["local", "affine", "basic"]]],
         [
           ["block", [
             ["define", 0],
@@ -52,11 +52,11 @@ describe("jump", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -80,11 +80,11 @@ describe("jump", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -110,13 +110,13 @@ describe("split and join", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -152,12 +152,12 @@ describe("split and join", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -197,12 +197,12 @@ describe("multiple returns", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -232,12 +232,12 @@ describe("multiple returns", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -271,11 +271,11 @@ describe("loop", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -305,11 +305,11 @@ describe("loop", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [
@@ -335,10 +335,10 @@ describe("loop", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
+          ["alloca", ["local", "affine", "basic"]],
         ],
         [
           ["block", [

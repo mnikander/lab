@@ -8,7 +8,7 @@ describe.skip("alloca issues", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [], // error: missing alloca
         [
@@ -26,11 +26,11 @@ describe.skip("alloca issues", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [
-          ["alloca", ["local", "affine", "i64"]],
-          ["alloca", ["local", "affine", "i64"]], // error: unused register
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]], // error: unused register
         ],
         [
           ["block", [

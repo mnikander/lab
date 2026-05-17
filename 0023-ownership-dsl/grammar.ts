@@ -9,6 +9,7 @@ export type Alloca      = ["alloca", Local | Global];
 export type Local       = ["local",  "affine"           , Type];
 export type Caller      = ["caller", "affine" | "linear", Type];
 export type Global      = ["global",            "linear", Type];
+export type Type        = "basic" | "pointer";
 
 export type Block       = ["block",  Line[]];
 
@@ -18,10 +19,6 @@ export type Use         = ["use",    Register];
 export type Drop        = ["drop",   Register];
 export type Return      = ["return", Register];
 export type Branch      = ["branch", Label[]];
-
-export type Type        = Basic | Pointer;
-export type Pointer     = ["pointer", address: number, target_type: Type];
-export type Basic       = "unit" | "i64";
 
 export type Metadata    = (Parameter | Alloca)[];
 export type Register    = number;

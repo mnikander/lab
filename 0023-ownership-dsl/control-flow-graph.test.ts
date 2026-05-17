@@ -7,7 +7,7 @@ describe("must compute control flow graphs for programs with one function", () =
   it("which is empty", () => {
     const program: G.Program = [[
       "func",
-      ["result", ["local", "affine", "unit"]],
+      ["result", ["local", "affine", "basic"]],
       [],
       [],
       [],
@@ -19,9 +19,9 @@ describe("must compute control flow graphs for programs with one function", () =
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
-        [["alloca", ["local", "affine", "i64"]]],
+        [["alloca", ["local", "affine", "basic"]]],
         [
           ["block", [
             ["return", 0],
@@ -36,7 +36,7 @@ describe("must compute control flow graphs for programs with one function", () =
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [],
         [
@@ -59,7 +59,7 @@ describe("must compute control flow graphs for programs with one function", () =
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [],
         [
@@ -90,7 +90,7 @@ describe("must compute control flow graphs for programs with one function", () =
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [],
         [
@@ -117,7 +117,7 @@ describe("must compute control flow graphs for programs with one function", () =
     const program: G.Program = [
       [
         "func",
-        ["result", ["local", "affine", "i64"]],
+        ["result", ["local", "affine", "basic"]],
         [],
         [],
         [
