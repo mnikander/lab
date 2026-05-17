@@ -89,12 +89,12 @@ function update_return(
   _metadata: G.Metadata,
 ): State {
   const register: number = line[1];
-  if (mutable[register] !== undefined) {
-    // TODO: check affine/linear and local/caller/global stuff here
-  } else {
+  if (mutable[register] === undefined) {
     throw Error("Bug: unknown register");
+  } else {
+    // TODO: check affine/linear and local/caller/global stuff here
+    return mutable;
   }
-  return mutable;
 }
 
 // in-place update of State
@@ -103,7 +103,9 @@ function update_line(
   mutable: State,
 ): State {
   const register: number = line[1];
-  if (mutable[register] !== undefined) {
+  if (mutable[register] === undefined) {
+    throw Error("Bug: unknown register");
+  } else {
     switch (line[0]) {
       case "define":
         mutable[register] = apply_define(mutable[register]);
@@ -117,10 +119,8 @@ function update_line(
       default:
         throw Error("Bug: unknown instruction");
     }
-  } else {
-    throw Error("Bug: unknown register");
+    return mutable;
   }
-  return mutable;
 }
 
 // Note that the SSA property ensures there is only one definition in the
