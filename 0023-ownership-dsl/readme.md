@@ -2,7 +2,7 @@
 <!-- What am I figuring out? -->
 
 1. Can ownership be modelled within functions with a small DSL?
-2. ~~Can ownership be modelled across function boundaries, with an extension of that DSL?~~
+2. ~~Can ownership be modelled across function boundaries, with an extension of that DSL?~~ _(will be done in a separate lab)_
 3. Can symbolic expressions be used to express the ownership DSL in a compact and readable form?
 4. Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?
 
@@ -98,9 +98,7 @@ The following two tables outline these requirements, as well as cases which are 
 - [x] test-cases with functions which contain linear variables
 - [x] decide to allow locals with linear semantics, since a resource handle or even heap storage may be desired in a local context
 - [ ] test-cases with functions which take parameters
-- [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
-- [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
-- [ ] extend the test-cases: find cases where it breaks! 
+- [ ] test-case for a program which contains two individual functions
 
 ## Findings
 <!-- What did I learn? -->
@@ -109,6 +107,13 @@ The following two tables outline these requirements, as well as cases which are 
 - The generic iterative solver was pretty straight-forward to implement. The only real stumbling block was the computation of the `in_state` via reduce. That doesn't work for entry nodes with no incoming edges, so a in_state for the entry node is passed in explicitly. Note that reduce uses this value as it's accumulator, so you have to be really careful about avoiding in-place mutation. This is problematic because I don't know of any universal mechanism to do a deep-copy of any primitive or object value in JavaScript/TypeScript. This requires caution when implementing join.
 - When writing the code, it's very easy to get confused between the out state of one  node, i.e. `LatticeElement[]` and the set of such out-states, i.e. `LatticeElement[][]`.
 - It is easy to forget `alloca` slots when typing in the symbolic expressions for the code. Having an analysis pass to check that enough slots are allocated, and that all allocated slots are actually needed, is important for execution / evaluation. For analysis it leads to missing or excessive meta-data.
+- In the lattice transition I _again_ forgot to set any "bottom" entries to "undefined" at the end of the block.
+- Implementing the lattice and the transition function correctly was a challenge. Debugging the `make_updater` function is a bit more tricky than the plain function, but it's OK.
+- The chosen interface for the iterative fixed-point solver works for this use case! :)
+- I have a lot of open questions regarding the intra-function checks, so I will do those in a separate lab. I think it will be very important to split the register annotations into orthogonal axes for the different concerns, so things don't get totally mixed up and complicated.
+- Writing down the tables for the expected behavior of `return` proved super useful. After that, the implementation was doable.
+- Linear variables seem to work nicely.
+- Testing all of this, with lots or corner cases, will be a large topic in its own right. Perhaps I can manually create a testing plan to cover as many corner-cases as I can think of, and let an LLM generate the test-cases.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
@@ -119,9 +124,13 @@ The following two tables outline these requirements, as well as cases which are 
 - [ ] implement annotation test-cases validation pass for result annotations and activate unit tests
 - [ ] write a pass to check that all variables have actually been allocated
 - [ ] write a pass to check that all allocated variables are actually referenced at least once
+- [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
+- [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
 - [ ] add a `call` instruction to the language, and analyze the lifetime and ownership semantics of argument passing and return values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
 - [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
+- [ ] create a plan of corner-cases to test
+- [ ] extend the test-cases: find cases where it breaks!
 - Do pointer types and resource handles have the same ownership semantics? Can the lifetime and ownership checks treat them the same way? What about a user-defined resource type? Does it suffice to mark it as _linear_, or does it have to be marked as a _Pointer_ as well? If so, does it make sense to rename _Pointer_ to _Handle_? How could a type be declared as a _Handle_? It would be a lot simpler if _linear_ is enough for those semantics.
 
 ---
