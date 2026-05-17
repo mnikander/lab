@@ -373,4 +373,35 @@ describe("loop", () => {
     const states: State[] = check_function(program[0]);
     expect(all_good(states)).toBe(false);
   });
+
+  it("must reject use of multiple drops of a register in a loop", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [],
+        [
+          ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["drop", 0], // error: possible double-drop
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
 });
