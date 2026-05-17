@@ -24,5 +24,5 @@ export function check_function(func: G.Function): boolean {
     update,
   );
 
-  return !out.some((s) => s.some((e) => !is_element(e)));
+  return out.every((s) => s.every((e) => is_element(e)));
 }
