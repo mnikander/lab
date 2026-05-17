@@ -8,7 +8,7 @@ describe.skip("alloca issues", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", "i64"],
+        ["result", ["local", "affine", "i64"]],
         [],
         [], // error: missing alloca
         [
@@ -26,7 +26,7 @@ describe.skip("alloca issues", () => {
     const program: G.Program = [
       [
         "func",
-        ["result", "i64"],
+        ["result", ["local", "affine", "i64"]],
         [],
         [
           ["alloca", ["local", "affine", "i64"]],
