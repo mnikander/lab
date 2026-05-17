@@ -96,6 +96,7 @@ The following two tables outline these requirements, as well as cases which are 
 - [x] investigate dataflow analysis with debugger
 - [x] is the new implementation noticably slower than the original implementation in lab-0020? => not for these small test-cases
 - [x] test-cases with functions which contain linear variables
+- [x] decide to allow locals with linear semantics, since a resource handle or even heap storage may be desired in a local context
 - [ ] test-cases with functions which take parameters
 - [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
 - [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
