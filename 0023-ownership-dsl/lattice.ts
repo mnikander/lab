@@ -90,7 +90,7 @@ function update_return(
 ): State {
   const register: number = line[1];
   if (mutable[register] !== undefined) {
-    // TODO: check affine/linear and local/escape/global stuff here
+    // TODO: check affine/linear and local/caller/global stuff here
   } else {
     throw Error("Bug: unknown register");
   }

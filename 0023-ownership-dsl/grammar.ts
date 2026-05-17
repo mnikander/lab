@@ -3,11 +3,11 @@
 export type Program     = Function[];
 
 export type Function    = ["func",   Result, Parameter[], Alloca[], Block[]];
-export type Result      = ["result", Local | Escape | Global];
-export type Parameter   = ["param",  Local | Escape];
+export type Result      = ["result", Local | Caller | Global];
+export type Parameter   = ["param",  Local | Caller];
 export type Alloca      = ["alloca", Local | Global];
 export type Local       = ["local",  "affine"           , Type];
-export type Escape      = ["escape", "affine" | "linear", Type];
+export type Caller      = ["caller", "affine" | "linear", Type];
 export type Global      = ["global",            "linear", Type];
 
 export type Block       = ["block",  Line[]];
