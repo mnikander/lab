@@ -1,12 +1,14 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
-import { check_function } from "./main.ts";
+import { all_good, check_function } from "./main.ts";
+import { State } from "./lattice.ts";
 
 describe("naive programs", () => {
   it.skip("must accept the empty program", () => {
     const program: G.Program = [];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must accept a function which returns a defined register", () => {
@@ -24,7 +26,8 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must reject a main function which returns a dropped register", () => {
@@ -43,7 +46,8 @@ describe("naive programs", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(false);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
   });
 });
 
@@ -73,7 +77,8 @@ describe("jump", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must reject use of a dropped variable in another block", () => {
@@ -101,7 +106,8 @@ describe("jump", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(false);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
   });
 });
 
@@ -146,7 +152,8 @@ describe("split and join", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
   it("must reject use of undefined/dropped variables in another block", () => {
     const program: G.Program = [
@@ -188,7 +195,8 @@ describe("split and join", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(false);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
   });
 });
 
@@ -225,7 +233,8 @@ describe("multiple returns", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must reject programs with an error on any of its return paths", () => {
@@ -262,7 +271,8 @@ describe("multiple returns", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(false);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
   });
 });
 
@@ -298,7 +308,8 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must accept define-use-drop inside loops", () => {
@@ -328,7 +339,8 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(true);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
   });
 
   it("must reject use of undefined/dropped variables in loops", () => {
@@ -359,6 +371,7 @@ describe("loop", () => {
         ],
       ],
     ];
-    expect(check_function(program[0])).toBe(false);
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
   });
 });
