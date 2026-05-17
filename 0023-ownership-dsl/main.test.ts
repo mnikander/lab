@@ -311,7 +311,7 @@ describe("loop", () => {
     expect(all_good(states)).toBe(true);
   });
 
-  it("must accept define-use-drop inside loops", () => {
+  it("must accept define-use-drop of a register inside loops", () => {
     const program: G.Program = [
       [
         "func",
@@ -382,6 +382,189 @@ describe("loop", () => {
         [],
         [
           ["alloca", ["local", "affine", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["drop", 0], // error: possible double-drop
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
+});
+
+describe("linear variables", () => {
+  it("must accept a function which returns a defined linear register", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["global", "linear", "basic"]],
+        [],
+        [["alloca", ["global", "linear", "basic"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
+  });
+
+  it("must reject a main function which returns a dropped linear register", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["global", "linear", "basic"]],
+        [],
+        [["alloca", ["global", "linear", "basic"]]],
+        [
+          ["block", [
+            ["define", 0],
+            ["drop", 0],
+            ["return", 0], // error: return-after-drop
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
+
+  it("must reject a function which does not drop/return all linear registers", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["global", "linear", "basic"]],
+        [],
+        [
+          ["alloca", ["global", "linear", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
+
+  it("must accept use of defined linear variables in multiple returns", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [],
+        [
+          ["alloca", ["global", "linear", "basic"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["return", 0],
+          ]],
+          ["block", [
+            ["return", 0], // error: did not drop/return a linear register
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
+  });
+
+  it("must reject a function which does not drop/return linear registers on all paths", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [],
+        [
+          ["alloca", ["global", "linear", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+        ],
+        [
+          ["block", [
+            ["define", 0],
+            ["define", 1],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["drop", 0],
+            ["return", 1],
+          ]],
+          ["block", [
+            ["return", 1], // error: did not drop/return a linear register
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
+
+  it("must accept define-use-drop of a linear register inside loops", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [],
+        [
+          ["alloca", ["global", "linear", "basic"]],
+          ["alloca", ["local", "affine", "basic"]],
+        ],
+        [
+          ["block", [
+            ["branch", [1]],
+          ]],
+          ["block", [
+            ["define", 0],
+            ["use", 0],
+            ["drop", 0],
+            ["branch", [1, 2]],
+          ]],
+          ["block", [
+            ["define", 1],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
+  });
+
+  it("must reject use of multiple drops of a linear register in a loop", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [],
+        [
+          ["alloca", ["global", "linear", "basic"]],
           ["alloca", ["local", "affine", "basic"]],
         ],
         [

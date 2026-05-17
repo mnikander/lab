@@ -95,11 +95,11 @@ The following two tables outline these requirements, as well as cases which are 
 - [x] implement the dataflow analysis for `return`
 - [x] investigate dataflow analysis with debugger
 - [x] is the new implementation noticably slower than the original implementation in lab-0020? => not for these small test-cases
-- [ ] test-cases to check for correct analysis of linear variables
+- [x] test-cases with functions which contain linear variables
+- [ ] test-cases with functions which take parameters
 - [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
 - [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
 - [ ] extend the test-cases: find cases where it breaks! 
-- [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
 
 ## Findings
 <!-- What did I learn? -->
@@ -120,6 +120,7 @@ The following two tables outline these requirements, as well as cases which are 
 - [ ] write a pass to check that all allocated variables are actually referenced at least once
 - [ ] add a `call` instruction to the language, and analyze the lifetime and ownership semantics of argument passing and return values
 - [ ] write down function argument and function return value semantics regarding life-time and ownership
+- [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
 - Do pointer types and resource handles have the same ownership semantics? Can the lifetime and ownership checks treat them the same way? What about a user-defined resource type? Does it suffice to mark it as _linear_, or does it have to be marked as a _Pointer_ as well? If so, does it make sense to rename _Pointer_ to _Handle_? How could a type be declared as a _Handle_? It would be a lot simpler if _linear_ is enough for those semantics.
 
 ---
