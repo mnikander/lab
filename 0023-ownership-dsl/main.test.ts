@@ -302,7 +302,6 @@ describe("loop", () => {
             ["drop", 0],
             ["define", 1],
             ["use", 1],
-            ["drop", 1],
             ["return", 1],
           ]],
         ],

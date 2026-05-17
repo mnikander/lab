@@ -2,7 +2,7 @@
 <!-- What am I figuring out? -->
 
 1. Can ownership be modelled within functions with a small DSL?
-2. Can ownership be modelled across function boundaries, with an extension of that DSL?
+2. ~~Can ownership be modelled across function boundaries, with an extension of that DSL?~~
 3. Can symbolic expressions be used to express the ownership DSL in a compact and readable form?
 4. Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?
 
@@ -28,12 +28,37 @@ deno test
 
 Many memory operations and constructs can probably be modelled with a simple DSL.
 There may be corner-cases which are very difficult or impossible to model, however.
-It's unclear if the _intra_-function and _inter_-function analysis can be done well in a dataflow run.
+It's unclear if the _intra_-function and _inter_-function analysis can be done well in a single dataflow run.
 
 Regarding the syntax, there will probably be a lot of parentheses and nesting.
 WASM-like symbolic expressions have a tag in every expression, which may help readability.
 
 The generic implementation of the iterative fixed point solver may help separate concerns, but could be very difficult to implement because it needs a lot of functionality which is specific to the problem.
+
+## Semantics of `return`
+
+The `return` statement plays a special role, since it moves a result variable out of the function and pops the entire stack frame.
+The result variable _and all other variables_ must satisfy certain properties for this to be a valid operation.
+Each variable state is in the set: `{ bottom, undefined, defined, dropped, top }`.
+The following two tables outline these requirements, as well as cases which are always an error.
+
+### Depending on the annotations of the return value, its State must be...
+
+|                    | Affine   | Linear   |
+| :--                | :--      | :--      |
+| (Local , Basic  )  | defined  | defined  |
+| (Local , Pointer)  | ERROR    | ERROR    |
+| (Caller, Pointer)  | defined  | defined  |
+| (Global, Pointer)  | defined  | defined  |
+
+### Depending on their annotations, everyone else must be...
+
+|                    | Affine   | Linear   |
+| :--                | :--      | :--      |
+| (Local , Basic  )  | anything | dropped  |
+| (Local , Pointer)  | anything | dropped  |
+| (Caller, Pointer)  | anything | dropped  |
+| (Global, Pointer)  | anything | dropped  |
 
 ## Steps
 <!-- What did I do? -->
@@ -59,14 +84,20 @@ The generic implementation of the iterative fixed point solver may help separate
 - [x] decided to remove the test cases for `alloca` from this lab and make them future work
 - [x] re-implement dataflow analysis on the DSL, using the code from lab 0020 as a starting point
 - [x] add semantic annotations to the function return type as well
-- [ ] decide whether or not to reduce the scope of the lab (to a cleaner syntax and worklist algorithm, but not inter-function checks)
-- [ ] write down `return` semantics for different kinds of values
-- [ ] write down function argument and function return value semantics regarding life-time and ownership
-- [ ] implement the dataflow analysis for `return`
-- [ ] investigate dataflow analysis with debugger
+- [x] decided to reduce the scope of the lab to keep things simple
+- [x] decided to focus on a cleaner worklist algorithm and the grammar based on symbolic expressions
+- [x] decided to include function `return` in this lab, which is an extension compared to lab-0020
+- [x] decided to prototype the function call-site semantics in separate lab
+- [x] decided not to model escape-semantics for function parameters in this lab (just assume they can escape)
+- [x] simplified type annotation to distinguish only between "basic" and "pointer" since the rest is not relevant for this lab
+- [x] decided to keep the Scope at {Local, Caller, Global} and not to differentiate between "Local" and "Pointer to Local" in the Scope -- you have to use the Type, i.e. { Basic, Pointer } information to make that distinction -- this separates concerns a bit
+- [x] write down `return` semantics for different kinds of values
+- [x] implement the dataflow analysis for `return`
+- [x] investigate dataflow analysis with debugger
+- [x] is the new implementation noticably slower than the original implementation in lab-0020? => not for these small test-cases
+- [ ] test-cases to check for correct analysis of linear variables
 - [ ] additional test cases to verify that the iterative solver is not doing in-place mutation via `join` and producing incorrect results somewhere
 - [ ] would it be wise to inject a `deep_copy: (state: State) => State` function into the iterative solver? It could be used to create the in-set, to avoid any corruption of the out-set via accidental in-place mutation
-- [ ] is the new implementation noticably slower than the original implementation in lab-0020?
 - [ ] extend the test-cases: find cases where it breaks! 
 - [ ] can aggregates, pointers, resource handles, closures, phi nodes, moving phi nodes, and in-place updates all be lowered into this DSL?
 
@@ -86,7 +117,8 @@ The generic implementation of the iterative fixed point solver may help separate
 - [ ] write a pass to check that all variables have actually been allocated
 - [ ] write a pass to check that all allocated variables are actually referenced at least once
 - [ ] add a `call` instruction to the language, and analyze the lifetime and ownership semantics of argument passing and return values
-
+- [ ] write down function argument and function return value semantics regarding life-time and ownership
+- Do pointer types and resource handles have the same ownership semantics? Can the lifetime and ownership checks treat them the same way? What about a user-defined resource type? Does it suffice to mark it as _linear_, or does it have to be marked as a _Pointer_ as well? If so, does it make sense to rename _Pointer_ to _Handle_? How could a type be declared as a _Handle_? It would be a lot simpler if _linear_ is enough for those semantics.
 
 ---
 **Copyright (c) 2026 Marco Nikander**
