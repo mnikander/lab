@@ -113,7 +113,9 @@ The following two tables outline these requirements, as well as cases which are 
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-- [ ] activate `alloca` test-cases -- it's very easy to make mistakes when writing the code
+- [ ] activate `alloca` test-cases
+- [ ] activate all annotation test-cases
+- [ ] implement annotation test-cases validation pass for result annotations and activate unit tests
 - [ ] write a pass to check that all variables have actually been allocated
 - [ ] write a pass to check that all allocated variables are actually referenced at least once
 - [ ] add a `call` instruction to the language, and analyze the lifetime and ownership semantics of argument passing and return values
