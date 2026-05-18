@@ -97,8 +97,11 @@ The following two tables outline these requirements, as well as cases which are 
 - [x] is the new implementation noticably slower than the original implementation in lab-0020? => not for these small test-cases
 - [x] test-cases with functions which contain linear variables
 - [x] decide to allow locals with linear semantics, since a resource handle or even heap storage may be desired in a local context
-- [ ] test-cases with functions which take parameters
+- [x] test-cases with functions which take parameters
+- [x] fixed the initialization of function parameters so they start correctly at `defined` instead of `bottom`
 - [ ] test-case for a program which contains two individual functions
+- [ ] test-case with an access pattern like pointer-creation and use
+- [ ] test-case with hand-lowered phi-node with one critical edge
 
 ## Findings
 <!-- What did I learn? -->
@@ -114,6 +117,7 @@ The following two tables outline these requirements, as well as cases which are 
 - Writing down the tables for the expected behavior of `return` proved super useful. After that, the implementation was doable.
 - Linear variables seem to work nicely.
 - Testing all of this, with lots or corner cases, will be a large topic in its own right. Perhaps I can manually create a testing plan to cover as many corner-cases as I can think of, and let an LLM generate the test-cases.
+- Initialization of the lattice-state needs to treat function parameters as `defined`, not `bottom`
 
 ## Future Work
 <!-- Are there follow-up questions? -->

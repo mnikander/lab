@@ -51,6 +51,68 @@ describe("naive programs", () => {
   });
 });
 
+describe("functions with parameters", () => {
+  it("must accept a main function which takes and returns a parameter", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [["param", ["local", "affine", "basic"]]],
+        [],
+        [
+          ["block", [
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
+  });
+
+  it("must accept a main function which takes two parameters and returns one", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "linear", "basic"]],
+        [
+          ["param", ["local", "affine", "basic"]],
+          ["param", ["local", "linear", "basic"]],
+        ],
+        [],
+        [
+          ["block", [
+            ["use", 0],
+            ["drop", 0],
+            ["return", 1],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(true);
+  });
+
+  it("must reject a main function which takes a parameter, drops it, and tries to return it", () => {
+    const program: G.Program = [
+      [
+        "func",
+        ["result", ["local", "affine", "basic"]],
+        [["param", ["local", "affine", "basic"]]],
+        [],
+        [
+          ["block", [
+            ["drop", 0],
+            ["return", 0],
+          ]],
+        ],
+      ],
+    ];
+    const states: State[] = check_function(program[0]);
+    expect(all_good(states)).toBe(false);
+  });
+});
+
 describe("jump", () => {
   it("must accept use of a defined variable in another block", () => {
     const program: G.Program = [

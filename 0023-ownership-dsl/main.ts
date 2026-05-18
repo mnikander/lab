@@ -8,10 +8,9 @@ import { equal, is_element, join, make_updater, State } from "./lattice.ts";
 
 export function check_function(func: G.Function): State[] {
   const graph: Node[] = make_cfg(func);
-  const register_count: number = func[2].length + func[3].length;
-  const default_state: State = Array(register_count).fill(["bottom"]);
+  const default_state: State = initial_state(func);
   const initial_out_states: State[] = Array(graph.length).fill(
-    Array(register_count).fill(["bottom"]),
+    initial_state(func),
   );
   const update = make_updater(func);
 
@@ -29,4 +28,19 @@ export function check_function(func: G.Function): State[] {
 
 export function all_good(states: State[]): boolean {
   return states.every((s) => s.every((e) => is_element(e)));
+}
+
+// parameters are initialized as "defined" and alloca slots are initialized as "bottom"
+function initial_state(func: G.Function): State {
+  const parameter_count = func[2].length;
+  const alloca_count = func[3].length;
+  const register_count: number = parameter_count + alloca_count;
+  const raw: State = Array(register_count).fill([
+    "error",
+    "Bug: unitialized state",
+  ]);
+  const parameters_defaulted: State = raw.map((_s, i) => {
+    return (i < parameter_count) ? ["defined"] : ["bottom"];
+  });
+  return parameters_defaulted;
 }
