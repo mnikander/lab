@@ -7,7 +7,7 @@
 4. Can separating concerns, by implementing a general iterative fixed-point solver as a standalone component, make the codebase simpler?
 
 Date:   2026-05-15
-Status: Doing
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -99,9 +99,6 @@ The following two tables outline these requirements, as well as cases which are 
 - [x] decide to allow locals with linear semantics, since a resource handle or even heap storage may be desired in a local context
 - [x] test-cases with functions which take parameters
 - [x] fixed the initialization of function parameters so they start correctly at `defined` instead of `bottom`
-- [ ] test-case for a program which contains two individual functions
-- [ ] test-case with an access pattern like pointer-creation and use
-- [ ] test-case with hand-lowered phi-node with one critical edge
 
 ## Findings
 <!-- What did I learn? -->
@@ -123,6 +120,9 @@ The following two tables outline these requirements, as well as cases which are 
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+- [ ] test-case for a program which contains two individual functions
+- [ ] test-case with an access pattern like pointer-creation and use
+- [ ] test-case with hand-lowered phi-node with one critical edge
 - [ ] activate `alloca` test-cases
 - [ ] activate all annotation test-cases
 - [ ] implement annotation test-cases validation pass for result annotations and activate unit tests
