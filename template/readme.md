@@ -1,15 +1,18 @@
 # Question and Hypothesis
 <!-- What am I figuring out? -->
-<!-- What do I think is going to happen? -->
 
-**question**
-- 
+
 
 Date:   2026-0
 Status: 
 
 ## Resources
 <!-- Where can I find relevant information? -->
+
+
+
+## Hypothesis
+<!-- What do I think is going to happen? -->
 
 
 
