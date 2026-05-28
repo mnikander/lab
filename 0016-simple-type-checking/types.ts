@@ -13,7 +13,7 @@ export type Int64   = ["Int64"];
 export type Arrow   = ["Arrow", from: Type, to: Type];
 export type Tuple   = ["Tuple", Type[]];
 export type Variant = ["Variant", Type[]];
-export type Array   = ["Array", Type, capacity: number]
+export type Array   = ["Array", Type, capacity: number];
 
 export function get_type(t: Type): Descriptor {
     return t[0];
