@@ -45,13 +45,15 @@ deno test
 <!-- What did I learn? -->
 
 - Declaring the Scope of the function result may be problematic unless the caller is allowed to relax that constraint a bit. A function may return a local, but the caller might know or decide that it actually has some other scope. This is especially important for nested function calls. Is there covariant/contravariant typing involved here?
+- having a massive tuples for the Token and Type is difficult to write and read, structured types may be a much better option
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - [ ] add construction and destruction of aggregates to the DSL
-- [ ] Can token operations be modelled explicitly in the DSL? This may allow expressing high-level constructs with a smaller number of primitives and may simplify the analysis, at the cost of complicating the lowering pass slightly
+- [ ] replace massive Token and Type tuples with structured types, i.e. `["caller", ["borrowed", "int"]]` which allows only tacking on those non-default properties you want
+- [ ] Can token operations be modelled explicitly in a DSL? This may allow expressing high-level constructs with a smaller number of primitives and may simplify the analysis, at the cost of complicating the lowering pass slightly
 - [ ] add `update` with similar/identical lifetime and ownership semantics as `move`
 - [ ] add an owning heap-pointer type
 - [ ] add global/heap scope for heap-allocated data
