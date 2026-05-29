@@ -27,13 +27,19 @@ That would mean the token only exists once the variable has been declared _and_ 
 deno test
 ```
 
-## Steps
+## Plan & Implementation
 <!-- What did I do? -->
 
-- [ ] define the Token type
-- [ ] define a DSL which models define, access, drop, own, borrow, clone, move, update
-- [ ] define Basic and Pointer types
-- [ ] plan how to compute the dependencies
+- [x] define Basic and Pointer types -- trivial placeholders may be enough for the DSL
+- [x] define the Token type
+- [x] does it make sense to model the token type as a single tuple, or should they be attributes which are composed onto the Type, i.e. `(unique (local (ptr int)))`? That would make defaulting easier, and makes is easier to implement the attributes one at a time. -- I'll keep the explicit tuple formulation for now, so the Token is concrete in the code
+- [x] define an IR-like grammar which models define, use, copy, move, ~~update~~, drop, own, borrow
+- [ ] create test-cases with examples
+- [ ] copy and adapt the code for control flow graph construction
+- [ ] define the lattice or state for the worklist algorithm to create the dependency graph
+- [ ] copy and adapt the worklist algorithm from lab 23
+- [ ] do I need to differentiate abstract tokens (unknown location outside the function) from concrete tokens where we know the storage location exactly?
+
 
 ## Findings
 <!-- What did I learn? -->
@@ -45,6 +51,7 @@ deno test
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - [ ] add construction and destruction of aggregates to the DSL
+- [ ] Can token operations be modelled explicitly in the DSL? This may allow expressing high-level constructs with a smaller number of primitives and may simplify the analysis, at the cost of complicating the lowering pass slightly
 
 
 ---
