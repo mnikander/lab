@@ -83,10 +83,15 @@ describe("simple examples", () => {
       [
         [
           "param",
-          ["token", "caller", "cloneable", "no_drop"],
-          ["type", "borrowed", simple(), int()],
+          ["token", "caller", "cloneable", "no_drop"], // allowed to escape
+          [
+            "type",
+            "borrowed",
+            ["token", "caller", "cloneable", "no_drop"],
+            int(),
+          ],
         ],
-      ], // allowed to escape
+      ],
       [],
       [["block", [
         [null, "return", 0],
