@@ -1,8 +1,8 @@
 import { expect } from "@std/expect";
-import { Expr, Call, Arg, Node, curry } from "./currying.ts"
+import { Call, curry } from "./currying.ts"
 
 Deno.test("do nothing", () => {
-    let ast: Call = {
+    const ast: Call = {
             name: 'root', tag: 'Call',
             fn: { name: '!', tag: 'Node' },
             arg: { name: 'FALSE', tag: 'Arg'}};
@@ -14,7 +14,7 @@ Deno.test("do nothing", () => {
 });
 
 Deno.test("curry once", () => {
-    let ast: Call = {
+    const ast: Call = {
         name: 'root',
         tag: 'Call',
         fn: { 
@@ -41,7 +41,7 @@ Deno.test("curry once", () => {
 });
 
 Deno.test("curry twice", () => {
-    let ast: Call = {
+    const ast: Call = {
         name: 'root',
         tag: 'Call',
         fn: { 

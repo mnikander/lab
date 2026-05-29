@@ -20,7 +20,7 @@ type Frame              = { registers: (undefined | Value)[], destination: undef
 
 export function evaluate(instructions: readonly Instruction[]): RawValue {
 
-    let stack: Frame[] = [ {registers: [], destination: undefined, return_pc: undefined} ];
+    const stack: Frame[] = [ {registers: [], destination: undefined, return_pc: undefined} ];
     let pc: number = 0;
 
     while (pc < instructions.length) {

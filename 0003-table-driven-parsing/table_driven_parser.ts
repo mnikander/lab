@@ -26,7 +26,7 @@ type NonTerminal  = 'S';
 type Vocabulary   = Token | NonTerminal;
 
 export function lex(input: string): Token[] {
-    let tokens: Token[] = [];
+    const tokens: Token[] = [];
     for (let i = 0; i < input.length; i++) {
         switch (input[i]) {
             case '(':
@@ -48,7 +48,7 @@ export function parse(input: Token[]): boolean {
     let top: undefined | Vocabulary = undefined;
     let first: undefined | Token    = input[0];
     let rest: (undefined | Token)[] = input.slice(1);
-    let history: ('M'|number)[]     = []; // 'M' indicates a token was matched, numbers indicate which rule was applied instead
+    const history: ('M'|number)[]   = []; // 'M' indicates a token was matched, numbers indicate which rule was applied instead
     
     while (stack.length > 0) {
         top = stack.pop();
@@ -72,7 +72,6 @@ export function parse(input: Token[]): boolean {
                     break;
                 default:
                     throw Error('Unhandled case! @(x_x)@');
-                    break;
             }
         }
         else {

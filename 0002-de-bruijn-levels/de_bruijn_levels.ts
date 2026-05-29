@@ -49,7 +49,7 @@ function replace_symbol_with_level(expr: AST, symbol: string, level: number): AS
     }
 }
 
-export function evaluate(lambda_expression: AST, params: number[] = []): number {
+export function evaluate(lambda_expression: AST): number {
     const expr = debruijn(lambda_expression, 0);
     return evaluate_debruijn(expr, []);
 }
