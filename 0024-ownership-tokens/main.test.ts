@@ -4,21 +4,40 @@ import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
 import { compute_dependencies, Deps } from "./main.ts";
 
-function simple(): G.Token {
-  return ["token", "local", "cloneable", "no_drop"];
+function int(): G.Token {
+  return ["token", "local", "cloneable", "no_drop", ["int"]];
 }
 
-function int(): ["type", "int"] {
-  return ["type", "int"];
+function borrow(token: G.Token): G.Token {
+  return ["token", "local", "cloneable", "no_drop", ["borrowed", token]];
+}
+
+function own(token: G.Token): G.Token {
+  return ["token", "local", "cloneable", "no_drop", ["owned", token]];
+}
+
+function caller(token: G.Token): G.Token {
+  token[1] = "caller";
+  return token;
+}
+
+function unique(token: G.Token): G.Token {
+  token[2] = "unique";
+  return token;
+}
+
+function must_drop(token: G.Token): G.Token {
+  token[3] = "must_drop";
+  return token;
 }
 
 describe("simple examples", () => {
   it("return a constant", () => {
     const fun: G.Function = [
       "func",
-      ["result", simple(), int()],
+      ["result", int()],
       [],
-      [["alloca", simple(), int()]],
+      [["alloca", int()]],
       [["block", [
         [0, "constant"],
         [null, "return", 0],
@@ -33,13 +52,13 @@ describe("simple examples", () => {
   it("add two arguments", () => {
     const fun: G.Function = [
       "func",
-      ["result", simple(), int()],
+      ["result", int()],
       [
-        ["param", simple(), int()],
-        ["param", simple(), int()],
+        ["param", int()],
+        ["param", int()],
       ],
       [
-        ["alloca", simple(), int()],
+        ["alloca", int()],
       ],
       [["block", [
         [2, "add", 0, 1],
@@ -59,8 +78,8 @@ describe("simple examples", () => {
   it("identity function on integers", () => {
     const fun: G.Function = [
       "func",
-      ["result", simple(), int()],
-      [["param", simple(), int()]],
+      ["result", int()],
+      [["param", int()]],
       [],
       [["block", [
         [null, "return", 0],
@@ -75,23 +94,8 @@ describe("simple examples", () => {
   it("identity function on borrows", () => {
     const fun: G.Function = [
       "func",
-      [
-        "result",
-        simple(),
-        ["type", "borrowed", simple(), int()],
-      ],
-      [
-        [
-          "param",
-          ["token", "caller", "cloneable", "no_drop"], // allowed to escape
-          [
-            "type",
-            "borrowed",
-            ["token", "caller", "cloneable", "no_drop"],
-            int(),
-          ],
-        ],
-      ],
+      ["result", borrow(int())],
+      [["param", caller(borrow(caller(int())))]], // allowed to escape
       [],
       [["block", [
         [null, "return", 0],

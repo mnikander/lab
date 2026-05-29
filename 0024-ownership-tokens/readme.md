@@ -34,7 +34,9 @@ deno test
 - [x] define the Token type
 - [x] does it make sense to model the token type as a single tuple, or should they be attributes which are composed onto the Type, i.e. `(unique (local (ptr int)))`? That would make defaulting easier, and makes is easier to implement the attributes one at a time. -- I'll keep the explicit tuple formulation for now, so the Token is concrete in the code
 - [x] define an IR-like grammar which models define, use, copy, move, ~~update~~, drop, own, borrow
-- [ ] create test-cases with examples
+- [x] merge Type information into Token type
+- [x] refactor test-cases to build Tokens algebraically, using functions, to make the code more readable
+- [x] create a few test-cases with examples
 - [ ] copy and adapt the code for control flow graph construction
 - [ ] define the lattice or state for the worklist algorithm to create the dependency graph
 - [ ] copy and adapt the worklist algorithm from lab 23
@@ -52,7 +54,7 @@ deno test
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - [ ] add construction and destruction of aggregates to the DSL
-- [ ] replace massive Token and Type tuples with structured types, i.e. `["caller", ["borrowed", "int"]]` which allows only tacking on those non-default properties you want
+- [ ] Replace massive Token and Type tuples with structured types, i.e. `["caller", ["borrowed", "int"]]` which allows only tacking on those non-default properties you want. Carefully consider what the defaults should be. Are there any reasons to choose the top or bottom of the attribute Lattices as the default, or can you just pick the most common case, i.e. (local, clonable, no_drop) to be the default?
 - [ ] Can token operations be modelled explicitly in a DSL? This may allow expressing high-level constructs with a smaller number of primitives and may simplify the analysis, at the cost of complicating the lowering pass slightly
 - [ ] add `update` with similar/identical lifetime and ownership semantics as `move`
 - [ ] add an owning heap-pointer type
