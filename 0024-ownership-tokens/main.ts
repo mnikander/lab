@@ -7,6 +7,6 @@ export type Dependency = ["register", number, TokenId[]];
 export type TokenId = ["token", number] | ["abstract_token", number];
 
 // TODO: implement this
-export function compute_dependencies(fun: G.Function): Deps {
+export function compute_dependencies(_fun: G.Function): Deps {
   return [];
 }

@@ -4,7 +4,7 @@ import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
 import { compute_dependencies, Deps } from "./main.ts";
 
-function default_token(): G.Token {
+function simple(): G.Token {
   return ["token", "local", "cloneable", "no_drop"];
 }
 
@@ -16,9 +16,9 @@ describe("simple examples", () => {
   it("return a constant", () => {
     const fun: G.Function = [
       "func",
-      ["result", default_token(), int()],
+      ["result", simple(), int()],
       [],
-      [["alloca", default_token(), int()]],
+      [["alloca", simple(), int()]],
       [["block", [
         [0, "constant"],
         [null, "return", 0],
@@ -33,13 +33,13 @@ describe("simple examples", () => {
   it("add two arguments", () => {
     const fun: G.Function = [
       "func",
-      ["result", default_token(), int()],
+      ["result", simple(), int()],
       [
-        ["param", default_token(), int()],
-        ["param", default_token(), int()],
+        ["param", simple(), int()],
+        ["param", simple(), int()],
       ],
       [
-        ["alloca", default_token(), int()],
+        ["alloca", simple(), int()],
       ],
       [["block", [
         [2, "add", 0, 1],
@@ -59,8 +59,8 @@ describe("simple examples", () => {
   it("identity function on integers", () => {
     const fun: G.Function = [
       "func",
-      ["result", default_token(), int()],
-      [["param", default_token(), int()]],
+      ["result", simple(), int()],
+      [["param", simple(), int()]],
       [],
       [["block", [
         [null, "return", 0],
@@ -77,14 +77,14 @@ describe("simple examples", () => {
       "func",
       [
         "result",
-        default_token(),
-        ["type", "borrowed", default_token(), ["type", "int"]],
+        simple(),
+        ["type", "borrowed", simple(), int()],
       ],
       [
         [
           "param",
           ["token", "caller", "cloneable", "no_drop"],
-          ["type", "borrowed", default_token(), ["type", "int"]],
+          ["type", "borrowed", simple(), int()],
         ],
       ], // allowed to escape
       [],
