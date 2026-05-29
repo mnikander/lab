@@ -2,7 +2,11 @@
 
 import * as G from "./grammar.ts";
 
+export type Deps = Dependency[];
+export type Dependency = ["register", number, TokenId[]];
+export type TokenId = ["token", number] | ["abstract_token", number];
+
 // TODO: implement this
-export function compute_dependencies(fun: G.Function): number[][] {
+export function compute_dependencies(fun: G.Function): Deps {
   return [];
 }
