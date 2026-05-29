@@ -10,8 +10,8 @@ export type Alloca      = ["alloca", Type, Token];
 export type Block       = ["block",  Line[]];
 
 export type Line        = Constant | Add | Copy | Move | Update | Own | Borrow | Phi | Drop | Call | Return | Branch;
-export type Constant    = [Register, "constant"];
-export type Add         = [Register, "add",    Register, Register];
+export type Constant    = [Register, "constant"]; // it doesn't matter what the value of the constant is
+export type Add         = [Register, "add",    Register, Register]; // analogous to all other arithmetic and logical operations
 export type Copy        = [Register, "copy",   Register];
 export type Move        = [Register, "move",   Register];
 export type Update      = [Register, "update", Register];
@@ -23,7 +23,7 @@ export type Return      = [null,     "return", Register];
 export type Branch      = [null,     "branch", Register, Label[]];
 export type Phi         = [Register, "phi",    Register[]];
 
-export type Type        = "basic" | "pointer";
+export type Type        = "int" | "pointer";
 export type Token       = [ Scope, Replication, Cleanup ];
 export type Scope       = "local"         | "caller"     | "global";
 export type Replication = "unique"        | "cloneable";

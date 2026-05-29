@@ -6,12 +6,12 @@
 3. How do you compute which variables depend on which tokens?
 
 Date:   2026-05-28
-Status: Planning
+Status: Doing
 
 ## Resources
 <!-- Where can I find relevant information? -->
 
-- lab 0023
+- lab 23
 
 ## Hypothesis
 <!-- What do I think is going to happen? -->
