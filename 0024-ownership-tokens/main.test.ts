@@ -4,13 +4,21 @@ import { expect } from "@std/expect";
 import * as G from "./grammar.ts";
 import { compute_dependencies, Deps } from "./main.ts";
 
+function default_token(): G.Token {
+  return ["token", "local", "cloneable", "no_drop"];
+}
+
+function int(): ["type", "int"] {
+  return ["type", "int"];
+}
+
 describe("simple examples", () => {
   it("return a constant", () => {
     const fun: G.Function = [
       "func",
-      ["result", "int", ["local", "cloneable", "no_destructor"]],
+      ["result", default_token(), int()],
       [],
-      [["alloca", "int", ["local", "cloneable", "no_destructor"]]],
+      [["alloca", default_token(), int()]],
       [["block", [
         [0, "constant"],
         [null, "return", 0],
@@ -25,12 +33,14 @@ describe("simple examples", () => {
   it("add two arguments", () => {
     const fun: G.Function = [
       "func",
-      ["result", "int", ["local", "cloneable", "no_destructor"]],
+      ["result", default_token(), int()],
       [
-        ["param", "int", ["local", "cloneable", "no_destructor"]],
-        ["param", "int", ["local", "cloneable", "no_destructor"]],
+        ["param", default_token(), int()],
+        ["param", default_token(), int()],
       ],
-      [["alloca", "int", ["local", "cloneable", "no_destructor"]]],
+      [
+        ["alloca", default_token(), int()],
+      ],
       [["block", [
         [2, "add", 0, 1],
         [null, "return", 2],
@@ -49,8 +59,8 @@ describe("simple examples", () => {
   it("identity function on integers", () => {
     const fun: G.Function = [
       "func",
-      ["result", "int", ["local", "cloneable", "no_destructor"]],
-      [["param", "int", ["local", "cloneable", "no_destructor"]]],
+      ["result", default_token(), int()],
+      [["param", default_token(), int()]],
       [],
       [["block", [
         [null, "return", 0],
@@ -65,8 +75,18 @@ describe("simple examples", () => {
   it("identity function on borrows", () => {
     const fun: G.Function = [
       "func",
-      ["result", "pointer", ["local", "cloneable", "no_destructor"]],
-      [["param", "pointer", ["caller", "cloneable", "no_destructor"]]], // allowed to escape
+      [
+        "result",
+        default_token(),
+        ["type", "borrowed", default_token(), ["type", "int"]],
+      ],
+      [
+        [
+          "param",
+          ["token", "caller", "cloneable", "no_drop"],
+          ["type", "borrowed", default_token(), ["type", "int"]],
+        ],
+      ], // allowed to escape
       [],
       [["block", [
         [null, "return", 0],

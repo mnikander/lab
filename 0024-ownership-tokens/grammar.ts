@@ -3,9 +3,9 @@
 export type Program     = Function[];
 
 export type Function    = ["func",   Result, Parameter[], Alloca[], Block[]];
-export type Result      = ["result", Type, Token];
-export type Parameter   = ["param",  Type, Token];
-export type Alloca      = ["alloca", Type, Token];
+export type Result      = ["result", Token, Type];
+export type Parameter   = ["param",  Token, Type];
+export type Alloca      = ["alloca", Token, Type];
 
 export type Block       = ["block",  Line[]];
 
@@ -22,8 +22,8 @@ export type Return      = [null,     "return", Register];
 export type Branch      = [null,     "branch", Register, Label[]];
 export type Phi         = [Register, "phi",    Register[]];
 
-export type Type        = "int" | "pointer";
-export type Token       = [ Scope, Duplication, Cleanup ];
+export type Type        = ["type", "int"] | ["type", "borrowed", Token, Type] | ["type", "owned", Type, Token];
+export type Token       = ["token", Scope, Duplication, Cleanup ];
 export type Scope       = "local"     | "caller";
 export type Duplication = "unique"    | "cloneable";
 export type Cleanup     = "must_drop" | "no_drop";
