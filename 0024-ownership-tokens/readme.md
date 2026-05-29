@@ -44,7 +44,7 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
-
+- Declaring the Scope of the function result may be problematic unless the caller is allowed to relax that constraint a bit. A function may return a local, but the caller might know or decide that it actually has some other scope. This is especially important for nested function calls. Is there covariant/contravariant typing involved here?
 
 ## Future Work
 <!-- Are there follow-up questions? -->
@@ -52,6 +52,9 @@ deno test
 
 - [ ] add construction and destruction of aggregates to the DSL
 - [ ] Can token operations be modelled explicitly in the DSL? This may allow expressing high-level constructs with a smaller number of primitives and may simplify the analysis, at the cost of complicating the lowering pass slightly
+- [ ] add `update` with similar/identical lifetime and ownership semantics as `move`
+- [ ] add an owning heap-pointer type
+- [ ] add global/heap scope for heap-allocated data
 
 
 ---
