@@ -73,20 +73,23 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] refactor test-cases to build Tokens algebraically, using functions, to make the code more readable
 - [x] create a few test-cases with examples
 - [x] document a table of operations and their impact on dependencies
-- [ ] implement `compute_tokens` which takes a Function and computes its set of Tokens from the params and allocas
-- [ ] extend `compute_tokens` so that the abstract tokens (targets of pointer-valued arguments) are created as well
-- [ ] do I need to differentiate abstract tokens (unknown location outside the function) from concrete tokens (where we know the storage location exactly)?
-- [ ] where and how can the abstract tokens be stored? 
-- [ ] how can you tell when you need to retrieve a concrete token and when you need to retrieve an abstract token?
-- [ ] how could element-wise abstract tokens be stored for aggregate types? (future work?)
-- [ ] make a plan how the abstract token of a pointer can be retrieved
-- [ ] perhaps implement `get_load_token` which retrieves the token corresposponding to the target of a `load` instruction (could be a concrete or abstract token)
-- [ ] implement `update_dependencies(line: Line, deps: Deps): Deps`
-- [ ] optional: implement function to verify static single assignment, and run that function in unit tests before computing the dependencies
-- [ ] copy and adapt the code for control flow graph construction
+- [x] ~~implement `compute_tokens` which takes a Function and computes its set of Tokens from the params and allocas~~ -- the tokens are all right there in the IR code
+- [x] ~~extend `compute_tokens` so that the abstract tokens (targets of pointer-valued arguments) are created as well~~ -- the abstract tokens are in the pointer type
+- [x] ~~where and how can the abstract tokens be stored?~~ -- they are already in the source code
+- [x] ~~how can you tell when you need to retrieve a concrete token and when you need to retrieve an abstract token?~~ -- just look at the pointer and for now, just treat it as an abstract token every time, even for locals, to keep things simple
+- [x] ~~how could element-wise abstract tokens be stored for aggregate types? (future work?)~~ -- they are already in the type
+- [x] ~~make a plan how the abstract token of a pointer can be retrieved~~
+- [x] ~~perhaps implement `get_load_token` which retrieves the token corresposponding to the target of a `load` instruction (could be a concrete or abstract token)~~
+- [ ] copy the code for control flow graph construction (tweak types if necessary)
+- [ ] define/refine a type to encode dependencies, keep it simple
+- [ ] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
+- [ ] check what the update function for the worklist algorithm expects
+- [ ] can I make the update function here, compatible with the worklist algorithm?
 - [ ] define the lattice or state for the worklist algorithm to create the dependency graph
 - [ ] copy and adapt the worklist algorithm from lab 23
 - [ ] test-cases for each instruction
+- [ ] do I need to differentiate abstract tokens (unknown location outside the function) from concrete tokens (where we know the storage location exactly)? I probably need a way to address into them, so that I can retrieve them from the source code
+- [ ] optional: implement function to verify static single assignment, and run that function in unit tests before computing the dependencies
 
 ## Findings
 <!-- What did I learn? -->
