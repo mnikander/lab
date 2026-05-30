@@ -2,27 +2,29 @@
 
 import { Node } from "./graph.ts";
 
-export function iterate_to_fixed_point<State>(
+export function iterate_to_fixed_point<Element, State>(
   graph: Node[],
+  elements: Element[],
   entry_in_state: State,
   out_states: State[],
   equal: (left: State, right: State) => boolean,
   join: (left: State, right: State) => State, // must return a COPY to avoid in-place mutation of left/right
-  update: (node_index: number, in_state: State) => State,
+  update: (in_state: State, element: Element) => State,
 ): State[] {
   const worklist: Worklist = initialize_worklist(graph.length);
   while (!is_empty(worklist)) {
-    const node_index: number = try_pop(worklist) as number;
-    const node: Node = graph[node_index];
+    const current: number = try_pop(worklist) as number;
+    const node: Node = graph[current];
+    const element: Element = elements[current];
     const in_state: State = (node.pred.length === 0)
       ? entry_in_state
       : node.pred.map((n) => out_states[n]).reduce((
         left,
         right,
       ) => join(left, right));
-    const updated_out_state = update(node_index, in_state);
-    if (!equal(out_states[node_index], updated_out_state)) {
-      out_states[node_index] = updated_out_state;
+    const updated_out_state = update(in_state, element);
+    if (!equal(out_states[current], updated_out_state)) {
+      out_states[current] = updated_out_state;
       node.succ.forEach((s) => {
         try_push(s, worklist);
       });
