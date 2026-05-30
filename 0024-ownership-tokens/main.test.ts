@@ -133,7 +133,7 @@ describe("functions with a single block", () => {
 });
 
 describe("jump", () => {
-  it("use a defined variable in another block", () => {
+  it("with use of a register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -163,7 +163,7 @@ describe("jump", () => {
 });
 
 describe("split and join", () => {
-  it("use defined variables in other blocks", () => {
+  it("with use of registers", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -209,8 +209,8 @@ describe("split and join", () => {
   });
 });
 
-describe("multiple returns of", () => {
-  it("a linear register", () => {
+describe("multiple returns", () => {
+  it("of a linear register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -236,7 +236,7 @@ describe("multiple returns of", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("several registers", () => {
+  it("of several registers", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -274,7 +274,7 @@ describe("multiple returns of", () => {
 });
 
 describe("loop", () => {
-  it("use defined variables in loops", () => {
+  it("with use of a register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -311,7 +311,7 @@ describe("loop", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("define-use-drop of a register inside loops", () => {
+  it("with define-use-drop of a register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -348,7 +348,7 @@ describe("loop", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("define-use-drop of a linear register inside loops", () => {
+  it("with define-use-drop of a linear register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
