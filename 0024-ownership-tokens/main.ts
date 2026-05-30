@@ -9,5 +9,7 @@ export type TokenId = ["token_id", number] | ["target_of", TokenId];
 
 // TODO: implement this
 export function compute_dependencies(_fun: G.Function, _cfg: Graph): Deps {
-  return [];
+  const param_deps: Deps = _fun[2].map((_e, i) => ["register", i, []]);
+  const alloca_deps: Deps = _fun[3].map((_e, i) => ["register", i, []]);
+  return [...param_deps, ...alloca_deps];
 }
