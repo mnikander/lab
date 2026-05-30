@@ -81,14 +81,14 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] ~~make a plan how the abstract token of a pointer can be retrieved~~
 - [x] ~~perhaps implement `get_load_token` which retrieves the token corresposponding to the target of a `load` instruction (could be a concrete or abstract token)~~
 - [x] define/refine a type to encode dependencies, keep it simple
-- [ ] copy the code for control flow graph construction (tweak types if necessary)
-- [ ] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
-- [ ] check what the update function for the worklist algorithm expects
+- [x] do I need to differentiate abstract tokens (unknown location outside the function) from concrete tokens (where we know the storage location exactly)? I probably need a way to address into them, so that I can retrieve them from the source code
+- [x] copy the code for control flow graph construction (tweak types if necessary)
+- [x] copy and adapt the worklist algorithm from lab 23
+- [x] check what the update function for the worklist algorithm expects
 - [ ] can I make the update function here, compatible with the worklist algorithm?
+- [ ] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
 - [ ] define the lattice or state for the worklist algorithm to create the dependency graph
-- [ ] copy and adapt the worklist algorithm from lab 23
 - [ ] test-cases for each instruction
-- [ ] do I need to differentiate abstract tokens (unknown location outside the function) from concrete tokens (where we know the storage location exactly)? I probably need a way to address into them, so that I can retrieve them from the source code
 - [ ] optional: implement function to verify static single assignment, and run that function in unit tests before computing the dependencies
 
 ## Findings
