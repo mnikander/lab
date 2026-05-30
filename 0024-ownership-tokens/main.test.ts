@@ -115,7 +115,7 @@ describe("functions with a single block", () => {
 });
 
 describe("jump", () => {
-  it("must accept use of a defined variable in another block", () => {
+  it("use a defined variable in another block", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -145,7 +145,7 @@ describe("jump", () => {
 });
 
 describe("split and join", () => {
-  it("must accept use of defined variables in other blocks", () => {
+  it("use defined variables in other blocks", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -193,7 +193,7 @@ describe("split and join", () => {
 });
 
 describe("multiple returns", () => {
-  it("must accept use of defined variables in multiple returns", () => {
+  it("use defined variables in multiple returns", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -231,7 +231,7 @@ describe("multiple returns", () => {
 });
 
 describe("loop", () => {
-  it("must accept use of defined variables in loops", () => {
+  it("use defined variables in loops", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -265,7 +265,7 @@ describe("loop", () => {
     expect(actual).toEqual(expected);
   });
 
-  it("must accept define-use-drop of a register inside loops", () => {
+  it("define-use-drop of a register inside loops", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -304,7 +304,7 @@ describe("loop", () => {
 });
 
 describe("linear variables", () => {
-  it("must accept a function which returns a defined linear register", () => {
+  it("return a linear register", () => {
     const fun: G.Function = [
       "func",
       ["result", caller(unique(must_drop(int())))],
@@ -322,7 +322,7 @@ describe("linear variables", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("must accept use of defined linear variables in multiple returns", () => {
+  it("multiple returns of a linear register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -348,7 +348,7 @@ describe("linear variables", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("must accept define-use-drop of a linear register inside loops", () => {
+  it("define-use-drop of a linear register inside loops", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
