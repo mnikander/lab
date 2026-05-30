@@ -27,6 +27,18 @@ That would mean the token only exists once the variable has been declared _and_ 
 deno test
 ```
 
+## Tokens are Qualified Types
+
+Each _Token_ is a Type in the usual sence, but with several additional qualifiers attached to it.
+
+| Qualifier   | Possible values      |
+| :--         | :--                  | 
+| Scope       | {local, caller}      |
+| Duplication | {unique, clonable}   |
+| Cleanup     | {must_drop, no_drop} |
+
+A _linear_ resource can be modelled by adding the two qualifiers `unique` and `must_drop`.
+
 ## Operations and Dependencies on Tokens
 
 | Operation         | Dependencies                                 | Comments |
