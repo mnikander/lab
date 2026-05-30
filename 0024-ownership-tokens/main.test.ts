@@ -34,12 +34,30 @@ function must_drop(token: G.Token): G.Token {
 }
 
 describe("functions with a single block", () => {
-  it("return a constant", () => {
+  it("return a register", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
       [],
       [["alloca", int()]],
+      [["block", [
+        ["assign", 0, "constant"],
+        ["return", 0],
+      ]]],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [["register", 0, []]];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(1);
+    // expect(actual).toEqual(expected);
+  });
+
+  it("return a linear register", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", unique(must_drop(int()))],
+      [],
+      [["alloca", unique(must_drop(int()))]],
       [["block", [
         ["assign", 0, "constant"],
         ["return", 0],
@@ -191,8 +209,34 @@ describe("split and join", () => {
   });
 });
 
-describe("multiple returns", () => {
-  it("use defined variables in multiple returns", () => {
+describe("multiple returns of", () => {
+  it("a linear register", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [["alloca", unique(must_drop(int()))]],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [["register", 0, []]];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(1);
+    // expect(actual).toEqual(expected);
+  });
+
+  it("several registers", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -301,52 +345,6 @@ describe("loop", () => {
     ];
     const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
-    // expect(actual).toEqual(expected);
-  });
-});
-
-describe("linear variables", () => {
-  it("return a linear register", () => {
-    const fun: G.Function = [
-      "func",
-      ["result", unique(must_drop(int()))],
-      [],
-      [["alloca", unique(must_drop(int()))]],
-      [["block", [
-        ["assign", 0, "constant"],
-        ["return", 0],
-      ]]],
-    ];
-    const cfg: Graph = make_cfg(fun);
-    const expected: Deps = [["register", 0, []]];
-    const actual: Deps = compute_dependencies(fun, cfg);
-    expect(actual.length).toBe(1);
-    // expect(actual).toEqual(expected);
-  });
-
-  it("multiple returns of a linear register", () => {
-    const fun: G.Function = [
-      "func",
-      ["result", int()],
-      [],
-      [["alloca", unique(must_drop(int()))]],
-      [
-        ["block", [
-          ["assign", 0, "constant"],
-          ["branch", 0, [1, 2]],
-        ]],
-        ["block", [
-          ["return", 0],
-        ]],
-        ["block", [
-          ["return", 0],
-        ]],
-      ],
-    ];
-    const cfg: Graph = make_cfg(fun);
-    const expected: Deps = [["register", 0, []]];
-    const actual: Deps = compute_dependencies(fun, cfg);
-    expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
 
