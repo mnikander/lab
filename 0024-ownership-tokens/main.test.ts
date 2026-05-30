@@ -282,12 +282,12 @@ describe("loop", () => {
         ]],
         ["block", [
           ["assign", 1, "constant"],
+          ["assign", 2, "copy", 1],
           ["drop", 1],
           ["branch", 0, [1, 2]],
         ]],
         ["block", [
-          ["assign", 2, "constant"],
-          ["return", 2],
+          ["return", 0],
         ]],
       ],
     ];
