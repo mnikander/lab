@@ -137,7 +137,7 @@ describe("jump", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: Deps = [["register", 0, [["target_of", ["token_id", 0]]]]];
+    const expected: Deps = [["register", 0, []], ["register", 1, []]];
     const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(2);
     // expect(actual).toEqual(expected);
@@ -179,7 +179,13 @@ describe("split and join", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: Deps = [["register", 0, [["target_of", ["token_id", 0]]]]];
+    const expected: Deps = [
+      ["register", 0, []],
+      ["register", 1, []],
+      ["register", 2, []],
+      ["register", 3, [["token_id", 1], ["token_id", 2]]],
+      ["register", 4, [["token_id", 3]]],
+    ];
     const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(5);
     // expect(actual).toEqual(expected);
