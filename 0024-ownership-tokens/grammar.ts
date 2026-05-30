@@ -9,7 +9,8 @@ export type Alloca      = ["alloca", Token];
 
 export type Block       = ["block",  Line[]];
 
-export type Line        = Constant | Add | Copy | Move | Own | Borrow | Drop | Call | Return | Branch | Phi;
+export type Line        =  Phi | Constant | Add | Copy | Move | Own | Borrow | Call |Drop | Branch | Return;
+export type Phi         = ["assign", Register, "phi",    Register[]];
 export type Constant    = ["assign", Register, "constant"]; // it doesn't matter what the value of the constant is
 export type Add         = ["assign", Register, "add",    Register, Register]; // analogous to all other arithmetic and logical operations
 export type Copy        = ["assign", Register, "copy",   Register];
@@ -17,10 +18,9 @@ export type Move        = ["assign", Register, "move",   Register];
 export type Own         = ["assign", Register, "own",    Register];
 export type Borrow      = ["assign", Register, "borrow", Register];
 export type Call        = ["assign", Register, "call",   Label,    Register[]]
-export type Phi         = ["assign", Register, "phi",    Register[]];
+export type Drop        = ["drop",   Register];
 export type Branch      = ["branch", Register, Label[]];
 export type Return      = ["return", Register];
-export type Drop        = ["drop",   Register];
 
 export type Token       = ["token", Scope, Duplication, Cleanup, Type ];
 export type Type        = ["int"] | ["borrowed", Token] | ["owned", Token];
@@ -38,7 +38,11 @@ export function get_lines(block: Block): Line[] {
     return block[1];
 }
 
-export function is_body(line: Line): line is Constant | Add | Copy | Move | Own | Borrow | Drop | Call {
+export function is_phi(line: Line): line is Phi {
+    return line[0] === "assign" && line[2] === "phi";
+}
+
+export function is_body(line: Line): line is Constant | Add | Copy | Move | Own | Borrow | Call | Drop {
     return line[0] === "assign" && line[2] === "constant"
         || line[0] === "assign" && line[2] === "add"
         || line[0] === "assign" && line[2] === "copy"
@@ -49,15 +53,10 @@ export function is_body(line: Line): line is Constant | Add | Copy | Move | Own 
         || line[0] === "drop";
 }
 
-export function is_return(line: Line): line is Return {
-    return line[0] === "return";
-}
-
-export function is_phi(line: Line): line is Phi {
-    return line[0] === "assign" && line[2] === "phi";
-}
-
 export function is_branch(line: Line): line is Branch {
     return line[0] === "branch";
 }
 
+export function is_return(line: Line): line is Return {
+    return line[0] === "return";
+}
