@@ -307,9 +307,9 @@ describe("linear variables", () => {
   it("return a linear register", () => {
     const fun: G.Function = [
       "func",
-      ["result", caller(unique(must_drop(int())))],
+      ["result", unique(must_drop(int()))],
       [],
-      [["alloca", caller(unique(must_drop(int())))]],
+      [["alloca", unique(must_drop(int()))]],
       [["block", [
         ["assign", 0, "constant"],
         ["return", 0],
@@ -327,7 +327,7 @@ describe("linear variables", () => {
       "func",
       ["result", int()],
       [],
-      [["alloca", caller(unique(must_drop(int())))]],
+      [["alloca", unique(must_drop(int()))]],
       [
         ["block", [
           ["assign", 0, "constant"],
@@ -355,7 +355,7 @@ describe("linear variables", () => {
       [],
       [
         ["alloca", int()],
-        ["alloca", caller(unique(must_drop(int())))],
+        ["alloca", unique(must_drop(int()))],
         ["alloca", int()],
       ],
       [
