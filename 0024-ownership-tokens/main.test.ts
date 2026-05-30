@@ -210,6 +210,36 @@ describe("split and join", () => {
 });
 
 describe("multiple returns", () => {
+  it("of a register", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [
+        ["alloca", int()],
+      ],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [
+      ["register", 0, []],
+    ];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(1);
+    // expect(actual).toEqual(expected);
+  });
+
   it("of a linear register", () => {
     const fun: G.Function = [
       "func",
