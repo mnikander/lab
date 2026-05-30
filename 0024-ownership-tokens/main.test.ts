@@ -302,3 +302,87 @@ describe("loop", () => {
     // expect(actual).toEqual(expected);
   });
 });
+
+describe("linear variables", () => {
+  it("must accept a function which returns a defined linear register", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", caller(unique(must_drop(int())))],
+      [],
+      [["alloca", caller(unique(must_drop(int())))]],
+      [["block", [
+        ["assign", 0, "constant"],
+        ["return", 0],
+      ]]],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [["register", 0, []]];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(1);
+    // expect(actual).toEqual(expected);
+  });
+
+  it("must accept use of defined linear variables in multiple returns", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [["alloca", caller(unique(must_drop(int())))]],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+        ["block", [
+          ["return", 0],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [["register", 0, []]];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(1);
+    // expect(actual).toEqual(expected);
+  });
+
+  it("must accept define-use-drop of a linear register inside loops", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [
+        ["alloca", int()],
+        ["alloca", caller(unique(must_drop(int())))],
+        ["alloca", int()],
+      ],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1]],
+        ]],
+        ["block", [
+          ["assign", 1, "constant"],
+          ["assign", 0, "copy", 1],
+          ["drop", 1],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["assign", 2, "constant"],
+          ["return", 2],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [
+      ["register", 0, []],
+      ["register", 1, []],
+      ["register", 2, []],
+    ];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(3);
+    // expect(actual).toEqual(expected);
+  });
+});
