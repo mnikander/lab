@@ -10,17 +10,17 @@ export type Alloca      = ["alloca", Token];
 export type Block       = ["block",  Line[]];
 
 export type Line        = Constant | Add | Copy | Move | Own | Borrow | Drop | Call | Return | Branch | Phi;
-export type Constant    = [Register, "constant"]; // it doesn't matter what the value of the constant is
-export type Add         = [Register, "add",    Register, Register]; // analogous to all other arithmetic and logical operations
-export type Copy        = [Register, "copy",   Register];
-export type Move        = [Register, "move",   Register];
-export type Own         = [Register, "own",    Register];
-export type Borrow      = [Register, "borrow", Register];
-export type Drop        = [null,     "drop",   Register];
-export type Call        = [Register, "call",   Label,    Register[]]
-export type Return      = [null,     "return", Register];
-export type Branch      = [null,     "branch", Register, Label[]];
-export type Phi         = [Register, "phi",    Register[]];
+export type Constant    = ["assign", Register, "constant"]; // it doesn't matter what the value of the constant is
+export type Add         = ["assign", Register, "add",    Register, Register]; // analogous to all other arithmetic and logical operations
+export type Copy        = ["assign", Register, "copy",   Register];
+export type Move        = ["assign", Register, "move",   Register];
+export type Own         = ["assign", Register, "own",    Register];
+export type Borrow      = ["assign", Register, "borrow", Register];
+export type Call        = ["assign", Register, "call",   Label,    Register[]]
+export type Phi         = ["assign", Register, "phi",    Register[]];
+export type Branch      = ["branch", Register, Label[]];
+export type Return      = ["return", Register];
+export type Drop        = ["drop",   Register];
 
 export type Token       = ["token", Scope, Duplication, Cleanup, Type ];
 export type Type        = ["int"] | ["borrowed", Token] | ["owned", Token];
@@ -39,25 +39,25 @@ export function get_lines(block: Block): Line[] {
 }
 
 export function is_body(line: Line): line is Constant | Add | Copy | Move | Own | Borrow | Drop | Call {
-    return line[1] === "constant"
-        || line[1] === "add"
-        || line[1] === "copy"
-        || line[1] === "move"
-        || line[1] === "own"
-        || line[1] === "borrow"
-        || line[1] === "drop"
-        || line[1] === "call"
+    return line[0] === "assign" && line[2] === "constant"
+        || line[0] === "assign" && line[2] === "add"
+        || line[0] === "assign" && line[2] === "copy"
+        || line[0] === "assign" && line[2] === "move"
+        || line[0] === "assign" && line[2] === "own"
+        || line[0] === "assign" && line[2] === "borrow"
+        || line[0] === "assign" && line[2] === "call"
+        || line[0] === "drop";
 }
 
 export function is_return(line: Line): line is Return {
-    return line[1] === "return";
+    return line[0] === "return";
 }
 
 export function is_phi(line: Line): line is Phi {
-    return line[1] === "phi";
+    return line[0] === "assign" && line[2] === "phi";
 }
 
 export function is_branch(line: Line): line is Branch {
-    return line[1] === "branch";
+    return line[0] === "branch";
 }
 

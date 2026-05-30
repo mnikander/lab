@@ -39,8 +39,8 @@ describe("simple examples", () => {
       [],
       [["alloca", int()]],
       [["block", [
-        [0, "constant"],
-        [null, "return", 0],
+        ["assign", 0, "constant"],
+        ["return", 0],
       ]]],
     ];
     const expected: Deps = [["register", 0, []]];
@@ -61,8 +61,8 @@ describe("simple examples", () => {
         ["alloca", int()],
       ],
       [["block", [
-        [2, "add", 0, 1],
-        [null, "return", 2],
+        ["assign", 2, "add", 0, 1],
+        ["return", 2],
       ]]],
     ];
     const expected: Deps = [
@@ -82,7 +82,7 @@ describe("simple examples", () => {
       [["param", int()]],
       [],
       [["block", [
-        [null, "return", 0],
+        ["return", 0],
       ]]],
     ];
     const expected: Deps = [["register", 0, []]];
@@ -98,7 +98,7 @@ describe("simple examples", () => {
       [["param", caller(borrow(caller(int())))]], // allowed to escape
       [],
       [["block", [
-        [null, "return", 0],
+        ["return", 0],
       ]]],
     ];
     const expected: Deps = [["register", 0, [["abstract_token", 0]]]];
