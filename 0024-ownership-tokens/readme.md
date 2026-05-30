@@ -80,8 +80,8 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] ~~how could element-wise abstract tokens be stored for aggregate types? (future work?)~~ -- they are already in the type
 - [x] ~~make a plan how the abstract token of a pointer can be retrieved~~
 - [x] ~~perhaps implement `get_load_token` which retrieves the token corresposponding to the target of a `load` instruction (could be a concrete or abstract token)~~
+- [x] define/refine a type to encode dependencies, keep it simple
 - [ ] copy the code for control flow graph construction (tweak types if necessary)
-- [ ] define/refine a type to encode dependencies, keep it simple
 - [ ] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
 - [ ] check what the update function for the worklist algorithm expects
 - [ ] can I make the update function here, compatible with the worklist algorithm?

@@ -101,7 +101,7 @@ describe("simple examples", () => {
         ["return", 0],
       ]]],
     ];
-    const expected: Deps = [["register", 0, [["abstract_token", 0]]]];
+    const expected: Deps = [["register", 0, [["target_of", ["token_id", 0]]]]];
     const actual: Deps = compute_dependencies(fun);
     expect(actual.length).toBe(1);
     expect(actual).toEqual(expected);
