@@ -43,13 +43,13 @@ A _linear_ resource can be modelled by adding the two qualifiers `unique` and `m
 
 | Operation         | Dependencies                                 | Comments |
 | :--               | :--                                          | :--      |
+| `x = phi a b ...` | `deps x = union (deps a) (deps b) ...`       | |
 | `x = constant`    | `deps x = empty`                             | |
 | `x = add a b`     | `deps x = empty`                             | `add` is a stand-in for all arithmetic and logical ops |
 | `x = copy a`      | `deps x = deps a`                            | |
 | `x = move a`      | `deps x = deps a`                            | |
 | `x = own a`       | `deps x = union (token a) (deps a)`          | Does this work correctly if `a` is a pointer or primitive? |
 | `x = borrow a`    | `deps x = union (token a) (deps a)`          | Does this work correctly if `a` is a pointer or primitive? |
-| `x = phi a b`     | `deps x = union (deps a) (deps b)`           | |
 | `x = load a`      | `deps x = deps a` **OR** `deps x = empty`    | Conservative over-estimation. See notes below. |
 | `x = call a b ...`| `deps x = union (deps caller_or_global_args)`| See notes below. |
 | `x = drop`        | no change                                    | Drop ends the lifetime, dependencies unchanged |
@@ -97,9 +97,14 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] copy the code for control flow graph construction (tweak types if necessary)
 - [x] copy and adapt the worklist algorithm from lab 23
 - [x] check what the update function for the worklist algorithm expects
+- [x] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
+- [ ] is there a way to simplify the reasoning about the dependencies and the CFG? 
 - [ ] can I make the update function here, compatible with the worklist algorithm?
-- [ ] use the table in this readme to implement `update_dependencies(line: Line, deps: Deps): Deps`
-- [ ] define the lattice or state for the worklist algorithm to create the dependency graph
+- [ ] should I use the worklist algorithm as is, or modify it to operate on code lines directly?
+- [ ] define the lattice or state for the worklist algorithm to create the dependency graph. Is the lattice the dependencies from each register to tokens?
+- [ ] where do I handle phi-nodes? at the instruction level, or in the `join` of the worklist algorithm? I think the table of instructions mixes concerns -- or the existing iterative fixed-point solver is not the right tool for this job
+- [ ] use worklist algorithm to iterate over the CFG and compute the dependencies
+- [ ] **phi nodes need to be able consume their registers**, for linear semantics -- add this to the grammar and add a loop-test case which does this
 - [ ] test-cases for each instruction
 - [ ] optional: implement function to verify static single assignment, and run that function in unit tests before computing the dependencies
 
@@ -108,6 +113,7 @@ That is the dependency set of the result, i.e. `deps x`.
 
 - Declaring the Scope of the function result may be problematic unless the caller is allowed to relax that constraint a bit. A function may return a local, but the caller might know or decide that it actually has some other scope. This is especially important for nested function calls. Is there covariant/contravariant typing involved here?
 - having a massive tuples for the Token and Type is difficult to write and read, structured types may be a much better option
+- just as in the last dataflow analysis, it got difficult to reason about the code when there are in/out-sets which themselves are effectively sets of sets
 
 ## Future Work
 <!-- Are there follow-up questions? -->
