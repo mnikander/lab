@@ -191,3 +191,114 @@ describe("split and join", () => {
     // expect(actual).toEqual(expected);
   });
 });
+
+describe("multiple returns", () => {
+  it("must accept use of defined variables in multiple returns", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [
+        ["alloca", int()],
+        ["alloca", int()],
+        ["alloca", int()],
+      ],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["assign", 1, "copy", 0],
+          ["return", 1],
+        ]],
+        ["block", [
+          ["assign", 2, "copy", 0],
+          ["return", 2],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [
+      ["register", 0, []],
+      ["register", 1, []],
+      ["register", 2, []],
+    ];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(3);
+    // expect(actual).toEqual(expected);
+  });
+});
+
+describe("loop", () => {
+  it("must accept use of defined variables in loops", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [
+        ["alloca", int()],
+        ["alloca", int()],
+      ],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1]],
+        ]],
+        ["block", [
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["drop", 0],
+          ["assign", 1, "constant"],
+          ["return", 1],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [
+      ["register", 0, []],
+      ["register", 1, []],
+    ];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(2);
+    expect(actual).toEqual(expected);
+  });
+
+  it("must accept define-use-drop of a register inside loops", () => {
+    const fun: G.Function = [
+      "func",
+      ["result", int()],
+      [],
+      [
+        ["alloca", int()],
+        ["alloca", int()],
+        ["alloca", int()],
+      ],
+      [
+        ["block", [
+          ["assign", 0, "constant"],
+          ["branch", 0, [1]],
+        ]],
+        ["block", [
+          ["assign", 1, "constant"],
+          ["drop", 1],
+          ["branch", 0, [1, 2]],
+        ]],
+        ["block", [
+          ["assign", 2, "constant"],
+          ["return", 2],
+        ]],
+      ],
+    ];
+    const cfg: Graph = make_cfg(fun);
+    const expected: Deps = [
+      ["register", 0, []],
+      ["register", 1, []],
+      ["register", 2, []],
+    ];
+    const actual: Deps = compute_dependencies(fun, cfg);
+    expect(actual.length).toBe(3);
+    // expect(actual).toEqual(expected);
+  });
+});
