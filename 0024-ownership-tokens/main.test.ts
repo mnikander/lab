@@ -3,6 +3,8 @@ import { expect } from "@std/expect";
 
 import * as G from "./grammar.ts";
 import { compute_dependencies, Deps } from "./main.ts";
+import { Graph } from "./graph.ts";
+import { make_cfg } from "./control-flow-graph.ts";
 
 function int(): G.Token {
   return ["token", "local", "cloneable", "no_drop", ["int"]];
@@ -31,7 +33,7 @@ function must_drop(token: G.Token): G.Token {
   return token;
 }
 
-describe("simple examples", () => {
+describe("functions with a single block", () => {
   it("return a constant", () => {
     const fun: G.Function = [
       "func",
@@ -43,8 +45,9 @@ describe("simple examples", () => {
         ["return", 0],
       ]]],
     ];
+    const cfg: Graph = make_cfg(fun);
     const expected: Deps = [["register", 0, []]];
-    const actual: Deps = compute_dependencies(fun);
+    const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     expect(actual).toEqual(expected);
   });
@@ -65,12 +68,13 @@ describe("simple examples", () => {
         ["return", 2],
       ]]],
     ];
+    const cfg: Graph = make_cfg(fun);
     const expected: Deps = [
       ["register", 0, []],
       ["register", 1, []],
       ["register", 2, []],
     ];
-    const actual: Deps = compute_dependencies(fun);
+    const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     expect(actual).toEqual(expected);
   });
@@ -85,8 +89,9 @@ describe("simple examples", () => {
         ["return", 0],
       ]]],
     ];
+    const cfg: Graph = make_cfg(fun);
     const expected: Deps = [["register", 0, []]];
-    const actual: Deps = compute_dependencies(fun);
+    const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     expect(actual).toEqual(expected);
   });
@@ -101,8 +106,9 @@ describe("simple examples", () => {
         ["return", 0],
       ]]],
     ];
+    const cfg: Graph = make_cfg(fun);
     const expected: Deps = [["register", 0, [["target_of", ["token_id", 0]]]]];
-    const actual: Deps = compute_dependencies(fun);
+    const actual: Deps = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     expect(actual).toEqual(expected);
   });
