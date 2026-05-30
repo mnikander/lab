@@ -53,16 +53,16 @@ function join_element(
 
 export function make_updater(
   func: G.Function,
-): (index: number, in_state: State) => State {
+): (node_index: number, in_state: State) => State {
   const metadata: G.Metadata = [...func[2], ...func[3]];
 
   // dataflow on the level of a block
   return function update(
-    index: number,
+    node_index: number,
     in_state: State,
   ): State {
     const blocks: G.Block[] = func[4];
-    const lines: G.Line[] = blocks[index][1];
+    const lines: G.Line[] = blocks[node_index][1];
     let mutable: State = in_state.map((e) => e); // fresh copy
     lines.forEach((line) => {
       if (G.is_body(line)) {

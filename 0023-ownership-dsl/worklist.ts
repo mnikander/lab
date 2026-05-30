@@ -8,21 +8,21 @@ export function iterate_to_fixed_point<State>(
   out_states: State[],
   equal: (left: State, right: State) => boolean,
   join: (left: State, right: State) => State, // must return a COPY to avoid in-place mutation of left/right
-  update: (index: number, in_state: State) => State,
+  update: (node_index: number, in_state: State) => State,
 ): State[] {
   const worklist: Worklist = initialize_worklist(graph.length);
   while (!is_empty(worklist)) {
-    const index: number = try_pop(worklist) as number;
-    const node: Node = graph[index];
+    const node_index: number = try_pop(worklist) as number;
+    const node: Node = graph[node_index];
     const in_state: State = (node.pred.length === 0)
       ? entry_in_state
       : node.pred.map((n) => out_states[n]).reduce((
         left,
         right,
       ) => join(left, right));
-    const updated_out_state = update(index, in_state);
-    if (!equal(out_states[index], updated_out_state)) {
-      out_states[index] = updated_out_state;
+    const updated_out_state = update(node_index, in_state);
+    if (!equal(out_states[node_index], updated_out_state)) {
+      out_states[node_index] = updated_out_state;
       node.succ.forEach((s) => {
         try_push(s, worklist);
       });
@@ -42,10 +42,10 @@ function is_empty(worklist: Worklist): boolean {
 }
 
 // in-place update
-function try_push(index: number, worklist: Worklist) {
-  if (worklist.contains[index] === false) {
-    worklist.contains[index] = true;
-    worklist.queue.push(index);
+function try_push(node_index: number, worklist: Worklist) {
+  if (worklist.contains[node_index] === false) {
+    worklist.contains[node_index] = true;
+    worklist.queue.push(node_index);
   }
 }
 
