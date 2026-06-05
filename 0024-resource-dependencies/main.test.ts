@@ -2,7 +2,7 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
 import * as G from "./grammar.ts";
-import { compute_dependencies, DependencyGraph } from "./main.ts";
+import { compute_dependencies, Dependencies } from "./main.ts";
 import { Graph } from "./graph.ts";
 import { make_cfg } from "./control-flow-graph.ts";
 
@@ -49,10 +49,10 @@ describe("functions with a single block", () => {
       ]]],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -69,10 +69,10 @@ describe("functions with a single block", () => {
       ]]],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -94,12 +94,12 @@ describe("functions with a single block", () => {
       ]]],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
@@ -115,10 +115,10 @@ describe("functions with a single block", () => {
       ]]],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -134,10 +134,10 @@ describe("functions with a single block", () => {
       ]]],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
-      [["target_of", ["type", 0]]],
+    const expected: Dependencies = [
+      [["deref", ["slot", 0]]],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -166,11 +166,11 @@ describe("jump", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(2);
     // expect(actual).toEqual(expected);
   });
@@ -210,14 +210,14 @@ describe("split and join", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
-      [["type", 0]],
-      [["type", 1], ["type", 2]],
-      [["type", 3]],
+      [["slot", 0]],
+      [["slot", 1], ["slot", 2]],
+      [["slot", 3]],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(5);
     // expect(actual).toEqual(expected);
   });
@@ -246,10 +246,10 @@ describe("multiple returns", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -274,10 +274,10 @@ describe("multiple returns", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
     // expect(actual).toEqual(expected);
   });
@@ -308,12 +308,12 @@ describe("multiple returns", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
-      [["type", 0]],
+      [["slot", 0]],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
@@ -347,12 +347,12 @@ describe("loop", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
-      [["type", 0], ["type", 2]],
-      [["type", 2]],
+      [["slot", 0], ["slot", 2]],
+      [["slot", 2]],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
@@ -384,12 +384,12 @@ describe("loop", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
@@ -422,12 +422,12 @@ describe("loop", () => {
       ],
     ];
     const cfg: Graph = make_cfg(fun);
-    const expected: DependencyGraph = [
+    const expected: Dependencies = [
       [],
       [],
       [],
     ];
-    const actual: DependencyGraph = compute_dependencies(fun, cfg);
+    const actual: Dependencies = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
