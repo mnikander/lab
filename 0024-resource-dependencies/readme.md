@@ -25,7 +25,7 @@ I think the resource itself undergoes various states, such as undefined, defined
 deno test
 ```
 
-## Resources, Types, Dependencies, and States
+## Terminology
 
 ### Resource
 
@@ -49,11 +49,32 @@ The possible qualifiers are:
 
 | Qualifier   | Possible values      |
 | :--         | :--                  | 
-| Scope       | {inner, outer}      |
+| Scope       | {inner, outer}       |
 | Duplication | {unique, clonable}   |
 | Cleanup     | {must_drop, no_drop} |
 
 A _linear_ resource can be modelled by adding the two qualifiers `unique` and `must_drop`.
+
+### Local, Param, Slot
+
+| Term  | Description      |
+| :--   | :--                  | 
+| param | A parameter of a function, the value is passed in from the outside |
+| local | A resource defined inside a function |
+| slot  | A `param` or a `local`, i.e. something within the function, not outside the function |
+
+Note that all slots are numbered.
+The params come first, followed by the locals.
+For example, a function which takes 2 parameters and has 3 local variables, has:
+- the parameters in slots 0 and 1
+- the local variables in slots 2, 3, and 4
+
+### Path
+
+A path is a description of how to access a particular resource.
+It could be just a slot number, which gives a `param` or `local`.
+It could also be a field access in an aggregate type or derefencing of a pointer.
+For example, if slot 1 is a pointer, we could also have a path `deref 1` which means "take resource 1, dereference it, and _that_ is the resource we are talking about".
 
 ### Resource Dependencies
 
@@ -133,7 +154,7 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] rename registers to resources
 - [x] rename scopes to {inner, outer} so that `alloca` can be replaced by `local`
 - [x] rename `alloca` to `local`
-- [ ] is there a way to simplify the reasoning about the dependencies and the CFG? 
+- [x] is there a way to simplify the reasoning about the dependencies and the CFG? -- yes, use better names such as `Path`
 - [ ] can I make the update function here, compatible with the worklist algorithm?
 - [ ] should I use the worklist algorithm as is, or modify it to operate on code lines directly?
 - [ ] define the lattice or state for the worklist algorithm to create the dependency graph. Is the lattice just the dependencies from each resource to other resources?
