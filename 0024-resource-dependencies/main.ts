@@ -65,8 +65,11 @@ function update_dependencies(
       case "call":
         deps = update_call(deps, line, prog);
         break;
-      default:
-        throw Error("Bug: unhandled case");
+      default: {
+        // the 'never' trick to ensure the switch-case is exhaustive
+        const _exhaustive: never = line;
+        return _exhaustive;
+      }
     }
   }
   return deps;
