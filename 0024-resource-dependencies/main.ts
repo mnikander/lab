@@ -167,7 +167,7 @@ function update_load(
 }
 
 // TODO: test this, because it has so much indirection with indices that there is probably a bug
-// `x = call a b ...` means `deps x = union (deps caller_scope_params)`
+// `x = call a b ...` means `deps x = union (deps outer_scope_params)`
 function update_call(
   deps: DependencyGraph,
   line: G.Call,
@@ -180,7 +180,7 @@ function update_call(
   let result_dependencies: Dependency[] = [];
   called_function_params.forEach(
     (p, i) => {
-      if (is_caller_scope(p)) {
+      if (is_outer_scope(p)) {
         result_dependencies = [
           ...result_dependencies,
           ...deps[argument_ids[i]],
@@ -192,6 +192,6 @@ function update_call(
   return deps;
 }
 
-function is_caller_scope(param: G.Parameter): boolean {
-  return param[1][1] === "caller";
+function is_outer_scope(param: G.Parameter): boolean {
+  return param[1][1] === "outer";
 }

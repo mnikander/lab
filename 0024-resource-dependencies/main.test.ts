@@ -7,22 +7,22 @@ import { Graph } from "./graph.ts";
 import { make_cfg } from "./control-flow-graph.ts";
 
 function int(): G.Type {
-  return ["type", "local", "cloneable", "no_drop", ["int"]];
+  return ["type", "inner", "cloneable", "no_drop", ["int"]];
 }
 
 function borrow(attributes: G.Type): G.Type {
-  return ["type", "local", "cloneable", "no_drop", [
+  return ["type", "inner", "cloneable", "no_drop", [
     "borrowed",
     attributes,
   ]];
 }
 
 function own(attributes: G.Type): G.Type {
-  return ["type", "local", "cloneable", "no_drop", ["owned", attributes]];
+  return ["type", "inner", "cloneable", "no_drop", ["owned", attributes]];
 }
 
-function caller(attributes: G.Type): G.Type {
-  attributes[1] = "caller";
+function outer(attributes: G.Type): G.Type {
+  attributes[1] = "outer";
   return attributes;
 }
 
@@ -127,7 +127,7 @@ describe("functions with a single block", () => {
     const fun: G.Function = [
       "func",
       ["result", borrow(int())],
-      [["param", caller(borrow(caller(int())))]], // allowed to escape
+      [["param", outer(borrow(outer(int())))]], // allowed to escape
       [],
       [["block", [
         ["return", 0],
