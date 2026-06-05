@@ -30,7 +30,7 @@ export function make_cfg(func: undefined | G.Function): Graph {
   }
 }
 
-function extract_successors(block: G.Block): G.Register[] {
+function extract_successors(block: G.Block): G.Resource[] {
   const lines: G.Line[] = G.get_lines(block);
   if (lines.length <= 0) {
     return [];

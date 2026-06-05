@@ -6,35 +6,38 @@ import { compute_dependencies, DependencyGraph } from "./main.ts";
 import { Graph } from "./graph.ts";
 import { make_cfg } from "./control-flow-graph.ts";
 
-function int(): G.Token {
-  return ["token", "local", "cloneable", "no_drop", ["int"]];
+function int(): G.Type {
+  return ["type", "local", "cloneable", "no_drop", ["int"]];
 }
 
-function borrow(token: G.Token): G.Token {
-  return ["token", "local", "cloneable", "no_drop", ["borrowed", token]];
+function borrow(attributes: G.Type): G.Type {
+  return ["type", "local", "cloneable", "no_drop", [
+    "borrowed",
+    attributes,
+  ]];
 }
 
-function own(token: G.Token): G.Token {
-  return ["token", "local", "cloneable", "no_drop", ["owned", token]];
+function own(attributes: G.Type): G.Type {
+  return ["type", "local", "cloneable", "no_drop", ["owned", attributes]];
 }
 
-function caller(token: G.Token): G.Token {
-  token[1] = "caller";
-  return token;
+function caller(attributes: G.Type): G.Type {
+  attributes[1] = "caller";
+  return attributes;
 }
 
-function unique(token: G.Token): G.Token {
-  token[2] = "unique";
-  return token;
+function unique(attributes: G.Type): G.Type {
+  attributes[2] = "unique";
+  return attributes;
 }
 
-function must_drop(token: G.Token): G.Token {
-  token[3] = "must_drop";
-  return token;
+function must_drop(attributes: G.Type): G.Type {
+  attributes[3] = "must_drop";
+  return attributes;
 }
 
 describe("functions with a single block", () => {
-  it("return a register", () => {
+  it("return a resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -54,7 +57,7 @@ describe("functions with a single block", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("return a linear register", () => {
+  it("return a linear resource", () => {
     const fun: G.Function = [
       "func",
       ["result", unique(must_drop(int()))],
@@ -132,7 +135,7 @@ describe("functions with a single block", () => {
     ];
     const cfg: Graph = make_cfg(fun);
     const expected: DependencyGraph = [
-      [["target_of", ["token", 0]]],
+      [["target_of", ["type", 0]]],
     ];
     const actual: DependencyGraph = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(1);
@@ -141,7 +144,7 @@ describe("functions with a single block", () => {
 });
 
 describe("jump", () => {
-  it("with use of a register", () => {
+  it("with use of a resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -174,7 +177,7 @@ describe("jump", () => {
 });
 
 describe("split and join", () => {
-  it("with use of registers", () => {
+  it("with use of resources", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -210,9 +213,9 @@ describe("split and join", () => {
     const expected: DependencyGraph = [
       [],
       [],
-      [["token", 0]],
-      [["token", 1], ["token", 2]],
-      [["token", 3]],
+      [["type", 0]],
+      [["type", 1], ["type", 2]],
+      [["type", 3]],
     ];
     const actual: DependencyGraph = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(5);
@@ -221,7 +224,7 @@ describe("split and join", () => {
 });
 
 describe("multiple returns", () => {
-  it("of a register", () => {
+  it("of a resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -251,7 +254,7 @@ describe("multiple returns", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("of a linear register", () => {
+  it("of a linear resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -279,7 +282,7 @@ describe("multiple returns", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("of several registers", () => {
+  it("of several resources", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -308,7 +311,7 @@ describe("multiple returns", () => {
     const expected: DependencyGraph = [
       [],
       [],
-      [["token", 0]],
+      [["type", 0]],
     ];
     const actual: DependencyGraph = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
@@ -317,7 +320,7 @@ describe("multiple returns", () => {
 });
 
 describe("loop", () => {
-  it("with use of a register", () => {
+  it("with use of a resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -346,15 +349,15 @@ describe("loop", () => {
     const cfg: Graph = make_cfg(fun);
     const expected: DependencyGraph = [
       [],
-      [["token", 0], ["token", 2]],
-      [["token", 2]],
+      [["type", 0], ["type", 2]],
+      [["type", 2]],
     ];
     const actual: DependencyGraph = compute_dependencies(fun, cfg);
     expect(actual.length).toBe(3);
     // expect(actual).toEqual(expected);
   });
 
-  it("with define-use-drop of a register", () => {
+  it("with define-use-drop of a resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],
@@ -391,7 +394,7 @@ describe("loop", () => {
     // expect(actual).toEqual(expected);
   });
 
-  it("with define-use-drop of a linear register", () => {
+  it("with define-use-drop of a linear resource", () => {
     const fun: G.Function = [
       "func",
       ["result", int()],

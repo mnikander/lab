@@ -4,7 +4,7 @@ import * as G from "./grammar.ts";
 import { Graph } from "./graph.ts";
 
 export type DependencyGraph = Dependency[][];
-export type Dependency = ["token", number] | ["target_of", Dependency];
+export type Dependency = ["type", number] | ["target_of", Dependency];
 
 // TODO: implement this
 export function compute_dependencies(
@@ -12,7 +12,7 @@ export function compute_dependencies(
   _cfg: Graph,
 ): DependencyGraph {
   // TODO: should I use the worklist algorithm as is, or modify it to operate on code lines directly?
-  // TODO: what is the lattice? is it the dependencies from each register to tokens?
+  // TODO: what is the lattice? is it the dependencies from each resource to other resources?
   // TODO: where do I handle phi-nodes? at the instruction level, or in the `join` of the worklist algorithm?
   // TODO: use worklist algorithm to iterate over the CFG and compute the dependencies
 
@@ -117,7 +117,7 @@ function update_move(deps: DependencyGraph, line: G.Move): DependencyGraph {
   return deps;
 }
 
-// `x = own a` means `deps x = union (token a) (deps a)`
+// `x = own a` means `deps x = union a (deps a)`
 function update_own(deps: DependencyGraph, line: G.Own): DependencyGraph {
   const current_id: number = line[1];
   const other_id: number = line[3];
@@ -128,7 +128,7 @@ function update_own(deps: DependencyGraph, line: G.Own): DependencyGraph {
   return deps;
 }
 
-// `x = borrow a` means `deps x = union (token a) (deps a)`
+// `x = borrow a` means `deps x = union a (deps a)`
 function update_borrow(deps: DependencyGraph, line: G.Borrow): DependencyGraph {
   const current_id: number = line[1];
   const other_id: number = line[3];
@@ -151,10 +151,10 @@ function update_load(
   const other_id: number = line[3];
   const param_count: number = func[2].length;
   const is_param: boolean = other_id < param_count;
-  const other_token: G.Token = is_param
+  const other_attributes: G.Type = is_param
     ? func[2][other_id][1]
     : func[3][other_id - param_count][1];
-  const other_type: G.Type = other_token[4];
+  const other_type: G.UnqualifiedType = other_attributes[4];
   if (
     (G.is_owned(other_type) || G.is_borrowed(other_type)) &&
     G.is_int(other_type[1][4])
