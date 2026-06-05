@@ -42,7 +42,7 @@ describe("functions with a single block", () => {
       "func",
       ["result", int()],
       [],
-      [["alloca", int()]],
+      [["local", int()]],
       [["block", [
         ["assign", 0, "constant"],
         ["return", 0],
@@ -62,7 +62,7 @@ describe("functions with a single block", () => {
       "func",
       ["result", unique(must_drop(int()))],
       [],
-      [["alloca", unique(must_drop(int()))]],
+      [["local", unique(must_drop(int()))]],
       [["block", [
         ["assign", 0, "constant"],
         ["return", 0],
@@ -86,7 +86,7 @@ describe("functions with a single block", () => {
         ["param", int()],
       ],
       [
-        ["alloca", int()],
+        ["local", int()],
       ],
       [["block", [
         ["assign", 2, "add", 0, 1],
@@ -150,8 +150,8 @@ describe("jump", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -183,11 +183,11 @@ describe("split and join", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -230,7 +230,7 @@ describe("multiple returns", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -259,7 +259,7 @@ describe("multiple returns", () => {
       "func",
       ["result", int()],
       [],
-      [["alloca", unique(must_drop(int()))]],
+      [["local", unique(must_drop(int()))]],
       [
         ["block", [
           ["assign", 0, "constant"],
@@ -288,9 +288,9 @@ describe("multiple returns", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -326,9 +326,9 @@ describe("loop", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -363,9 +363,9 @@ describe("loop", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", int()],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", int()],
+        ["local", int()],
       ],
       [
         ["block", [
@@ -400,9 +400,9 @@ describe("loop", () => {
       ["result", int()],
       [],
       [
-        ["alloca", int()],
-        ["alloca", unique(must_drop(int()))],
-        ["alloca", int()],
+        ["local", int()],
+        ["local", unique(must_drop(int()))],
+        ["local", int()],
       ],
       [
         ["block", [

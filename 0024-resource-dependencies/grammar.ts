@@ -2,10 +2,10 @@
 
 export type Program     = Function[];
 
-export type Function    = ["func",   Result, Parameter[], Alloca[], Block[]];
+export type Function    = ["func",   Result, Parameter[], Local[], Block[]];
 export type Result      = ["result", Type];
 export type Parameter   = ["param",  Type];
-export type Alloca      = ["alloca", Type];
+export type Local       = ["local", Type];
 
 export type Block       = ["block",  Line[]];
 
@@ -38,7 +38,7 @@ export function get_params(func: Function): Parameter[] {
     return func[2];
 }
 
-export function get_allocas(func: Function): Alloca[] {
+export function get_locals(func: Function): Local[] {
     return func[3];
 }
 

@@ -15,7 +15,7 @@ Status: Doing
 ## Hypothesis
 <!-- What do I think is going to happen? -->
 
-I think the resource declaration can be written at the parameter / alloca slot declarations.
+I think the resource declaration can be written at the parameter / local slot declarations.
 I think the resource itself undergoes various states, such as undefined, defined, dropped, and several others.
 
 ## Running the Code
@@ -132,7 +132,7 @@ That is the dependency set of the result, i.e. `deps x`.
 - [x] update the types and code to use the "Resource" terminology
 - [x] rename registers to resources
 - [x] rename scopes to {inner, outer} so that `alloca` can be replaced by `local`
-- [ ] rename `alloca` to `local`
+- [x] rename `alloca` to `local`
 - [ ] is there a way to simplify the reasoning about the dependencies and the CFG? 
 - [ ] can I make the update function here, compatible with the worklist algorithm?
 - [ ] should I use the worklist algorithm as is, or modify it to operate on code lines directly?

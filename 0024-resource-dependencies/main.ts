@@ -21,10 +21,10 @@ export function compute_dependencies(
 
 function make_empty_dependencies(func: G.Function): DependencyGraph {
   const params: G.Parameter[] = G.get_params(func);
-  const allocas: G.Alloca[] = G.get_allocas(func);
+  const locals: G.Local[] = G.get_locals(func);
   const empty_deps_for_params: DependencyGraph = params.map((_e) => []);
-  const empty_deps_for_allocas: DependencyGraph = allocas.map((_e) => []);
-  return [...empty_deps_for_params, ...empty_deps_for_allocas];
+  const empty_deps_for_locals: DependencyGraph = locals.map((_e) => []);
+  return [...empty_deps_for_params, ...empty_deps_for_locals];
 }
 
 // TODO: implement function which updates dependencies for a basic block
