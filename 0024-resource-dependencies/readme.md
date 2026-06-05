@@ -1,9 +1,8 @@
 # Question and Hypothesis
 <!-- What am I figuring out? -->
 
-1. How can resource attributes be defined?
+1. How can resource dependencies be defined and computed?
 2. Where are resources created and destroyed?
-3. How do you compute which resources depend on which other resources?
 
 Date:   2026-05-28
 Status: Doing

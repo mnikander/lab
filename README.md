@@ -16,7 +16,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-|      |        | 2026-05-28 | memory               | How can ownership tokens be defined? |
+|      |        | 2026-05-28 | memory               | How can resource dependencies be defined and computed? |
 |      |        | 2026-0- | | |
 
 ## Resolved
