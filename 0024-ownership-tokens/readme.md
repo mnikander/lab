@@ -26,7 +26,24 @@ I think the resource itself undergoes various states, such as undefined, defined
 deno test
 ```
 
-## Resources have Qualified Types
+## Resources, Types, Dependencies, and States
+
+### Resource
+
+A _resource_ is a location in memory, such as a local variable `x`.
+Resources can be:
+- _concrete_: a memory location which is within the scope of the function, which we can reason about precisely, for example a local variable
+- _abstract_: a memory location which exists somewhere outside of the function, about which we only have type information
+
+If we pass a pointer as an argument to a function, then the pointer itself is a concrete resource, a copy of it is stored locally after all.
+Whatever that pointer argument is pointing at, lies outside of the function, and that is an _abstract_ resource, since we don't know where it is.
+In theory, some information about abstract resources could be recovered via whole-program analysis.
+Analysis will only be done up the the function boundary, however.
+This keeps the analysis and the semantics fast and simple, but with some loss of precision.
+What we do know about an abstract resource, is its full type, and for aggregate types, the full type of every component of the aggregate.
+The qualifiers contain all of the essential information necessary to check ownership and lifetime constraints.
+
+### Resource Type
 
 Each resource has a Type, consisting of several qualifiers and an unqualified type such as `int` or `borrow int`.
 The possible qualifiers are:
@@ -38,6 +55,20 @@ The possible qualifiers are:
 | Cleanup     | {must_drop, no_drop} |
 
 A _linear_ resource can be modelled by adding the two qualifiers `unique` and `must_drop`.
+
+### Resource Dependencies
+
+For a given resource, the _resource dependencies_ is the set of other resources which it depends on.
+For an integer resource, this set it empty, it's just a basic value.
+For a pointer-type resource, it is the set of resources which that pointer may point at.
+
+### Resource State
+
+The _resource state_ is the state of a particular resource at a particular location in the code.
+The state of a resource can be _undefined_, _defined_, _moved_, _dropped_, _escaped_, or _ambiguous_.
+A dataflow analysis verifies all operations which are done with resources are allowed for the current resource state.
+For example, a resource which is _defined_ can be accessed.
+Accessing a resource which is _undefined_, _dropped_, or _ambiguous_ is an error.
 
 ## Operations and Dependencies on Resources
 
