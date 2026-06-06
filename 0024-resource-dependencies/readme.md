@@ -101,7 +101,7 @@ Accessing a resource which is _undefined_, _dropped_, or _ambiguous_ is an error
 | `x = move a`      | `deps x = deps a`                            | |
 | `x = own a`       | `deps x = union a (deps a)`                  | Does this work correctly if `a` is a pointer or primitive? |
 | `x = borrow a`    | `deps x = union a (deps a)`                  | Does this work correctly if `a` is a pointer or primitive? |
-| `x = load a`      | `deps x = deps a` **OR** `deps x = empty`    | Conservative over-estimation. See notes below. |
+| `x = load a`      | `deps x = union (deps a_i)` for all `a_i` in `(deps a)` | |
 | `x = call a b ...`| `deps x = union (deps outer_or_global_args)` | See notes below. |
 | `x = drop`        | no change                                    | Drop ends the lifetime, dependencies unchanged |
 | `branch x [L R]`  | no change                                    | |
@@ -109,13 +109,11 @@ Accessing a resource which is _undefined_, _dropped_, or _ambiguous_ is an error
 
 ### Load
 
-For the case of `x = load a`, we need the dependencies of whatever `a` is pointing at: `deps x = deps (deref a)`.
-If `a` is a function parameter, then we cannot determine what it's pointing at, without doing whole-program analysis.
-We can estimate the dependencies conservatively by saying `deps x = deps a`.
-We can simplify this if `a` is a pointer to a primitive type.
+If `a` is a pointer to a primitive type, then `deps a` is empty, and thus `deps x` must also be empty.
 If, for example, `a` is a `borrow int` then we can treat the `load a` like `copy` of an `int`.
-So `x = load a` causes `deps x = deps a`, unless `a` points to a primitive, in which case `deps x = empty`.
-If the target has an inner scope to the function, then in the future we could use pointer analysis to compute the set of possible targets and arrive at a more precise result.
+
+If `a` is a local variable and a pointer to a pointer, we can compute the points-to-set accurately.
+If `a` is an argument which was passsed into the function and a pointer to a pointer, it points at something which lies outside of the function, i.e. an abstract resource.
 
 ### Call
 
