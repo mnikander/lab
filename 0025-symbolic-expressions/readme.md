@@ -1,11 +1,11 @@
 # Question and Hypothesis
 <!-- What am I figuring out? -->
 
-1. How can symbolic expressions be encoded in JSON?
+1. How can simple symbolic expressions be encoded in JSON?
 2. How can this be made type-safe using the type system in TypeScript?
 
 Date:   2026-08-10
-Status: 
+Status: Done
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -36,13 +36,18 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
+- It is very easy to encode simple symbolic expressions in JSON and check them via the TypeScript type system.
 - The ambiguity between symbols and strings must be resolved somehow, one option might be to tag strings as such, but then they no longer have the same structure as the other atoms. It would be a shame if all the atoms would need to be tagged, since that would be terrible for readability.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+- Find a way to add string support, i.e. to differentiate variables and strings, perhaps by double-quoting the strings with "'hello world!'", defining the types accordingly via template strings, and defining the required predicates
+- How can pattern-matching be implemented for these symbolic expressions?
 - How can term-rewriting be implemented via a catamorphism (i.e. fold)?
+- How can transformations and validations of an Expr be implemented with a unified interface?
+- Can transformations and validations be cleanly chained via a Result-type and flat-map?
 
 ---
 **Copyright (c) 2026 Marco Nikander**

@@ -22,6 +22,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0025 |        | 2026-08-10 | ast                  | How can simple symbolic expressions be encoded in JSON? |
 | 0023 |        | 2026-05-15 | memory               | Can ownership be modelled within functions and across function boundaries with a small DSL? |
 | 0022 |        | 2026-05-14 | web                  | How can the content and structure of an HTML page be edited in place? |
 | 0014 |        | 2026-02-20 | ssa, graphs          | ~~How can an iterative fixed-point solver compute the availabilty of SSA variables?~~ |
