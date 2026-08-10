@@ -31,6 +31,7 @@ deno test
 2. tried tagged types for literals, i.e. `["boolean", true]` but decided not to use them because they are too verbose
 3. decided to not support strings for the moment, since they create ambiguity with variables, which must be resolved somehow
 4. wrote several test-cases which show-case the use of typescript's type system to check terms for syntactic correctness
+5. implemented predicates which can identify Atoms and Lists as such
 
 ## Findings
 <!-- What did I learn? -->
@@ -42,7 +43,6 @@ deno test
 <!-- Can I create a concrete ticket/issue from this? -->
 
 - How can term-rewriting be implemented via a catamorphism (i.e. fold)?
-- Create predicates which can identify Atoms and Lists as such
 
 ---
 **Copyright (c) 2026 Marco Nikander**

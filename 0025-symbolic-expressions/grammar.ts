@@ -7,3 +7,19 @@ export type Variable = string; // TODO: restrict the allowed names using a templ
 export type Boolean  = boolean;
 export type Number   = number;
 
+export function is_variable(e: Expr): e is Variable {
+  return typeof e === "string";
+}
+
+export function is_boolean(e: Expr): e is Boolean {
+  return typeof e === "boolean";
+}
+
+export function is_number(e: Expr): e is Number {
+  return typeof e === "number";
+}
+
+export function is_list(e: Expr): e is List {
+  return Array.isArray(e);
+}
+
