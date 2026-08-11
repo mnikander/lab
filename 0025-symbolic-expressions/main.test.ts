@@ -4,8 +4,8 @@ import * as S from "./grammar.ts";
 
 describe("atoms", () => {
   it("single variable", () => {
-    const expr: S.Variable = "x";
-    expect(S.is_variable(expr)).toBe(true);
+    const expr: S.Symbol = "x";
+    expect(S.is_symbol(expr)).toBe(true);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(false);
@@ -25,7 +25,7 @@ describe("atoms", () => {
 describe("lists", () => {
   it("empty list", () => {
     const expr: S.Expr = [];
-    expect(S.is_variable(expr)).toBe(false);
+    expect(S.is_symbol(expr)).toBe(false);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(true);
@@ -33,7 +33,7 @@ describe("lists", () => {
   
   it("add", () => {
     const expr: S.List = ["add", 1, 2];
-    expect(S.is_variable(expr)).toBe(false);
+    expect(S.is_symbol(expr)).toBe(false);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(true);
