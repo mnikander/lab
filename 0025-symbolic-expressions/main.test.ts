@@ -8,6 +8,7 @@ describe("atoms", () => {
     expect(S.is_symbol(expr)).toBe(true);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
+    expect(S.is_atom(expr)).toBe(true);
     expect(S.is_list(expr)).toBe(false);
   });
   
@@ -28,6 +29,7 @@ describe("lists", () => {
     expect(S.is_symbol(expr)).toBe(false);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
+    expect(S.is_atom(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(true);
   });
   
@@ -36,6 +38,7 @@ describe("lists", () => {
     expect(S.is_symbol(expr)).toBe(false);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
+    expect(S.is_atom(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(true);
   });
 

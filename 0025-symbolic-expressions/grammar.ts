@@ -19,6 +19,10 @@ export function is_number(e: Expr): e is Number {
   return typeof e === "number";
 }
 
+export function is_atom(e: Expr): e is Atom {
+  return is_symbol(e) || is_boolean(e) || is_number(e);
+}
+
 export function is_list(e: Expr): e is List {
   return Array.isArray(e);
 }
