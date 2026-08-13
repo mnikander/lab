@@ -12,12 +12,12 @@ describe("valid atoms", () => {
     expect(S.is_atom(expr)).toBe(true);
     expect(S.is_list(expr)).toBe(false);
   });
-  
+
   it("boolean literal", () => {
     const expr: S.Boolean = true;
     expect(S.is_boolean(expr)).toBe(true);
   });
-  
+
   it("number literal", () => {
     const expr: S.Number = 42;
     expect(S.is_number(expr)).toBe(true);
@@ -30,7 +30,6 @@ describe("valid atoms", () => {
 });
 
 describe("invalid atoms", () => {
-
   it("symbol with whitespace", () => {
     const expr: S.Expr = "hello world";
     expect(S.is_expr(expr)).toBe(false);
@@ -57,7 +56,7 @@ describe("valid lists", () => {
     expect(S.is_list(expr)).toBe(true);
     expect(S.is_expr(expr)).toBe(true);
   });
-  
+
   it("add", () => {
     const expr: S.List = ["add", 1, 2];
     expect(S.is_symbol(expr)).toBe(false);
