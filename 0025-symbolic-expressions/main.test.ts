@@ -6,6 +6,7 @@ describe("atoms", () => {
   it("single variable", () => {
     const expr: S.Symbol = "x";
     expect(S.is_symbol(expr)).toBe(true);
+    expect(S.is_string(expr)).toBe(false);
     expect(S.is_boolean(expr)).toBe(false);
     expect(S.is_number(expr)).toBe(false);
     expect(S.is_atom(expr)).toBe(true);
@@ -21,6 +22,21 @@ describe("atoms", () => {
     const expr: S.Number = 42;
     expect(S.is_number(expr)).toBe(true);
   });
+
+  it("single string literal", () => {
+    const expr: S.String = "'hello world'";
+    expect(S.is_string(expr)).toBe(true);
+  });
+
+  it("invalid string-like literal", () => {
+    const expr: S.Expr = "'x";
+    expect(S.is_expr(expr)).toBe(false);
+  });
+
+  it("invalid symbol-like literal", () => {
+    const expr: S.Expr = "x'";
+    expect(S.is_expr(expr)).toBe(false);
+  });
 });
 
 describe("lists", () => {
@@ -31,6 +47,7 @@ describe("lists", () => {
     expect(S.is_number(expr)).toBe(false);
     expect(S.is_atom(expr)).toBe(false);
     expect(S.is_list(expr)).toBe(true);
+    expect(S.is_expr(expr)).toBe(true);
   });
   
   it("add", () => {
@@ -59,4 +76,3 @@ describe("nested lists", () => {
     expect(S.is_list(expr)).toBe(true);
   });
 });
-
