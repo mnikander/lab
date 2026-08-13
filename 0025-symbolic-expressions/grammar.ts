@@ -24,6 +24,6 @@ export function is_atom(e: Expr): e is Atom {
 }
 
 export function is_list(e: Expr): e is List {
-  return Array.isArray(e);
+  return Array.isArray(e) && (e.length == 0 || is_symbol(e[0]));
 }
 
