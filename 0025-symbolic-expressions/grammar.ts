@@ -9,7 +9,7 @@ export type Boolean  = boolean;
 export type Number   = number;
 
 export function is_symbol(e: Expr): e is Symbol {
-  return typeof e === "string" && !e.startsWith("'") && !e.endsWith("'");
+  return typeof e === "string" && /^[a-zA-Z0-9_]+$/.test(e);
 }
 
 export function is_string(e: Expr): e is String {

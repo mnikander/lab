@@ -2,8 +2,8 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import * as S from "./grammar.ts";
 
-describe("atoms", () => {
-  it("single variable", () => {
+describe("valid atoms", () => {
+  it("symbol", () => {
     const expr: S.Symbol = "x";
     expect(S.is_symbol(expr)).toBe(true);
     expect(S.is_string(expr)).toBe(false);
@@ -13,33 +13,41 @@ describe("atoms", () => {
     expect(S.is_list(expr)).toBe(false);
   });
   
-  it("single boolean literal", () => {
+  it("boolean literal", () => {
     const expr: S.Boolean = true;
     expect(S.is_boolean(expr)).toBe(true);
   });
   
-  it("single number literal", () => {
+  it("number literal", () => {
     const expr: S.Number = 42;
     expect(S.is_number(expr)).toBe(true);
   });
 
-  it("single string literal", () => {
+  it("string literal", () => {
     const expr: S.String = "'hello world'";
     expect(S.is_string(expr)).toBe(true);
   });
+});
 
-  it("invalid string-like literal", () => {
+describe("invalid atoms", () => {
+
+  it("symbol with whitespace", () => {
+    const expr: S.Expr = "hello world";
+    expect(S.is_expr(expr)).toBe(false);
+  });
+
+  it("quote at the beginning", () => {
     const expr: S.Expr = "'x";
     expect(S.is_expr(expr)).toBe(false);
   });
 
-  it("invalid symbol-like literal", () => {
+  it("quote at the end", () => {
     const expr: S.Expr = "x'";
     expect(S.is_expr(expr)).toBe(false);
   });
 });
 
-describe("lists", () => {
+describe("valid lists", () => {
   it("empty list", () => {
     const expr: S.Expr = [];
     expect(S.is_symbol(expr)).toBe(false);
@@ -62,6 +70,28 @@ describe("lists", () => {
   it("simple let-binding", () => {
     const expr: S.List = ["let", "x", 42];
     expect(S.is_list(expr)).toBe(true);
+  });
+});
+
+describe("invalid lists", () => {
+  it("untagged list", () => {
+    const expr: S.Expr = [1];
+    expect(S.is_symbol(expr)).toBe(false);
+    expect(S.is_boolean(expr)).toBe(false);
+    expect(S.is_number(expr)).toBe(false);
+    expect(S.is_atom(expr)).toBe(false);
+    expect(S.is_list(expr)).toBe(false);
+    expect(S.is_expr(expr)).toBe(false);
+  });
+
+  it("list starting with a string", () => {
+    const expr: S.Expr = ["'1'"];
+    expect(S.is_symbol(expr)).toBe(false);
+    expect(S.is_boolean(expr)).toBe(false);
+    expect(S.is_number(expr)).toBe(false);
+    expect(S.is_atom(expr)).toBe(false);
+    expect(S.is_list(expr)).toBe(false);
+    expect(S.is_expr(expr)).toBe(false);
   });
 });
 
