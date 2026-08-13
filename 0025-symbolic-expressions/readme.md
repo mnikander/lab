@@ -32,20 +32,22 @@ deno test
 3. decided to not support strings for the moment, since they create ambiguity with variables, which must be resolved somehow
 4. wrote several test-cases which show-case the use of typescript's type system to check terms for syntactic correctness
 5. implemented predicates which can identify Atoms and Lists as such
+6. added string support using template literal types
+7. added runtime checks to the type guards to enforce the naming convention of symbols
 
 ## Findings
 <!-- What did I learn? -->
 
 - It is very easy to encode simple symbolic expressions in JSON and check them via the TypeScript type system.
-- The ambiguity between symbols and strings must be resolved somehow, one option might be to tag strings as such, but then they no longer have the same structure as the other atoms. It would be a shame if all the atoms would need to be tagged, since that would be terrible for readability.
+- The ambiguity between symbols and strings can be resolved using template literals
+- Naming conventions for symbols cannot be checked at compile-time, since template literals don't allow regex
 
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-- Find a way to add string support, i.e. to differentiate variables and strings, perhaps by double-quoting the strings with "'hello world!'", defining the types accordingly via template strings, and defining the required predicates
 - How can pattern-matching be implemented for these symbolic expressions?
-- How can term-rewriting be implemented via a catamorphism (i.e. fold)?
+- How can term-rewriting be implemented via a catamorphism (i.e. fold) or paramorphism?
 - How can transformations and validations of an Expr be implemented with a unified interface?
 - Can transformations and validations be cleanly chained via a Result-type and flat-map?
 
