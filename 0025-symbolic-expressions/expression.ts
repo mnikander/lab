@@ -1,12 +1,12 @@
 // Copyright (c) 2026 Marco Nikander
 
-export type Expr     = Atom | List;
-export type Atom     = Symbol | Boolean | Number;
-export type List     = Expr[];
-export type Symbol   = string; // TODO: restrict the allowed names using a template string
-export type String   = `'${string}'`;
-export type Boolean  = boolean;
-export type Number   = number;
+export type Expr = Atom | List;
+export type Atom = Symbol | Boolean | Number;
+export type List = Expr[];
+export type Symbol = string; // TODO: restrict the allowed names using a template string
+export type String = `'${string}'`;
+export type Boolean = boolean;
+export type Number = number;
 
 export function is_symbol(e: Expr): e is Symbol {
   return typeof e === "string" && /^[a-zA-Z0-9_]+$/.test(e);
