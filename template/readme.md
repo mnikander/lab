@@ -1,4 +1,4 @@
-# Question and Hypothesis
+# Question
 <!-- What am I figuring out? -->
 
 
@@ -6,13 +6,13 @@
 Date:   2026-0
 Status: 
 
-## Resources
-<!-- Where can I find relevant information? -->
-
-
-
 ## Hypothesis
 <!-- What do I think is going to happen? -->
+
+
+
+## Resources
+<!-- Where can I find relevant information? -->
 
 
 
