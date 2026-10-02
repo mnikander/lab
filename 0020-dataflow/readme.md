@@ -124,7 +124,7 @@ It makes program concerns more intertwined, so it makes it more complex to reaso
 - loops can be tricky to handle
 - the lattice needs to differentiate between "bottom" and "undefined" so that back-edges can be processed directly
 - "bottom" must act like a unit element in a join, when joined with something else, the result is that something else
-- when a block has been processed, then all remaining "bottom" entries _must_ be set to "undefined" to signal that we know we didn't have the definition in this block, so that joining of blocks functions correctly (this was a major source of confusion)
+- after a block has been processed, all remaining "bottom" entries _must_ be set to "undefined" to signal that this block definitely _does not_ contain the definition, so that joining of blocks functions correctly (this was a major source of confusion)
 
 
 
