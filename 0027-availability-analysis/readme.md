@@ -47,29 +47,32 @@ deno test
 
 <!-- What did I do? -->
 
-- [ ] define a Graph type
-- [ ] define a Lattice type for the program state
-- [ ] define a Lattice type for the resource state
-- [ ] define an encoding for the transfer function
-- [ ] implement join operation for program states
+- [x] define a Graph type
+- [x] define a Lattice type for the program state
+- [x] define a Lattice type for the resource state
+- [x] implement join operation for program states
+- [x] define an encoding for the transfer function
 - [ ] implement the propagation worklist algorithm
 - [ ] select several interesting cases from the MIR test-cases (control flow
       loops, diamonds, splits, etc)
 - [ ] hand code the control flow graphs for the examples
 - [ ] hand code the transfer functions for the examples
 
-### Transistion Function
+### Transition Function
 
 To implement the `block_transition` function, a few things are needed.
 - `variable_transition` function
-- `block_transition` which takes the block state, and maps each variable state in the vector to it's new variable state, to produce the updated block state
+- `block_transition` which takes the block state, and maps each variable state in the vector to its new variable state, to produce the updated block state
 
-The `variable_transition` function can be implemented as a closure: `(is_defined, is_dropped) => ((variable_state) => variable_state)`.
+The `variable_transition` function could be implemented as a closure: `(is_defined, is_dropped) => ((variable_state) => variable_state)`.
 I can then create a vector of such closures, one for each variable in the IR function.
-The `block_transition` function applies a map over its variable states, by applying those individual variable transistion functions.
+
+Alternatively, the block transition function can take an array of a `[boolean, boolean]` pair.
+This array has one entry for each variable, which encodes if the variable is defined and/or dropped in that block.
+The `block_transition` function applies a map over its variable states, by applying the variable transition function with those booleans.
 This is the block transition function, for one block.
-I need to repeat this process for each block, so that I have an array of block transition functions.
-The worklist algorithm over the CFG graph uses this array of block transistion functions.
+I need to store one such array of boolean-pairs, for each block.
+The worklist algorithm over the CFG graph uses this array to update the block states.
 
 ### Block join function
 

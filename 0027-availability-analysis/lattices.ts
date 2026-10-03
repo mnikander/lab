@@ -26,10 +26,10 @@ function is_known(b: BlockState): b is Known {
 //              Undefined
 //
 export type VariableState =
-  | "Undefined"
-  | "Available"
+  | "Ambiguous"
   | "Destroyed"
-  | "Ambiguous";
+  | "Available"
+  | "Undefined";
 
 export function join_block(left: BlockState, right: BlockState): BlockState {
   if (is_bottom(left) && is_bottom(right)) {
