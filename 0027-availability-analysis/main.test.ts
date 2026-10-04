@@ -10,7 +10,7 @@ const cfg_one: Graph = [
     // @entry:
     pred: [],
     succ: [],
-  }
+  },
 ];
 
 const cfg_two: Graph = [
@@ -96,7 +96,7 @@ describe("fixed-point of empty blocks", () => {
     // This prototype does not enforce this SSA property, however.
     expect(result).toEqual(expected);
   });
-  
+
   it("two blocks", () => {
     const ops: BlockOperations[] = [[], []];
     const result: BlockState[] = fixed_point(cfg_two, ops);
@@ -114,7 +114,12 @@ describe("fixed-point of empty blocks", () => {
   it("diamond blocks", () => {
     const ops: BlockOperations[] = [[], [], [], []];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []], ["Known", []]];
+    const expected: BlockState[] = [
+      ["Bottom"],
+      ["Known", []],
+      ["Known", []],
+      ["Known", []],
+    ];
     expect(result).toEqual(expected);
   });
 
@@ -122,6 +127,30 @@ describe("fixed-point of empty blocks", () => {
     const ops: BlockOperations[] = [[], [], []];
     const result: BlockState[] = fixed_point(cfg_loop, ops);
     const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    expect(result).toEqual(expected);
+  });
+});
+
+describe("fixed-point of blocks with variables", () => {
+  it("two blocks", () => {
+    const ops: BlockOperations[] = [[
+      [false, false],
+      [false, true],
+      [true, false],
+      [true, true],
+    ], [ // do nothing in the 2nd block, it won't affect the input of the 2nd block anyway
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+    ]];
+    const result: BlockState[] = fixed_point(cfg_two, ops);
+    const expected: BlockState[] = [["Bottom"], ["Known", [
+      "Undefined",
+      "Ambiguous",
+      "Available",
+      "Destroyed",
+    ]]];
     expect(result).toEqual(expected);
   });
 });
