@@ -196,12 +196,242 @@ describe("fixed-point of blocks with variables", () => {
     expect(result).toEqual(expected);
   });
 
-  it.skip("diamond blocks", () => {
-    const ops: BlockOperations[] = [[], [], [], []];
+  it("diamond blocks", () => {
+    // a variable can be defined in blocks 0, 1, 2, 3, or never -- that's 5 possibilities
+    // a variable can be dropped in blocks 0, 1, 2, 3, or never -- that's 5 possibilities
+    // that means a total of 5x5=25 variables are needed to exhaustively test the options
+    const ops: BlockOperations[] = [[
+      // transfers which happen in block 0:
+      // defined in block 0:
+      [true, true],
+      [true, false],
+      [true, false],
+      [true, false],
+      [true, false],
+      // defined in block 1:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 2:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 3:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // never defined:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+    ], [
+      // transfers which happen in block 1:
+      // defined in block 0:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 1:
+      [true, false],
+      [true, true],
+      [true, false],
+      [true, false],
+      [true, false],
+      // defined in block 2:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 3:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      // never defined:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+    ], [
+      // transfers which happen in block 2:
+      // defined in block 0:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      // defined in block 1:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      // defined in block 2:
+      [true, false],
+      [true, false],
+      [true, true],
+      [true, false],
+      [true, false],
+      // defined in block 3:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      // never defined:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+    ], [
+      // transfers which happen in block 3:
+      // defined in block 0:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      // defined in block 1:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      // defined in block 2:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      // defined in block 3:
+      [true, false],
+      [true, false],
+      [true, false],
+      [true, true],
+      [true, false],
+      // never defined:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+    ]];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []], [
+    const expected: BlockState[] = [["Bottom"], [
       "Known",
-      [],
+      [ // variable states at BEFORE entering block 1:
+        // defined in block 0:
+        "Destroyed",
+        "Available",
+        "Available",
+        "Available",
+        "Available",
+        // defined in block 1:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // defined in block 2:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // defined in block 3:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // never defined:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+      ],
+    ], [
+      "Known",
+      [ // variable states at BEFORE entering block 2:
+        // defined in block 0:
+        "Destroyed",
+        "Available",
+        "Available",
+        "Available",
+        "Available",
+        // defined in block 1:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // defined in block 2:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // defined in block 3:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        // never defined:
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+        "Undefined",
+      ],
+    ], [
+      "Known",
+      [ // variable states at BEFORE entering block 3:
+        // defined in block 0:
+        "Destroyed",
+        "Ambiguous",
+        "Ambiguous",
+        "Available",
+        "Available",
+        // defined in block 1:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        // defined in block 2:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        // defined in block 3:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        // never defined:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+      ],
     ]];
     expect(result).toEqual(expected);
   });
