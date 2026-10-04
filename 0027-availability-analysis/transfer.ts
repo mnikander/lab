@@ -2,11 +2,11 @@
 
 import { BlockState, VariableState } from "./lattices.ts";
 
-export type VariableOps = [defined: boolean, dropped: boolean];
+export type BlockOperations = [defined: boolean, dropped: boolean][];
 
 export function block_transition(
   block_state: BlockState,
-  transitions: VariableOps[],
+  transitions: BlockOperations,
 ): BlockState {
   let updated: VariableState[] = [];
 
