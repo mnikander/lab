@@ -138,11 +138,11 @@ describe("fixed-point of blocks with variables", () => {
       [false, true],
       [true, false],
       [true, true],
-    ], [ // do nothing in the 2nd block, it won't affect the input of the 2nd block anyway
-      [false, false],
-      [false, false],
-      [false, false],
-      [false, false],
+    ], [ // whatever happens in the 2nd block, should not effect the input-state of the 2nd block
+      [false, true], // should do nothing to the test result
+      [false, true], // should do nothing to the test result
+      [false, true], // should do nothing to the test result
+      [false, true], // should do nothing to the test result
     ]];
     const result: BlockState[] = fixed_point(cfg_two, ops);
     const expected: BlockState[] = [["Bottom"], ["Known", [
