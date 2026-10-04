@@ -108,6 +108,7 @@ where:
 
 <!-- What did I learn? -->
 - Learning about JavaScript/TypeScript: Range-based for-loops, i.e. `for (let id of worklist)`, operate on the container correctly even if push_back is called during the iteration
+- A `return` instruction cannot be modelled as a regular drop. A 'return' instruction drops everything which has not yet been dropped. It must not cause a double-drop error though for variables which were dropped explicitly sometime before the return statement.
 
 ## Future Work
 
