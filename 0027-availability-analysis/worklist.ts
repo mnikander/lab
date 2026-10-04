@@ -20,7 +20,10 @@ export function fixed_point(cfg: Graph, ops: BlockOperations[]): BlockState[] {
 
   const states: BlockState[] = new Array(cfg.length);
   states.fill(["Bottom"]);
-  const worklist: Array<number> = Array.from({ length: cfg.length }, (_, i) => i);
+  const worklist: Array<number> = Array.from(
+    { length: cfg.length },
+    (_, i) => i,
+  );
   const workset: Set<number> = new Set(worklist); // helps avoid enqueing stuff which is already in the worklist
 
   for (const current of worklist) {
@@ -44,7 +47,11 @@ export function fixed_point(cfg: Graph, ops: BlockOperations[]): BlockState[] {
 }
 
 // iff the worklist/workset do NOT contain the 'element', then add the element to the worklist and workset
-function enqueue(element: number, worklist: Array<number>, workset: Set<number>) {
+function enqueue(
+  element: number,
+  worklist: Array<number>,
+  workset: Set<number>,
+) {
   if (!workset.has(element)) {
     worklist.push(element);
     workset.add(element);

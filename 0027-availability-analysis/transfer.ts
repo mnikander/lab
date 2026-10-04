@@ -21,7 +21,7 @@ export function block_transfer(
   updated = updated.map((vs, i) =>
     variable_transfer(vs, transfers[i][0], transfers[i][1])
   );
-  
+
   return ["Known", updated];
 }
 
