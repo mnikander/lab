@@ -4,14 +4,14 @@ import { BlockState, VariableState } from "./lattices.ts";
 
 export type BlockOperations = [defined: boolean, dropped: boolean][];
 
-export function block_transition(
+export function block_transfer(
   block_state: BlockState,
-  transitions: BlockOperations,
+  transfers: BlockOperations,
 ): BlockState {
   let updated: VariableState[] = [];
 
   if (block_state[0] === "Bottom") {
-    const count: number = transitions.length;
+    const count: number = transfers.length;
     updated = Array<VariableState>(count);
     updated.fill("Undefined");
   } else {
@@ -19,18 +19,18 @@ export function block_transition(
   }
 
   updated = updated.map((vs, i) =>
-    variable_transition(vs, transitions[i][0], transitions[i][1])
+    variable_transfer(vs, transfers[i][0], transfers[i][1])
   );
   
   return ["Known", updated];
 }
 
-function variable_transition(
+function variable_transfer(
   vs: VariableState,
   defined: boolean,
   destroyed: boolean,
 ): VariableState {
-  // in-place update of `vs` is OK, since the whole VariableState-array is cloned in `block_transition()`
+  // in-place update of `vs` is OK, since the whole VariableState-array is cloned in `block_transfer()`
   if (defined) {
     vs = apply_define(vs);
   }
@@ -51,7 +51,7 @@ function apply_define(vs: VariableState): VariableState {
     case "Undefined":
       return "Available";
     default:
-      throw Error("Bug: invalid transition in 'apply_define'");
+      throw Error("Bug: invalid transfer in 'apply_define'");
   }
 }
 
@@ -66,6 +66,6 @@ function apply_destroy(vs: VariableState): VariableState {
     case "Undefined":
       return "Ambiguous"; // error: drop-before-define
     default:
-      throw Error("Bug: invalid transition in 'apply_destroy'");
+      throw Error("Bug: invalid transfer in 'apply_destroy'");
   }
 }

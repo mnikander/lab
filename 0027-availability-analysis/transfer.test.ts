@@ -2,10 +2,10 @@
 
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import { block_transition } from "./transfer.ts";
-import { BlockState, VariableState } from "./lattices.ts";
+import { block_transfer } from "./transfer.ts";
+import { BlockState } from "./lattices.ts";
 
-describe("block_transition", () => {
+describe("block_transfer", () => {
   it("bottom -> known", () => {
     const initial: BlockState = ["Bottom"];
     const expected: BlockState = ["Known", [
@@ -14,13 +14,13 @@ describe("block_transition", () => {
       "Available",
       "Destroyed",
     ]];
-    const transitions: [boolean, boolean][] = [
+    const transfers: [boolean, boolean][] = [
       [false, false],
       [false, true],
       [true, false],
       [true, true],
     ];
-    expect(block_transition(initial, transitions)).toEqual(expected);
+    expect(block_transfer(initial, transfers)).toEqual(expected);
   });
 
   it("known -> known", () => {
@@ -42,7 +42,7 @@ describe("block_transition", () => {
       "Undefined",
       "Undefined",
     ]];
-    const transitions: [boolean, boolean][] = [
+    const transfers: [boolean, boolean][] = [
       [false, false],
       [false, true],
       [true, false],
@@ -60,7 +60,7 @@ describe("block_transition", () => {
       [true, false],
       [true, true],
     ];
-    const expected: BlockState = ["Known",[
+    const expected: BlockState = ["Known", [
       "Ambiguous",
       "Ambiguous",
       "Available",
@@ -78,6 +78,6 @@ describe("block_transition", () => {
       "Available",
       "Destroyed",
     ]];
-    expect(block_transition(initial, transitions)).toEqual(expected);
+    expect(block_transfer(initial, transfers)).toEqual(expected);
   });
 });

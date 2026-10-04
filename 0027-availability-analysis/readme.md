@@ -59,19 +59,19 @@ deno test
 - [ ] hand code the control flow graphs for the examples
 - [ ] hand code the transfer functions for the examples
 
-### Transition Function
+### Transfer Function
 
-To implement the `block_transition` function, a few things are needed.
-- `variable_transition` function
-- `block_transition` which takes the block state, and maps each variable state in the vector to its new variable state, to produce the updated block state
+To implement the `block_transfer` function, a few things are needed.
+- `variable_transfer` function
+- `block_transfer` which takes the block state, and maps each variable state in the vector to its new variable state, to produce the updated block state
 
-The `variable_transition` function could be implemented as a closure: `(is_defined, is_dropped) => ((variable_state) => variable_state)`.
+The `variable_transfer` function could be implemented as a closure: `(is_defined, is_dropped) => ((variable_state) => variable_state)`.
 I can then create a vector of such closures, one for each variable in the IR function.
 
-Alternatively, the block transition function can take an array of a `[boolean, boolean]` pair.
+Alternatively, the block transfer function can take an array of a `[boolean, boolean]` pair.
 This array has one entry for each variable, which encodes if the variable is defined and/or dropped in that block.
-The `block_transition` function applies a map over its variable states, by applying the variable transition function with those booleans.
-This is the block transition function, for one block.
+The `block_transfer` function applies a map over its variable states, by applying the variable transfer function with those booleans.
+This is the block transfer function, for one block.
 I need to store one such array of boolean-pairs, for each block.
 The worklist algorithm over the CFG graph uses this array to update the block states.
 
