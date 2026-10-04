@@ -26,6 +26,24 @@ const cfg_two: Graph = [
   },
 ];
 
+const cfg_three: Graph = [
+  {
+    // @entry:
+    pred: [],
+    succ: [1],
+  },
+  {
+    // @middle:
+    pred: [0],
+    succ: [2],
+  },
+  {
+    // @final:
+    pred: [1],
+    succ: [],
+  },
+];
+
 const cfg_split: Graph = [
   {
     // @entry:
@@ -104,6 +122,13 @@ describe("fixed-point of empty blocks", () => {
     expect(result).toEqual(expected);
   });
 
+  it("three blocks", () => {
+    const ops: BlockOperations[] = [[], [], []];
+    const result: BlockState[] = fixed_point(cfg_three, ops);
+    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    expect(result).toEqual(expected);
+  });
+
   it("split blocks", () => {
     const ops: BlockOperations[] = [[], [], []];
     const result: BlockState[] = fixed_point(cfg_split, ops);
@@ -151,6 +176,77 @@ describe("fixed-point of blocks with variables", () => {
       "Available",
       "Destroyed",
     ]]];
+    expect(result).toEqual(expected);
+  });
+
+  it("three blocks", () => {
+    const ops: BlockOperations[] = [
+      [ // first block
+        [true, true],
+        [true, false],
+        [true, false],
+        [false, true],
+        [false, false],
+        [false, false],
+        [false, true],
+        [false, false],
+        [false, false],
+      ],
+      [ // second block
+        [false, false],
+        [false, true],
+        [false, false],
+        [true, false],
+        [true, true],
+        [true, false],
+        [false, false],
+        [false, true],
+        [false, false],
+      ],
+      [ // third block does nothing, only serves to observe the results of the 2nd block
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+        [false, false],
+      ],
+    ];
+    const result: BlockState[] = fixed_point(cfg_three, ops);
+    const expected: BlockState[] = [
+      ["Bottom"],
+      [
+        "Known",
+        [
+          "Destroyed",
+          "Available",
+          "Available",
+          "Ambiguous",
+          "Undefined",
+          "Undefined",
+          "Ambiguous",
+          "Undefined",
+          "Undefined",
+        ],
+      ],
+      [
+        "Known",
+        [
+          "Destroyed",
+          "Destroyed",
+          "Available",
+          "Available", // Note: this one is technically 'Ambiguous', but since real programs are in SSA form, the analysis allows a 'define' to reset any state, to handle loops correctly
+          "Destroyed",
+          "Available",
+          "Ambiguous",
+          "Ambiguous",
+          "Undefined",
+        ],
+      ],
+    ];
     expect(result).toEqual(expected);
   });
 
