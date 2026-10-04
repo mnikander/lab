@@ -53,11 +53,12 @@ deno test
 - [x] implement join operation for program states
 - [x] define an encoding for the transfer function
 - [x] test the `block_transfer` function
-- [ ] implement the propagation worklist algorithm
-- [ ] select several interesting cases from the MIR test-cases (control flow
+- [x] implement the propagation worklist algorithm
+- [x] select several interesting cases from the MIR test-cases (control flow
       loops, diamonds, splits, etc)
-- [ ] hand code the control flow graphs for the examples
-- [ ] hand code the transfer functions for the examples
+- [x] hand code the control flow graphs for the examples
+- [x] hand code the transfer functions for the examples
+- [ ] search for examples where the current algorithm allows recovery from `Ambiguous` to `Available`, but where recovery should be illegal -- this may require a graph with _two_ back edges
 
 ### Transfer Function
 
@@ -110,10 +111,68 @@ where:
 - Learning about JavaScript/TypeScript: Range-based for-loops, i.e. `for (let id of worklist)`, operate on the container correctly even if push_back is called during the iteration
 - A `return` instruction cannot be modelled as a regular drop. A 'return' instruction drops everything which has not yet been dropped. It must not cause a double-drop error though for variables which were dropped explicitly sometime before the return statement.
 
+### Joining variables in loops
+Initially, it seemed like the following implementation of the `join_variable` function was incorrect:
+```ts
+export function join_variable(
+  left: VariableState,
+  right: VariableState,
+): VariableState {
+  if (left === right) {
+    return structuredClone(left);
+  } else {
+    // NOTE: variables defined in a loop wind up ambiguous
+    return "Ambiguous";
+  }
+}
+```
+Given we have a CFG which consists of an entry block and a loop block:
+```
+    Entry
+      |
+     Loop <--,
+      |      |
+      |------'
+      |
+    Final
+```
+The in-set at the loop-block will be a join of whatever comes out of the Entry block and whatever comes out of the Loop block.
+Say we have a variable `v1` which is undefined in the Entry block, and is first defined in the Loop block.
+The state of `v1`, in the **in-set** of the Loop block, is thus a join of `Undefined` and `Available`, which is `Ambiguous`.
+Interestingly, the Final block has the guaranty that we passed through the Loop block at least once.
+This means that the state of `v1` actually recovers from `Ambiguous` in the in-set of Loop to `Available` in the in-set of the Final block.
+It's up to the line-by-line analysis to work out what is allowed and what isn't, _inside_ the Loop block.
+I wonder if this 'recovery' from `Ambiguous` to `Available` jeopardizes the complexity bounds and termination guaranty of the algorithm.
+
+Ah, I think I get it: `Ambiguous` is too coarse. I need the power-set here.
+At the beginning of Loop, `v1` is in a superposition of `(Undefined, Defined)`.
+Passing through the Loop, it encounters a definition and ascends to `(Defined, Defined)`.
+That is equal to just `Defined`.
+Using only one `Ambiguous` state in the Lattice, obscures the fact there are actually several kinds of superpositions, some of which can make a recovery.
+
+Somewhat strangely, the present implementation seems to work though.
+Why is that?
+Are there cases where the present implementation breaks?
+I think such cases should exist.
+Perhaps with several back edges which disargree?
+Perhaps they could create a case where recovery is not allowed, but the present implementation would allow a recovery from `Ambiguous` to `Available`/`Destroyed`.
+
 ## Future Work
 
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
+
+### Termination and Define-in-Loop
+
+Allowing a variable definition inside a loop block is essential.
+Having the `define` reset the state of the variable allows 'define-use-drop' patterns inside the loop.
+Multiple defines, as a result of looping, should also not be an error.
+Thus it is important
+
+Does resetting the variable state via a define inside a loop jeopardize the termination / complexity guaranty of the worklist algorithm?
+The code is in SSA form, which guarantees there is only one definition site in the code.
+Does this property protect the complexity / termination guarantees of the analysis?
+
 
 ---
 
