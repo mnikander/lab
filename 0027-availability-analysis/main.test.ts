@@ -79,8 +79,13 @@ const cfg_diamond: Graph = [
     succ: [3],
   },
   {
-    // @final:
+    // @merge:
     pred: [1, 2],
+    succ: [4],
+  },
+  {
+    // @final:
+    pred: [3],
     succ: [],
   },
 ];
@@ -137,10 +142,11 @@ describe("fixed-point of empty blocks", () => {
   });
 
   it("diamond blocks", () => {
-    const ops: BlockOperations[] = [[], [], [], []];
+    const ops: BlockOperations[] = [[], [], [], [], []];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
     const expected: BlockState[] = [
       ["Bottom"],
+      ["Known", []],
       ["Known", []],
       ["Known", []],
       ["Known", []],
@@ -424,6 +430,38 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
       [false, true],
       [false, false],
+    ], [
+      // no transfers happen in block 4, it is only to check the results of block 3
+      // defined in block 0:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 1:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 2:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // defined in block 3:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // never defined:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
     ]];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
     const expected: BlockState[] = [["Bottom"], [
@@ -526,6 +564,40 @@ describe("fixed-point of blocks with variables", () => {
         "Ambiguous",
         "Ambiguous",
         "Undefined",
+        "Undefined",
+      ],
+    ], [
+      "Known",
+      [ // variable states at BEFORE entering block 4, i.e. after completing block 3:
+        // defined in block 0:
+        "Destroyed",
+        "Ambiguous",
+        "Ambiguous",
+        "Destroyed",
+        "Available",
+        // defined in block 1:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        // defined in block 2:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        // defined in block 3:
+        "Available",
+        "Available",
+        "Available",
+        "Destroyed",
+        "Available",
+        // never defined:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
         "Undefined",
       ],
     ]];
