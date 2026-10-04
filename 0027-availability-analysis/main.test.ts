@@ -195,4 +195,21 @@ describe("fixed-point of blocks with variables", () => {
     ];
     expect(result).toEqual(expected);
   });
+
+  it.skip("diamond blocks", () => {
+    const ops: BlockOperations[] = [[], [], [], []];
+    const result: BlockState[] = fixed_point(cfg_diamond, ops);
+    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []], [
+      "Known",
+      [],
+    ]];
+    expect(result).toEqual(expected);
+  });
+
+  it.skip("loop blocks", () => {
+    const ops: BlockOperations[] = [[], [], []];
+    const result: BlockState[] = fixed_point(cfg_loop, ops);
+    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    expect(result).toEqual(expected);
+  });
 });
