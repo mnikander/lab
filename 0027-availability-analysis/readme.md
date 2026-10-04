@@ -52,6 +52,7 @@ deno test
 - [x] define a Lattice type for the resource state
 - [x] implement join operation for program states
 - [x] define an encoding for the transfer function
+- [x] test the `block_transfer` function
 - [ ] implement the propagation worklist algorithm
 - [ ] select several interesting cases from the MIR test-cases (control flow
       loops, diamonds, splits, etc)
