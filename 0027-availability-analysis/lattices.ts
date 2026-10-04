@@ -23,7 +23,7 @@ export function is_equal(left: BlockState, right: BlockState): boolean {
   if (left[0] === "Bottom" && right[0] === "Bottom") {
     return true;
   } else if (left[0] === "Known" && right[0] === "Known") {
-    assert(left[0].length !== right[0].length, "Arrays must be of equal length.");
+    assert(left[0].length === right[0].length, "Arrays must be of equal length.");
     const mismatch: undefined | VariableState = left[1].find((_,i)=>left[1][i] !== right[1][i]);
     return mismatch === undefined;
   } else {
@@ -55,17 +55,12 @@ export function join_block(left: BlockState, right: BlockState): BlockState {
   } else if (is_known(left) && is_known(right)) {
     const left_vector: VariableState[] = left[1];
     const right_vector: VariableState[] = right[1];
-    if (left_vector.length !== right_vector.length) {
-      throw Error(
-        `Vectors of variables must be of the same length: ${left_vector.length} != ${right_vector.length}`,
-      );
-    } else {
-      // element-wise join of variables
-      const result: VariableState[] = left_vector.map(function (_vs, i) {
-        return join_variable(left_vector[i], right_vector[i]);
-      });
-      return ["Known", result];
-    }
+    assert(left_vector.length === right_vector.length,`Vectors of variables must be of the same length: ${left_vector.length} != ${right_vector.length}`);
+    // element-wise join of variables
+    const result: VariableState[] = left_vector.map(function (_vs, i) {
+      return join_variable(left_vector[i], right_vector[i]);
+    });
+    return ["Known", result];
   } else {
     return left as never;
   }
