@@ -102,8 +102,13 @@ const cfg_loop: Graph = [
     succ: [1, 2],
   },
   {
-    // @final:
+    // @after:
     pred: [1],
+    succ: [3],
+  },
+  {
+    // @final:
+    pred: [2],
     succ: [],
   },
 ];
@@ -155,9 +160,12 @@ describe("fixed-point of empty blocks", () => {
   });
 
   it("loop blocks", () => {
-    const ops: BlockOperations[] = [[], [], []];
+    const ops: BlockOperations[] = [[], [], [], []];
     const result: BlockState[] = fixed_point(cfg_loop, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []], [
+      "Known",
+      [],
+    ]];
     expect(result).toEqual(expected);
   });
 });
@@ -304,25 +312,25 @@ describe("fixed-point of blocks with variables", () => {
     // that means a total of 5x5=25 variables are needed to exhaustively test the options
     const ops: BlockOperations[] = [[
       // transfers which happen in block 0:
-      // defined in block 0:
+      // variables which are defined in block 0:
       [true, true],
       [true, false],
       [true, false],
       [true, false],
       [true, false],
-      // defined in block 1:
+      // variables which are defined in block 1:
       [false, true],
       [false, false],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 2:
+      // variables which are defined in block 2:
       [false, true],
       [false, false],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 3:
+      // variables which are defined in block 3:
       [false, true],
       [false, false],
       [false, false],
@@ -336,25 +344,25 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
     ], [
       // transfers which happen in block 1:
-      // defined in block 0:
+      // variables which are defined in block 0:
       [false, false],
       [false, true],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 1:
+      // variables which are defined in block 1:
       [true, false],
       [true, true],
       [true, false],
       [true, false],
       [true, false],
-      // defined in block 2:
+      // variables which are defined in block 2:
       [false, false],
       [false, true],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 3:
+      // variables which are defined in block 3:
       [false, false],
       [false, true],
       [false, false],
@@ -368,25 +376,25 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
     ], [
       // transfers which happen in block 2:
-      // defined in block 0:
+      // variables which are defined in block 0:
       [false, false],
       [false, false],
       [false, true],
       [false, false],
       [false, false],
-      // defined in block 1:
+      // variables which are defined in block 1:
       [false, false],
       [false, false],
       [false, true],
       [false, false],
       [false, false],
-      // defined in block 2:
+      // variables which are defined in block 2:
       [true, false],
       [true, false],
       [true, true],
       [true, false],
       [true, false],
-      // defined in block 3:
+      // variables which are defined in block 3:
       [false, false],
       [false, false],
       [false, true],
@@ -400,25 +408,25 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
     ], [
       // transfers which happen in block 3:
-      // defined in block 0:
+      // variables which are defined in block 0:
       [false, false],
       [false, false],
       [false, false],
       [false, true],
       [false, false],
-      // defined in block 1:
+      // variables which are defined in block 1:
       [false, false],
       [false, false],
       [false, false],
       [false, true],
       [false, false],
-      // defined in block 2:
+      // variables which are defined in block 2:
       [false, false],
       [false, false],
       [false, false],
       [false, true],
       [false, false],
-      // defined in block 3:
+      // variables which are defined in block 3:
       [true, false],
       [true, false],
       [true, false],
@@ -432,25 +440,25 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
     ], [
       // no transfers happen in block 4, it is only to check the results of block 3
-      // defined in block 0:
+      // variables which are defined in block 0:
       [false, false],
       [false, false],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 1:
+      // variables which are defined in block 1:
       [false, false],
       [false, false],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 2:
+      // variables which are defined in block 2:
       [false, false],
       [false, false],
       [false, false],
       [false, false],
       [false, false],
-      // defined in block 3:
+      // variables which are defined in block 3:
       [false, false],
       [false, false],
       [false, false],
@@ -467,25 +475,25 @@ describe("fixed-point of blocks with variables", () => {
     const expected: BlockState[] = [["Bottom"], [
       "Known",
       [ // variable states at BEFORE entering block 1:
-        // defined in block 0:
+        // variables which are defined in block 0:
         "Destroyed",
         "Available",
         "Available",
         "Available",
         "Available",
-        // defined in block 1:
+        // variables which are defined in block 1:
         "Ambiguous",
         "Undefined",
         "Undefined",
         "Undefined",
         "Undefined",
-        // defined in block 2:
+        // variables which are defined in block 2:
         "Ambiguous",
         "Undefined",
         "Undefined",
         "Undefined",
         "Undefined",
-        // defined in block 3:
+        // variables which are defined in block 3:
         "Ambiguous",
         "Undefined",
         "Undefined",
@@ -501,25 +509,25 @@ describe("fixed-point of blocks with variables", () => {
     ], [
       "Known",
       [ // variable states at BEFORE entering block 2:
-        // defined in block 0:
+        // variables which are defined in block 0:
         "Destroyed",
         "Available",
         "Available",
         "Available",
         "Available",
-        // defined in block 1:
+        // variables which are defined in block 1:
         "Ambiguous",
         "Undefined",
         "Undefined",
         "Undefined",
         "Undefined",
-        // defined in block 2:
+        // variables which are defined in block 2:
         "Ambiguous",
         "Undefined",
         "Undefined",
         "Undefined",
         "Undefined",
-        // defined in block 3:
+        // variables which are defined in block 3:
         "Ambiguous",
         "Undefined",
         "Undefined",
@@ -535,25 +543,25 @@ describe("fixed-point of blocks with variables", () => {
     ], [
       "Known",
       [ // variable states at BEFORE entering block 3:
-        // defined in block 0:
+        // variables which are defined in block 0:
         "Destroyed",
         "Ambiguous",
         "Ambiguous",
         "Available",
         "Available",
-        // defined in block 1:
+        // variables which are defined in block 1:
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
-        // defined in block 2:
+        // variables which are defined in block 2:
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
-        // defined in block 3:
+        // variables which are defined in block 3:
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
@@ -569,25 +577,25 @@ describe("fixed-point of blocks with variables", () => {
     ], [
       "Known",
       [ // variable states at BEFORE entering block 4, i.e. after completing block 3:
-        // defined in block 0:
+        // variables which are defined in block 0:
         "Destroyed",
         "Ambiguous",
         "Ambiguous",
         "Destroyed",
         "Available",
-        // defined in block 1:
+        // variables which are defined in block 1:
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
-        // defined in block 2:
+        // variables which are defined in block 2:
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
         "Ambiguous",
-        // defined in block 3:
+        // variables which are defined in block 3:
         "Available",
         "Available",
         "Available",
@@ -604,10 +612,170 @@ describe("fixed-point of blocks with variables", () => {
     expect(result).toEqual(expected);
   });
 
-  it.skip("loop blocks", () => {
-    const ops: BlockOperations[] = [[], [], []];
+  it("loop blocks", () => {
+    const ops: BlockOperations[] = [[
+      // block 0
+      // variables which are defined in block 0:
+      [true, true],
+      [true, false],
+      [true, false],
+      [true, false],
+      // variables which are defined in block 1:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 2:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 3:
+      [false, true],
+      [false, false],
+      [false, false],
+      [false, false],
+    ], [
+      // block 1
+      // variables which are defined in block 0:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 1:
+      [true, false],
+      [true, true],
+      [true, false],
+      [true, false],
+      // variables which are defined in block 2:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 3:
+      [false, false],
+      [false, true],
+      [false, false],
+      [false, false],
+    ], [
+      // block 2
+      // variables which are defined in block 0:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      // variables which are defined in block 1:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+      // variables which are defined in block 2:
+      [true, false],
+      [true, false],
+      [true, true],
+      [true, false],
+      // variables which are defined in block 3:
+      [false, false],
+      [false, false],
+      [false, true],
+      [false, false],
+    ], [
+      // block 3, do nothing, it is only to check the final results
+      // variables which are defined in block 0:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 1:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 2:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+      // variables which are defined in block 3:
+      [false, false],
+      [false, false],
+      [false, false],
+      [false, false],
+    ]];
     const result: BlockState[] = fixed_point(cfg_loop, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    const expected: BlockState[] = [
+      // block 0, in-set:
+      ["Bottom"],
+      // block 1, in-set -- this is the loop block, so it is a join of the block-0 and the block-1 out-sets:
+      ["Known", [
+        // variables which are defined in block 0:
+        "Destroyed",
+        "Ambiguous",
+        "Available",
+        "Available",
+        // variables which are defined in block 1:
+        "Ambiguous", // join of the out-states of block 0 and 1 results in 'Ambiguous' at the start of block 1
+        "Ambiguous", // join of the out-states of block 0 and 1 results in 'Ambiguous' at the start of block 1
+        "Ambiguous", // join of the out-states of block 0 and 1 results in 'Ambiguous' at the start of block 1
+        "Ambiguous", // join of the out-states of block 0 and 1 results in 'Ambiguous' at the start of block 1
+        // variables which are defined in block 2:
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        // variables which are defined in block 3:
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+      ]],
+      // block 2, in-set:
+      ["Known", [
+        // variables which are defined in block 0:
+        "Destroyed",
+        "Ambiguous",
+        "Available",
+        "Available",
+        // variables which are defined in block 1:
+        "Available", // this state actually recovers from 'Ambiguous', when leaving the loop
+        "Destroyed", // this state actually recovers from 'Ambiguous', when leaving the loop
+        "Available", // this state actually recovers from 'Ambiguous', when leaving the loop
+        "Available", // this state actually recovers from 'Ambiguous', when leaving the loop
+        // variables which are defined in block 2:
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+        // variables which are defined in block 3:
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+        "Undefined",
+      ]],
+      // block 3, in-set:
+      ["Known", [
+        // variables which are defined in block 0:
+        "Destroyed",
+        "Ambiguous",
+        "Destroyed",
+        "Available",
+        // variables which are defined in block 1:
+        "Available",
+        "Destroyed",
+        "Destroyed",
+        "Available",
+        // variables which are defined in block 2:
+        "Available",
+        "Available",
+        "Destroyed",
+        "Available",
+        // variables which are defined in block 3:
+        "Ambiguous",
+        "Ambiguous",
+        "Ambiguous",
+        "Undefined",
+      ]],
+    ];
     expect(result).toEqual(expected);
   });
 });
