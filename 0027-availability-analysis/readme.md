@@ -80,9 +80,34 @@ The worklist algorithm over the CFG graph uses this array to update the block st
 The worklist algorithm must join two block states, whenever there are multiple incoming CFG edges into a block.
 Perhaps the predecessors are useful here, or perhaps they are not needed because the new state and old state can always be joined, for each incoming edge individually.
 
+### Propagation Work List algorithm (Moller et al.)
+```
+procedure PropagationWorkListAlgorithm(t1 , ... , tn )
+  (x_1 , ... , x_n) := (⊥, ... , ⊥)
+  W := {v_1 , ... , v_n}
+  while W != ∅ do
+    v_i := W.removeNext()
+    y := t_v_i (x_i)
+    for each v_j ∈ dep(v_i) do
+      z := x_j ⊔ y
+      if x_j != z then
+        x_j := z
+        W.add(v_j)
+      end if
+    end for
+  end while
+  return (x_1 , ... , x_n)
+end procedure
+```
+where:
+- `x_i` is the BlockState at control-flow graph node V_i
+- `y` is the state at the end of the block, i.e. after applying the transfer function
+- `z` is `join(x_s, y)` for each successor block 's'
+
 ## Findings
 
 <!-- What did I learn? -->
+- Learning about JavaScript/TypeScript: Range-based for-loops, i.e. `for (let id of worklist)`, operate on the container correctly even if push_back is called during the iteration
 
 ## Future Work
 
