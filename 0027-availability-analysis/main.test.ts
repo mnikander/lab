@@ -138,7 +138,7 @@ describe("fixed-point of blocks with variables", () => {
       [false, true],
       [true, false],
       [true, true],
-    ], [ // whatever happens in the 2nd block, should not effect the input-state of the 2nd block
+    ], [ // whatever happens in the 2nd block, should not effect the **input** state of the 2nd block
       [false, true], // should do nothing to the test result
       [false, true], // should do nothing to the test result
       [false, true], // should do nothing to the test result
@@ -151,6 +151,48 @@ describe("fixed-point of blocks with variables", () => {
       "Available",
       "Destroyed",
     ]]];
+    expect(result).toEqual(expected);
+  });
+
+  it("split blocks", () => {
+    const ops: BlockOperations[] = [[
+      [false, false],
+      [false, true],
+      [true, false],
+      [true, true],
+    ], [ // whatever happens in the 2nd block, should not effect the test result
+      [false, true],
+      [false, true],
+      [false, true],
+      [false, true],
+    ], [ // whatever happens in the 3rd block, should not effect the test result
+      [false, true],
+      [false, true],
+      [false, true],
+      [false, true],
+    ]];
+    const result: BlockState[] = fixed_point(cfg_split, ops);
+    const expected: BlockState[] = [
+      ["Bottom"],
+      [
+        "Known",
+        [
+          "Undefined",
+          "Ambiguous",
+          "Available",
+          "Destroyed",
+        ],
+      ],
+      [
+        "Known",
+        [
+          "Undefined",
+          "Ambiguous",
+          "Available",
+          "Destroyed",
+        ],
+      ],
+    ];
     expect(result).toEqual(expected);
   });
 });
