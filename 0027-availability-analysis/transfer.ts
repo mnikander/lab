@@ -10,7 +10,7 @@ export function block_transfer(
 ): BlockState {
   let updated: VariableState[] = [];
 
-  if (block_state[0] === "Bottom") {
+  if (block_state[0] === "Unknown") {
     const count: number = transfers.length;
     updated = Array<VariableState>(count);
     updated.fill("Undefined");

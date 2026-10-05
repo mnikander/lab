@@ -117,10 +117,10 @@ describe("fixed-point of empty blocks", () => {
   it("one block", () => {
     const ops: BlockOperations[] = [[]];
     const result: BlockState[] = fixed_point(cfg_one, ops);
-    const expected: BlockState[] = [["Bottom"]];
+    const expected: BlockState[] = [["Unknown"]];
     // Note that since the 'Entry' block is not allowed to have incoming edges
     // in static single-assigment (SSA) form, the input block state of the entry
-    // block is _always_ "Bottom".
+    // block is _always_ "Unknown".
     // This prototype does not enforce this SSA property, however.
     expect(result).toEqual(expected);
   });
@@ -128,21 +128,21 @@ describe("fixed-point of empty blocks", () => {
   it("two blocks", () => {
     const ops: BlockOperations[] = [[], []];
     const result: BlockState[] = fixed_point(cfg_two, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []]];
+    const expected: BlockState[] = [["Unknown"], ["Known", []]];
     expect(result).toEqual(expected);
   });
 
   it("three blocks", () => {
     const ops: BlockOperations[] = [[], [], []];
     const result: BlockState[] = fixed_point(cfg_three, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    const expected: BlockState[] = [["Unknown"], ["Known", []], ["Known", []]];
     expect(result).toEqual(expected);
   });
 
   it("split blocks", () => {
     const ops: BlockOperations[] = [[], [], []];
     const result: BlockState[] = fixed_point(cfg_split, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []]];
+    const expected: BlockState[] = [["Unknown"], ["Known", []], ["Known", []]];
     expect(result).toEqual(expected);
   });
 
@@ -150,7 +150,7 @@ describe("fixed-point of empty blocks", () => {
     const ops: BlockOperations[] = [[], [], [], [], []];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
     const expected: BlockState[] = [
-      ["Bottom"],
+      ["Unknown"],
       ["Known", []],
       ["Known", []],
       ["Known", []],
@@ -162,7 +162,7 @@ describe("fixed-point of empty blocks", () => {
   it("loop blocks", () => {
     const ops: BlockOperations[] = [[], [], [], []];
     const result: BlockState[] = fixed_point(cfg_loop, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", []], ["Known", []], [
+    const expected: BlockState[] = [["Unknown"], ["Known", []], ["Known", []], [
       "Known",
       [],
     ]];
@@ -184,7 +184,7 @@ describe("fixed-point of blocks with variables", () => {
       [false, true], // should do nothing to the test result
     ]];
     const result: BlockState[] = fixed_point(cfg_two, ops);
-    const expected: BlockState[] = [["Bottom"], ["Known", [
+    const expected: BlockState[] = [["Unknown"], ["Known", [
       "Undefined",
       "Ambiguous",
       "Available",
@@ -231,7 +231,7 @@ describe("fixed-point of blocks with variables", () => {
     ];
     const result: BlockState[] = fixed_point(cfg_three, ops);
     const expected: BlockState[] = [
-      ["Bottom"],
+      ["Unknown"],
       [
         "Known",
         [
@@ -283,7 +283,7 @@ describe("fixed-point of blocks with variables", () => {
     ]];
     const result: BlockState[] = fixed_point(cfg_split, ops);
     const expected: BlockState[] = [
-      ["Bottom"],
+      ["Unknown"],
       [
         "Known",
         [
@@ -472,7 +472,7 @@ describe("fixed-point of blocks with variables", () => {
       [false, false],
     ]];
     const result: BlockState[] = fixed_point(cfg_diamond, ops);
-    const expected: BlockState[] = [["Bottom"], [
+    const expected: BlockState[] = [["Unknown"], [
       "Known",
       [ // variable states at BEFORE entering block 1:
         // variables which are defined in block 0:
@@ -705,7 +705,7 @@ describe("fixed-point of blocks with variables", () => {
     const result: BlockState[] = fixed_point(cfg_loop, ops);
     const expected: BlockState[] = [
       // block 0, in-set:
-      ["Bottom"],
+      ["Unknown"],
       // block 1, in-set -- this is the loop block, so it is a join of the block-0 and the block-1 out-sets:
       ["Known", [
         // variables which are defined in block 0:

@@ -7,7 +7,7 @@ import { BlockState } from "./lattices.ts";
 
 describe("block_transfer", () => {
   it("bottom -> known", () => {
-    const initial: BlockState = ["Bottom"];
+    const initial: BlockState = ["Unknown"];
     const expected: BlockState = ["Known", [
       "Undefined",
       "Ambiguous",

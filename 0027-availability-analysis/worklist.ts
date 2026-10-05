@@ -19,7 +19,7 @@ export function fixed_point(cfg: Graph, ops: BlockOperations[]): BlockState[] {
   }
 
   const states: BlockState[] = new Array(cfg.length);
-  states.fill(["Bottom"]);
+  states.fill(["Unknown"]);
   const worklist: Array<number> = Array.from(
     { length: cfg.length },
     (_, i) => i,

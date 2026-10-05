@@ -6,21 +6,21 @@ import { assert } from "@std/assert";
 //
 //               Known*
 //                 |
-//               Bottom
+//              Unknown
 //
-export type BlockState = Bottom | Known;
-type Bottom = ["Bottom"];
+export type BlockState = Unknown | Known;
+type Unknown = ["Unknown"];
 type Known = ["Known", VariableState[]];
 
-function is_bottom(b: BlockState): b is Bottom {
-  return b[0] === "Bottom";
+function is_bottom(b: BlockState): b is Unknown {
+  return b[0] === "Unknown";
 }
 function is_known(b: BlockState): b is Known {
   return b[0] === "Known";
 }
 
 export function is_equal(left: BlockState, right: BlockState): boolean {
-  if (left[0] === "Bottom" && right[0] === "Bottom") {
+  if (left[0] === "Unknown" && right[0] === "Unknown") {
     return true;
   } else if (left[0] === "Known" && right[0] === "Known") {
     assert(
