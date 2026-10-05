@@ -58,7 +58,6 @@ deno test
       loops, diamonds, splits, etc)
 - [x] hand code the control flow graphs for the examples
 - [x] hand code the transfer functions for the examples
-- [ ] search for examples where the current algorithm allows recovery from `Ambiguous` to `Available`, but where recovery should be illegal -- this may require a graph with _two_ back edges
 
 ### Transfer Function
 
@@ -112,7 +111,7 @@ where:
 - A `return` instruction cannot be modelled as a regular drop. A 'return' instruction drops everything which has not yet been dropped. It must not cause a double-drop error though for variables which were dropped explicitly sometime before the return statement.
 
 ### Joining variables in loops
-Initially, it seemed like the following implementation of the `join_variable` function was incorrect:
+Initially, it seemed like the following implementation of the `join_variable` function was incorrect, but it turns out to be exactly what is needed.
 ```ts
 export function join_variable(
   left: VariableState,
@@ -126,53 +125,71 @@ export function join_variable(
   }
 }
 ```
-Given we have a CFG which consists of an entry block and a loop block:
+Given we have a CFG which consists of an entry, loop, and final block:
 ```
     Entry
       |
-     Loop <--,
-      |      |
-      |------'
+    Loop <--,
+      |     |
+      |-----'
       |
     Final
 ```
-The in-set at the loop-block will be a join of whatever comes out of the Entry block and whatever comes out of the Loop block.
-Say we have a variable `v1` which is undefined in the Entry block, and is first defined in the Loop block.
-The state of `v1`, in the **in-set** of the Loop block, is thus a join of `Undefined` and `Available`, which is `Ambiguous`.
-Interestingly, the Final block has the guaranty that we passed through the Loop block at least once.
-This means that the state of `v1` actually recovers from `Ambiguous` in the in-set of Loop to `Available` in the in-set of the Final block.
-It's up to the line-by-line analysis to work out what is allowed and what isn't, _inside_ the Loop block.
-I wonder if this 'recovery' from `Ambiguous` to `Available` jeopardizes the complexity bounds and termination guaranty of the algorithm.
+The in-set at the loop-block will be a join of out-sets of the Entry and Loop block.
+Suppose a variable `L` is first defined in the Loop block.
+The state of `L`, in the **in-set** of the Loop block, is a join of `Undefined` from the Entry block and `Available` from the Loop block.
+This results in an `Ambiguous` state.
+This is the correct result.
 
-Ah, I think I get it: `Ambiguous` is too coarse. I need the power-set here.
-At the beginning of Loop, `v1` is in a superposition of `(Undefined, Defined)`.
-Passing through the Loop, it encounters a definition and ascends to `(Defined, Defined)`.
-That is equal to just `Defined`.
-Using only one `Ambiguous` state in the Lattice, obscures the fact there are actually several kinds of superpositions, some of which can make a recovery.
+### Termination and Define-in-Loop
 
-Somewhat strangely, the present implementation seems to work though.
-Why is that?
-Are there cases where the present implementation breaks?
-I think such cases should exist.
-Perhaps with several back edges which disargree?
-Perhaps they could create a case where recovery is not allowed, but the present implementation would allow a recovery from `Ambiguous` to `Available`/`Destroyed`.
+Allowing a variable definition inside a loop block is essential for practical use.
+Having the `define` reset the state of the variable allows 'define-use-drop' patterns inside the loop.
+Multiple defines, as a result of looping, should not be an error.
+
+Does resetting the variable state, via a define inside a loop, jeopardize the termination / complexity guaranty of the worklist algorithm?
+
+The code is in SSA form, which guarantees there is only one definition site in the code.
+Does this property protect the complexity / termination guarantees of the analysis?
+
+It does _not_ jeopardize the complexity and termination guarantee.
+The availability analysis is similar to constant-propagation of booleans, with the boolean lattice `{Bottom, True, False, Top}`.
+It is allowed for the variable state to be `Top` in one control flow node, and then be `True` in some later control flow node, if that fact has been established there.
+The Lattice applies at each control-flow node individually.
+The block state, at one particular node, must always be updated monotonously.
+It _does not_ have to be monotonous as we move along the control flow edges.
+
+Let us revisit the example:
+```
+    Entry
+      |
+    Loop <--,
+      |     |
+      |-----'
+      |
+    Final
+```
+with a variable `L` which is defined in the loop block.
+The state of `L` is `Ambiguous` at the beginning of Loop, because the Entry out-set has `state(L)=Undefined` and Loop out-set has `state(L)=Available`.
+The Final block has the guarantee that we passed through the Loop block at least once though.
+Thus at the beginning of the Final block, the state is `Available`.
+
+Inside of the Loop block, it's up to the line-by-line analysis to work out what is allowed and what isn't.
+
+### Structured Clone is very useful in JS/TS
+
+The function `structuredClone(foo)` creates a deep copy of a structured object.
+This is extremely useful to avoid accidental sharing of references.
 
 ## Future Work
 
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
-### Termination and Define-in-Loop
+### Power-set lattices
 
-Allowing a variable definition inside a loop block is essential.
-Having the `define` reset the state of the variable allows 'define-use-drop' patterns inside the loop.
-Multiple defines, as a result of looping, should also not be an error.
-Thus it is important
-
-Does resetting the variable state via a define inside a loop jeopardize the termination / complexity guaranty of the worklist algorithm?
-The code is in SSA form, which guarantees there is only one definition site in the code.
-Does this property protect the complexity / termination guarantees of the analysis?
-
+Would the use of a power-set lattice enable a more precise analysis?
+Could it improve error messages?
 
 ---
 
