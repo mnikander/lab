@@ -7,7 +7,7 @@ functions be expressed in a simple way?
 
 Date: 2026-10-02
 
-Status: Todo
+Status: Done
 
 ## Hypothesis
 
@@ -217,6 +217,46 @@ This is extremely useful to avoid accidental sharing of references.
 
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
+
+### Convert IR-function into worklist inputs
+
+To do the analysis, the IR code for a function must be converted into the inputs
+for the fixed-point solver. The algorithm requires two things:
+
+1. control flow graph
+2. block-wise transfer tables
+
+I have computed the control flow graph from an IR-like code before. The
+implementation can be found in
+[lab 23](0023-ownership-dsl/control-flow-graph.ts). That code can be adapted to
+the new IR syntax. It could also be adapted to deal with parameterized blocks,
+instead of jump/branch and phi-nodes. That would make the later line-by-line
+analysis much easier.
+
+The transfer tables are an array of arrays of pairs of booleans. They describe
+the state transfer for each block. That block-wise transfer consists of a
+variable-wise transfer. Each variable-wise transfer is a pair of booleans which
+describe:
+
+- whether or not the variable is defined within that block
+- whether or not it is dropped inside that block
+
+### Line-by-line availability analysis _inside_ each code block
+
+To analyze the code for correctness, a line-by-line analysis needs to be done.
+This analysis can catch things such as:
+
+- drop-before-define inside of a block
+- invalid use of pointers
+
+This analysis needs the in-set for the respective block, computed by the
+high-level CFG availability analysis. That is the starting point for the
+line-by-line analysis. It also needs an approximation of the points-to set for
+each variable. I don't need Anderson's algorithm yet, a coarse approximation
+will do for now. Furthermore, it needs the actual IR-code, or a simplified DSL
+which covers the IR operations. The basic operations are similar to the set of
+primitive operations outlined for Anderson's algorithm for pointer analysis. I
+need to have `drop`, `return`, and `use` operations as well.
 
 ### Power-set lattices
 
