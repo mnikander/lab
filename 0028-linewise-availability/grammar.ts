@@ -12,8 +12,8 @@ export type Operation    = Call | Borrow | Load | Unary | Binary;
 export type Call         = [ tag: "call",      function: FunctionId, Arguments ];
 export type Borrow       = [ tag: "borrow",    Peek ]; // take the address of a resource and create a read-only pointer
 export type Load         = [ tag: "load",      Peek | Move ]; // dereference a pointer and load the value
-export type Unary        = [ tag: "identity",  Operand ];
-export type Binary       = [ tag: "add",       Operand, Operand ];
+export type Unary        = [ tag: "unary",     Operand ];
+export type Binary       = [ tag: "binary",    Operand, Operand ];
 
 export type Terminator   = Return | Jump | Branch;
 export type Jump         = [ tag: "jump",      targetBlock: BlockId ];
