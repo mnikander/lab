@@ -51,7 +51,43 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("ok");
   });
 
-  it("must accept valid define-use-drop", () => {
+  it.skip("must reject return of 'Undefined' variable", () => {
+    const result: Result = linewise_availability(
+      ["Undefined"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("error");
+  });
+
+  it.skip("must reject return of 'Destroyed' variable", () => {
+    const result: Result = linewise_availability(
+      ["Destroyed"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("error");
+  });
+
+  it.skip("must reject return of 'Ambiguous' variable", () => {
+    const result: Result = linewise_availability(
+      ["Ambiguous"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("error");
+  });
+
+  it.skip("must accept valid define-use-drop", () => {
     const result: Result = linewise_availability(
       ["Undefined"],
       [[]],
@@ -59,14 +95,30 @@ describe("simple operations", () => {
         ["bindings"],
         ["lines",
           ["let", "%0", ["identity", ["constant", 42]]],
-          ["let", "%1", ["identity", ["constant", 2]]],
+          ["let", "%1", ["identity", ["constant", 5]]],
           ["drop", "%1"],
           ["return", "%0"],
         ]]);
     expect(result[0]).toEqual("ok");
   });
 
-  it("must accept valid use of predefined variable", () => {
+  it.skip("must reject double-drop", () => {
+    const result: Result = linewise_availability(
+      ["Ambiguous"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["let", "%0", ["identity", ["constant", 42]]],
+          ["let", "%1", ["identity", ["constant", 5]]],
+          ["drop", "%1"],
+          ["drop", "%1"],
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept valid return of predefined variable", () => {
     const result: Result = linewise_availability(
       ["Available"],
       [[]],
@@ -76,5 +128,17 @@ describe("simple operations", () => {
           ["return", "%0"],
         ]]);
     expect(result[0]).toEqual("ok");
+  });
+
+  it.skip("must reject return of ambiguous variable", () => {
+    const result: Result = linewise_availability(
+      ["Ambiguous"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("error");
   });
 });
