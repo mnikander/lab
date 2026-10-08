@@ -38,8 +38,8 @@ deno test
 - [x] define function signature
 - [x] create trivial test-cases
 - [x] define simplified grammar for source language, including block parameters
-- [ ] define DSL define/use/drop/return
-- [ ] for each instruction, translate it into a combination of define/use/drop/return
+- [x] define DSL define/use/drop/return
+- [x] for each instruction, translate it into a combination of define/use/drop/return
 - [ ] update the variable states using the DSL ops
 - [ ] iterate over the lines
 - [ ] interpret pointer drops as pointee uses
