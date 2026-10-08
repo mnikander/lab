@@ -7,7 +7,7 @@ import { Block } from "./grammar.ts";
 const empty_block: Block = ["block", ["bindings"], ["lines"]];
 
 describe("empty block", () => {
-  it("must pass on empty input", () => {
+  it("must accept empty input", () => {
     const result: Result = linewise_availability([], [], empty_block);
     expect(result[0]).toEqual("ok");
   });
@@ -34,5 +34,47 @@ describe("invalid input", () => {
 
   it("must throw on unequal lengths", () => {
     expect(() => linewise_availability(["Available"], [[],[]], empty_block)).toThrow();
+  });
+});
+
+describe("simple operations", () => {
+  it("must accept valid define and use", () => {
+    const result: Result = linewise_availability(
+      ["Undefined"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["let", "%0", ["identity", ["constant", 42]]],
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("ok");
+  });
+
+  it("must accept valid define-use-drop", () => {
+    const result: Result = linewise_availability(
+      ["Undefined"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["let", "%0", ["identity", ["constant", 42]]],
+          ["let", "%1", ["identity", ["constant", 2]]],
+          ["drop", "%1"],
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("ok");
+  });
+
+  it("must accept valid use of predefined variable", () => {
+    const result: Result = linewise_availability(
+      ["Available"],
+      [[]],
+      ["block",
+        ["bindings"],
+        ["lines",
+          ["return", "%0"],
+        ]]);
+    expect(result[0]).toEqual("ok");
   });
 });
