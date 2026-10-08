@@ -1,5 +1,7 @@
 // Copyright (c) 2026 Marco Nikander
 
+import { Result } from "./result.ts";
+
 // State of a variable:
 //
 //              Ambiguous
@@ -13,7 +15,3 @@ export type VariableState =
   | "Destroyed"
   | "Available"
   | "Undefined";
-
-export type Result =
-  | ["ok", VariableState[]]
-  | ["error", message: string, line: number];

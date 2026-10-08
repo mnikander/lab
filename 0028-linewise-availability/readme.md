@@ -37,8 +37,14 @@ deno test
 - [x] copy/paste VariableState from lab 27
 - [x] define function signature
 - [x] create trivial test-cases
-- [ ] define simplified grammar for source language, including block parameters
+- [x] define simplified grammar for source language, including block parameters
+- [ ] define DSL define/use/drop/return
+- [ ] for each instruction, translate it into a combination of define/use/drop/return
+- [ ] update the variable states using the DSL ops
+- [ ] iterate over the lines
 - [ ] interpret pointer drops as pointee uses
+- [ ] special treatment is needed for the return instruction, since a lot of conditional drops are done there
+- [ ] if any errors occur, return an error message, otherwise return the update states at the end
 
 ## Findings
 <!-- What did I learn? -->
