@@ -1,19 +1,24 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { linewise_availability } from "./main.ts";
-import { Result } from "./lattice.ts";
+import { Result } from "./result.ts";
 import { Block } from "./grammar.ts";
+import { VariableState } from "./lattice.ts";
 
-const empty_block: Block = ["block", ["bindings"], ["lines"]];
+const empty_block: Block = ["block", ["bindings"], ["instructions"]];
 
 describe("empty block", () => {
   it("must accept empty input", () => {
-    const result: Result = linewise_availability([], [], empty_block);
+    const result: Result<VariableState[]> = linewise_availability(
+      [],
+      [],
+      empty_block,
+    );
     expect(result[0]).toEqual("ok");
   });
 
   it("must return availabilities unchanged", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Undefined", "Available", "Destroyed", "Ambiguous"],
       [[], [], [], []],
       empty_block,
@@ -28,7 +33,7 @@ describe("empty block", () => {
 
 describe("invalid input", () => {
   it("must throw on missing input availability", () => {
-    expect(() => linewise_availability([], [[0]], empty_block)).toThrow();
+    expect(() => linewise_availability([], [["%0"]], empty_block)).toThrow();
   });
 
   it("must throw on missing points-to set", () => {
@@ -44,52 +49,53 @@ describe("invalid input", () => {
 
 describe("simple operations", () => {
   it("must accept valid define and use", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block", ["bindings"], ["lines", ["let", "%0", ["identity", [
-        "constant",
-        42,
-      ]]], ["return", "%0"]]],
+      ["block", ["bindings"], [
+        "instructions",
+        ["let", "%0", ["unary", ["constant", 42]]],
+        ["return", "%0"],
+      ]],
     );
     expect(result[0]).toEqual("ok");
   });
 
   it.skip("must reject return of 'Undefined' variable", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must reject return of 'Destroyed' variable", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Destroyed"],
       [[]],
-      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must reject return of 'Ambiguous' variable", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must accept valid define-use-drop", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
       ["block", ["bindings"], [
-        "lines",
-        ["let", "%0", ["identity", ["constant", 42]]],
-        ["let", "%1", ["identity", ["constant", 5]]],
+        "instructions",
+        ["let", "%0", ["unary", ["constant", 42]]],
+        ["let", "%1", ["unary", ["constant", 5]]],
         ["drop", "%1"],
         ["return", "%0"],
       ]],
@@ -98,13 +104,13 @@ describe("simple operations", () => {
   });
 
   it.skip("must reject double-drop", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
       ["block", ["bindings"], [
-        "lines",
-        ["let", "%0", ["identity", ["constant", 42]]],
-        ["let", "%1", ["identity", ["constant", 5]]],
+        "instructions",
+        ["let", "%0", ["unary", ["constant", 42]]],
+        ["let", "%1", ["unary", ["constant", 5]]],
         ["drop", "%1"],
         ["drop", "%1"],
         ["return", "%0"],
@@ -114,19 +120,19 @@ describe("simple operations", () => {
   });
 
   it("must accept valid return of predefined variable", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Available"],
       [[]],
-      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
     );
     expect(result[0]).toEqual("ok");
   });
 
   it.skip("must reject return of ambiguous variable", () => {
-    const result: Result = linewise_availability(
+    const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
     );
     expect(result[0]).toEqual("error");
   });
