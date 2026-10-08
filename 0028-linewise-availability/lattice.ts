@@ -14,4 +14,6 @@ export type VariableState =
   | "Available"
   | "Undefined";
 
-export type Result = ["ok", VariableState[]] | ["error", message: string, line: number];
+export type Result =
+  | ["ok", VariableState[]]
+  | ["error", message: string, line: number];

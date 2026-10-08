@@ -14,7 +14,10 @@ describe("empty block", () => {
 
   it("must return availabilities unchanged", () => {
     const result: Result = linewise_availability(
-      ["Undefined", "Available", "Destroyed", "Ambiguous"], [[], [], [], []], empty_block);
+      ["Undefined", "Available", "Destroyed", "Ambiguous"],
+      [[], [], [], []],
+      empty_block,
+    );
     expect(result[0]).toEqual("ok");
     expect(result[1][0]).toEqual("Undefined");
     expect(result[1][1]).toEqual("Available");
@@ -29,11 +32,13 @@ describe("invalid input", () => {
   });
 
   it("must throw on missing points-to set", () => {
-    expect(() => linewise_availability(["Available"], [], empty_block)).toThrow();
+    expect(() => linewise_availability(["Available"], [], empty_block))
+      .toThrow();
   });
 
   it("must throw on unequal lengths", () => {
-    expect(() => linewise_availability(["Available"], [[],[]], empty_block)).toThrow();
+    expect(() => linewise_availability(["Available"], [[], []], empty_block))
+      .toThrow();
   });
 });
 
@@ -42,12 +47,11 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["let", "%0", ["identity", ["constant", 42]]],
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["let", "%0", ["identity", [
+        "constant",
+        42,
+      ]]], ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("ok");
   });
 
@@ -55,11 +59,8 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("error");
   });
 
@@ -67,11 +68,8 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Destroyed"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("error");
   });
 
@@ -79,11 +77,8 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("error");
   });
 
@@ -91,14 +86,14 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["let", "%0", ["identity", ["constant", 42]]],
-          ["let", "%1", ["identity", ["constant", 5]]],
-          ["drop", "%1"],
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], [
+        "lines",
+        ["let", "%0", ["identity", ["constant", 42]]],
+        ["let", "%1", ["identity", ["constant", 5]]],
+        ["drop", "%1"],
+        ["return", "%0"],
+      ]],
+    );
     expect(result[0]).toEqual("ok");
   });
 
@@ -106,15 +101,15 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["let", "%0", ["identity", ["constant", 42]]],
-          ["let", "%1", ["identity", ["constant", 5]]],
-          ["drop", "%1"],
-          ["drop", "%1"],
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], [
+        "lines",
+        ["let", "%0", ["identity", ["constant", 42]]],
+        ["let", "%1", ["identity", ["constant", 5]]],
+        ["drop", "%1"],
+        ["drop", "%1"],
+        ["return", "%0"],
+      ]],
+    );
     expect(result[0]).toEqual("error");
   });
 
@@ -122,11 +117,8 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Available"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("ok");
   });
 
@@ -134,11 +126,8 @@ describe("simple operations", () => {
     const result: Result = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block",
-        ["bindings"],
-        ["lines",
-          ["return", "%0"],
-        ]]);
+      ["block", ["bindings"], ["lines", ["return", "%0"]]],
+    );
     expect(result[0]).toEqual("error");
   });
 });
