@@ -6,10 +6,6 @@
 Date:   2026-0
 Status: 
 
-## Hypothesis
-<!-- What do I think is going to happen? -->
-
-
 
 ## Resources
 <!-- Where can I find relevant information? -->
@@ -18,6 +14,14 @@ Status:
 
 ## Running the Code
 <!-- What steps are required to run the code? -->
+
+```bash
+deno test
+```
+
+## Description and Hypothesis
+<!-- How do I want to approach the problem? -->
+<!-- What do I think is going to happen? -->
 
 
 
