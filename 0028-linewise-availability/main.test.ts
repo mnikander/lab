@@ -49,90 +49,113 @@ describe("invalid input", () => {
 
 describe("simple operations", () => {
   it("must accept valid define and use", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block", ["bindings"], [
-        "instructions",
-        ["let", "%0", ["unary", ["constant", 42]]],
-        ["return", "%0"],
-      ]],
+      code,
     );
     expect(result[0]).toEqual("ok");
   });
 
   it.skip("must reject return of 'Undefined' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
+      code,
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must reject return of 'Destroyed' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Destroyed"],
       [[]],
-      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
+      code,
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must reject return of 'Ambiguous' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
+      code,
     );
     expect(result[0]).toEqual("error");
   });
 
   it.skip("must accept valid define-use-drop", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["unary", ["constant", 5]]],
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Undefined"],
       [[]],
-      ["block", ["bindings"], [
-        "instructions",
-        ["let", "%0", ["unary", ["constant", 42]]],
-        ["let", "%1", ["unary", ["constant", 5]]],
-        ["drop", "%1"],
-        ["return", "%0"],
-      ]],
+      code,
     );
     expect(result[0]).toEqual("ok");
   });
 
   it.skip("must reject double-drop", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["unary", ["constant", 5]]],
+      ["drop", "%1"],
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block", ["bindings"], [
-        "instructions",
-        ["let", "%0", ["unary", ["constant", 42]]],
-        ["let", "%1", ["unary", ["constant", 5]]],
-        ["drop", "%1"],
-        ["drop", "%1"],
-        ["return", "%0"],
-      ]],
+      code,
     );
     expect(result[0]).toEqual("error");
   });
 
   it("must accept valid return of predefined variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Available"],
       [[]],
-      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
+      code,
     );
     expect(result[0]).toEqual("ok");
   });
 
   it.skip("must reject return of ambiguous variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
     const result: Result<VariableState[]> = linewise_availability(
       ["Ambiguous"],
       [[]],
-      ["block", ["bindings"], ["instructions", ["return", "%0"]]],
+      code,
     );
     expect(result[0]).toEqual("error");
   });
