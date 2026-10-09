@@ -31,10 +31,9 @@ export function linewise_availability(
     if (is_ok(result)) {
       state = result[1];
     } else {
-      return result;
+      return result; // error detected
     }
   }
-
   return ["ok", state];
 }
 
@@ -83,6 +82,6 @@ function update_one(
     state[i] = result[1];
     return ["ok", state];
   } else {
-    return result;
+    return ["error", op[1] + ": " + result[1]];
   }
 }

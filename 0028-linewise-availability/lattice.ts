@@ -37,7 +37,7 @@ export function apply_use(state: VariableState): Result<VariableState> {
   // Thus, we just treat 'define' as a reset of the variable item.
   switch (state) {
     case "Ambiguous":
-      return ["error", "potentially unsafe use"];
+      return ["error", "unsafe use"];
     case "Destroyed":
       return ["error", "use-after-drop"];
     case "Available":
@@ -52,9 +52,9 @@ export function apply_use(state: VariableState): Result<VariableState> {
 export function apply_drop(state: VariableState): Result<VariableState> {
   switch (state) {
     case "Ambiguous":
-      return ["error", "potentially unsafe drop"];
+      return ["error", "unsafe drop"];
     case "Destroyed":
-      return ["error", "double drop"];
+      return ["error", "double-drop"];
     case "Available":
       return ["ok", "Destroyed"];
     case "Undefined":
