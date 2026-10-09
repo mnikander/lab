@@ -347,7 +347,7 @@ describe("loading from borrowed resources", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it("must accept load of borrow to defined resource in block", () => {
+  it("must accept load of borrow to resource defined in the block", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -367,7 +367,7 @@ describe("loading from borrowed resources", () => {
     expect(result[1][2]).toEqual("Available");
   });
 
-  it("must reject load of borrow to a not-yet defined resource in the block", () => {
+  it("must reject load of borrow to a resource not-yet defined in the block", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -379,6 +379,39 @@ describe("loading from borrowed resources", () => {
       code,
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject load of borrow to a resource already dropped in the block", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"],
+      ["let", "%2", ["load", ["peek", "%1"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject load of a dropped borrow", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%1"],
+      ["let", "%2", ["load", ["peek", "%1"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Available", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
   });
