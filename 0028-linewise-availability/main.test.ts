@@ -65,7 +65,7 @@ describe("invalid input", () => {
   });
 });
 
-describe("simple operations", () => {
+describe("integer resources", () => {
   it("must accept valid define and use", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -176,5 +176,78 @@ describe("simple operations", () => {
       ["Ambiguous"],
     );
     expect(result[0]).toEqual("error");
+  });
+});
+
+describe("borrowed resources and return", () => {
+  it("must reject a borrow to Undefined resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept borrow to Available resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Available", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+  });
+
+  it("must reject borrow to Destroyed resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Destroyed", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject borrow to Ambiguous resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Ambiguous", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept borrow to resource defined in block", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
   });
 });
