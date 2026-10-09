@@ -1,6 +1,7 @@
 // Copyright (c) 2026 Marco Nikander
 
 import * as IR from "./grammar.ts";
+import { VariableState } from "./lattice.ts";
 
 export type Op = Use | Define | Drop | Return;
 export type Define = ["define", IR.ResourceId];
@@ -11,6 +12,7 @@ export type Return = ["return", IR.ResourceId];
 export function translate(
   line: IR.Line,
   points_to_set: IR.ResourceId[][],
+  state: VariableState[],
 ): Op[] {
   switch (line[0]) {
     case "let":
@@ -22,7 +24,7 @@ export function translate(
     case "branch":
       return translate_branch(line);
     case "return":
-      return translate_return(line);
+      return translate_return(line, points_to_set, state);
     default:
       return line as never;
   }
@@ -48,8 +50,12 @@ function translate_branch(line: IR.Branch): Op[] {
   return [...translate_operand(cond), ...translate_arguments(args)];
 }
 
-function translate_return(line: IR.Return): Op[] {
-  return [["return", line[1]]];
+function translate_return(
+  line: IR.Return,
+  points_to_set: IR.ResourceId[][],
+  state: VariableState[],
+): Op[] {
+  return [["use", line[1]]];
 }
 
 function translate_operation(

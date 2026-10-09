@@ -12,9 +12,9 @@ import { is_ok, Result } from "./result.ts";
 import * as DSL from "./dsl_grammar.ts";
 
 export function linewise_availability(
-  state: VariableState[],
-  points_to_set: ResourceId[][],
   code: Block,
+  points_to_set: ResourceId[][],
+  state: VariableState[],
 ): Result<VariableState[]> {
   assert(
     state.length === points_to_set.length,
@@ -23,7 +23,7 @@ export function linewise_availability(
   const instructions: Instructions = code[2];
   const lines: Line[] = [...instructions.slice(1)] as Line[];
   for (const l of lines) {
-    const ops: DSL.Op[] = DSL.translate(l, points_to_set);
+    const ops: DSL.Op[] = DSL.translate(l, points_to_set, state);
     const result: Result<VariableState[]> = update(
       state,
       ops,
@@ -76,7 +76,7 @@ function update_one(
       result = apply_drop(s);
       break;
     case "return":
-      result = apply_use(s); // TODO implement special logic for 'return' in a function call here
+      result = apply_use(s); // TODO remove this if return can be translated into DSL.Use
       break;
     default:
       return op as never;

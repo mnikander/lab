@@ -10,18 +10,18 @@ const empty_block: Block = ["block", ["bindings"], ["instructions"]];
 describe("empty block", () => {
   it("must accept empty input", () => {
     const result: Result<VariableState[]> = linewise_availability(
-      [],
-      [],
       empty_block,
+      [],
+      [],
     );
     expect(result[0]).toEqual("ok");
   });
 
   it("must return availabilities unchanged", () => {
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined", "Available", "Destroyed", "Ambiguous"],
-      [[], [], [], []],
       empty_block,
+      [[], [], [], []],
+      ["Undefined", "Available", "Destroyed", "Ambiguous"],
     );
     expect(result[0]).toEqual("ok");
     expect(result[1][0]).toEqual("Undefined");
@@ -33,16 +33,34 @@ describe("empty block", () => {
 
 describe("invalid input", () => {
   it("must throw on missing input availability", () => {
-    expect(() => linewise_availability([], [["%0"]], empty_block)).toThrow();
+    expect(() =>
+      linewise_availability(
+        empty_block,
+        [["%0"]],
+        [],
+      )
+    ).toThrow();
   });
 
   it("must throw on missing points-to set", () => {
-    expect(() => linewise_availability(["Available"], [], empty_block))
+    expect(() =>
+      linewise_availability(
+        empty_block,
+        [],
+        ["Available"],
+      )
+    )
       .toThrow();
   });
 
   it("must throw on unequal lengths", () => {
-    expect(() => linewise_availability(["Available"], [[], []], empty_block))
+    expect(() =>
+      linewise_availability(
+        empty_block,
+        [[], []],
+        ["Available"],
+      )
+    )
       .toThrow();
   });
 });
@@ -55,9 +73,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined"],
-      [[]],
       code,
+      [[]],
+      ["Undefined"],
     );
     expect(result[0]).toEqual("ok");
   });
@@ -68,9 +86,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined"],
-      [[]],
       code,
+      [[]],
+      ["Undefined"],
     );
     expect(result[0]).toEqual("error");
   });
@@ -81,9 +99,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Destroyed"],
-      [[]],
       code,
+      [[]],
+      ["Destroyed"],
     );
     expect(result[0]).toEqual("error");
   });
@@ -94,9 +112,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Ambiguous"],
-      [[]],
       code,
+      [[]],
+      ["Ambiguous"],
     );
     expect(result[0]).toEqual("error");
   });
@@ -110,9 +128,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined", "Undefined"],
-      [[], []],
       code,
+      [[], []],
+      ["Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
   });
@@ -127,9 +145,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined", "Undefined"],
-      [[], []],
       code,
+      [[], []],
+      ["Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
   });
@@ -140,9 +158,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Available"],
-      [[]],
       code,
+      [[]],
+      ["Available"],
     );
     expect(result[0]).toEqual("ok");
   });
@@ -153,9 +171,9 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Ambiguous"],
-      [[]],
       code,
+      [[]],
+      ["Ambiguous"],
     );
     expect(result[0]).toEqual("error");
   });
