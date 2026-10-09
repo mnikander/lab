@@ -59,6 +59,7 @@ function update_one(
 ): Result<VariableState[]> {
   const i: number = to_index(op[1]);
   const s: VariableState = state[i];
+  assert(s !== undefined, `Variable #${i} does not have a valid input state.`);
   let result: Result<VariableState> = [
     "error",
     "Bug: no DSL operation was applied",

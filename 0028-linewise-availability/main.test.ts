@@ -62,7 +62,7 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("ok");
   });
 
-  it.skip("must reject return of 'Undefined' variable", () => {
+  it("must reject return of 'Undefined' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["return", "%0"],
@@ -75,7 +75,7 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it.skip("must reject return of 'Destroyed' variable", () => {
+  it("must reject return of 'Destroyed' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["return", "%0"],
@@ -88,7 +88,7 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it.skip("must reject return of 'Ambiguous' variable", () => {
+  it("must reject return of 'Ambiguous' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["return", "%0"],
@@ -101,7 +101,7 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it.skip("must accept valid define-use-drop", () => {
+  it("must accept valid define-use-drop", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -110,14 +110,14 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Undefined"],
-      [[]],
+      ["Undefined", "Undefined"],
+      [[], []],
       code,
     );
     expect(result[0]).toEqual("ok");
   });
 
-  it.skip("must reject double-drop", () => {
+  it("must reject double-drop", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -127,8 +127,8 @@ describe("simple operations", () => {
       ["return", "%0"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
-      ["Ambiguous"],
-      [[]],
+      ["Undefined", "Undefined"],
+      [[], []],
       code,
     );
     expect(result[0]).toEqual("error");
@@ -147,7 +147,7 @@ describe("simple operations", () => {
     expect(result[0]).toEqual("ok");
   });
 
-  it.skip("must reject return of ambiguous variable", () => {
+  it("must reject return of ambiguous variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["return", "%0"],
