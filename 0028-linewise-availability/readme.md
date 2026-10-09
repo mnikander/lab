@@ -47,12 +47,23 @@ deno test
 - [x] return must 'use' all variables which are not Destroyed
 - [x] return value must be used
 - [x] return value's points-to set must be used
-- [ ] use of a pointer-type variable should also be a use of its pointee
+- [x] use of a pointer-type variable should also be a use of its pointee
+- [ ] test let, unary (with/without borrow)
+- [ ] test let, binary
+- [ ] test return (with/without borrow)
+- [ ] test drop
+- [ ] test let, borrow
+- [ ] test let, load
+- [ ] test let, call
+- [ ] test let, call (with/without borrows)
+- [ ] test jump
+- [ ] test branch (with/without parameters, with/without borrows)
+- [ ] test binding of block parameters (with/without borrows)
 
 ## Findings
 <!-- What did I learn? -->
 
-
+1. It will require dozens, or probably over a hundred, test-cases to check the relevant cases
 
 ## Future Work
 <!-- Are there follow-up questions? -->
