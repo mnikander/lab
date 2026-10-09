@@ -44,8 +44,10 @@ deno test
 - [x] iterate over the lines
 - [x] interpret pointer drops as pointee uses
 - [x] if any errors occur, return an error message, otherwise return the update states at the end
+- [x] return must 'use' all variables which are not Destroyed
+- [x] return value must be used
+- [x] return value's points-to set must be used
 - [ ] use of a pointer-type variable should also be a use of its pointee
-- [ ] return needs to be treated as a 'use' of all variables which are not dropped
 
 ## Findings
 <!-- What did I learn? -->
@@ -56,7 +58,12 @@ deno test
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
 
+### Escape analysis
 
+The points-to-set of the result may only contain function arguments, no function locals.
+This could be built into `translate_return`, but it's probably better to have it's own small analysis pass.
+Separation of concerns.
+That way each pass can get exactly the inputs which it needs and the code is also easier to reason about.
 
 ---
 **Copyright (c) 2026 Marco Nikander**
