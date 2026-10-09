@@ -27,7 +27,7 @@ export function apply_define(state: VariableState): Result<VariableState> {
     case "Undefined":
       return ["ok", "Available"];
     default:
-      throw Error("Bug: invalid transfer in 'apply_define'");
+      throw Error("Bug: invalid variable state in 'apply_define'");
   }
 }
 
@@ -45,7 +45,7 @@ export function apply_use(state: VariableState): Result<VariableState> {
     case "Undefined":
       return ["error", "use-before-define"];
     default:
-      throw Error("Bug: invalid transfer in 'apply_define'");
+      throw Error("Bug: invalid variable state in 'apply_define'");
   }
 }
 
@@ -60,6 +60,6 @@ export function apply_drop(state: VariableState): Result<VariableState> {
     case "Undefined":
       return ["error", "drop-before-define"];
     default:
-      throw Error("Bug: invalid transfer in 'apply_drop'");
+      throw Error("Bug: invalid variable state in 'apply_drop'");
   }
 }
