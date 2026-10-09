@@ -40,11 +40,12 @@ deno test
 - [x] define simplified grammar for source language, including block parameters
 - [x] define DSL define/use/drop/return
 - [x] for each instruction, translate it into a combination of define/use/drop/return
-- [ ] update the variable states using the DSL ops
-- [ ] iterate over the lines
-- [ ] interpret pointer drops as pointee uses
-- [ ] special treatment is needed for the return instruction, since a lot of conditional drops are done there
-- [ ] if any errors occur, return an error message, otherwise return the update states at the end
+- [x] update the variable states using the DSL ops
+- [x] iterate over the lines
+- [x] interpret pointer drops as pointee uses
+- [x] if any errors occur, return an error message, otherwise return the update states at the end
+- [ ] use of a pointer-type variable should also be a use of its pointee
+- [ ] return needs to be treated as a 'use' of all variables which are not dropped
 
 ## Findings
 <!-- What did I learn? -->
