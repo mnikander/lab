@@ -1,5 +1,16 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Result<T> =
-  | ["ok", T]
-  | ["error", message: string, line: number];
+  | Ok<T>
+  | Error;
+
+export type Ok<T> = ["ok", T];
+export type Error = ["error", message: string];
+
+export function is_ok<T>(r: Result<T>): r is Ok<T> {
+  return r[0] === "ok";
+}
+
+export function is_error<T>(r: Result<T>): r is Error {
+  return r[0] === "error";
+}
