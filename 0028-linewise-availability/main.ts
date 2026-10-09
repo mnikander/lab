@@ -75,9 +75,6 @@ function update_one(
     case "drop":
       result = apply_drop(s);
       break;
-    case "return":
-      result = apply_use(s); // TODO remove this if return can be translated into DSL.Use
-      break;
     default:
       return op as never;
   }

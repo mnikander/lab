@@ -3,11 +3,10 @@
 import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
 
-export type Op = Use | Define | Drop | Return;
+export type Op = Use | Define | Drop;
 export type Define = ["define", IR.ResourceId];
 export type Use = ["use", IR.ResourceId];
 export type Drop = ["drop", IR.ResourceId];
-export type Return = ["return", IR.ResourceId];
 
 export function translate(
   line: IR.Line,
@@ -55,6 +54,8 @@ function translate_return(
   points_to_set: IR.ResourceId[][],
   state: VariableState[],
 ): Op[] {
+  // TODO: implement return logic here
+  // - for all pointer-type variables which are not "Destroyed": apply_use
   return [["use", line[1]]];
 }
 
