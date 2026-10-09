@@ -15,6 +15,7 @@ describe("empty block", () => {
       [],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(0);
   });
 
   it("must return availabilities unchanged", () => {
@@ -24,6 +25,7 @@ describe("empty block", () => {
       ["Undefined", "Available", "Destroyed", "Ambiguous"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(4);
     expect(result[1][0]).toEqual("Undefined");
     expect(result[1][1]).toEqual("Available");
     expect(result[1][2]).toEqual("Destroyed");
@@ -78,6 +80,8 @@ describe("integer resources", () => {
       ["Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(1);
+    expect(result[1][0]).toEqual("Available");
   });
 
   it("must reject return of 'Undefined' variable", () => {
@@ -133,6 +137,9 @@ describe("integer resources", () => {
       ["Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
   });
 
   it("must reject double-drop", () => {
@@ -163,6 +170,8 @@ describe("integer resources", () => {
       ["Available"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(1);
+    expect(result[1][0]).toEqual("Available");
   });
 
   it("must reject return of ambiguous variable", () => {
@@ -206,6 +215,9 @@ describe("returning with borrowed resources", () => {
       ["Available", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
   });
 
   it("must reject borrow to Destroyed resource", () => {
@@ -249,6 +261,9 @@ describe("returning with borrowed resources", () => {
       ["Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
   });
 
   it("must reject borrow to a not-yet defined resource in the block", () => {
@@ -296,6 +311,10 @@ describe("loading from borrowed resources", () => {
       ["Available", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+    expect(result[1][2]).toEqual("Available");
   });
 
   it("must reject load of borrow to Destroyed resource", () => {
@@ -342,6 +361,10 @@ describe("loading from borrowed resources", () => {
       ["Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+    expect(result[1][2]).toEqual("Available");
   });
 
   it("must reject load of borrow to a not-yet defined resource in the block", () => {
