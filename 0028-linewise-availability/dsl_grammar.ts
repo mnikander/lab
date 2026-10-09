@@ -32,7 +32,7 @@ export function translate(
 function translate_let(line: IR.Let, points_to_set: IR.ResourceId[][]): Op[] {
   const lhs: Op[] = [["define", line[1]]];
   const rhs: Op[] = translate_operation(line[2], points_to_set);
-  return [...lhs, ...rhs];
+  return [...rhs, ...lhs]; // we evaluate the right hand side BEFORE we define the variable on the left hand side
 }
 
 function translate_drop(line: IR.Drop): Op[] {
