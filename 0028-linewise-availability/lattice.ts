@@ -58,7 +58,7 @@ export function apply_drop(state: VariableState): Result<VariableState> {
     case "Available":
       return ["ok", "Destroyed"];
     case "Undefined":
-      return ["ok", "Ambiguous"]; // error: drop-before-define -- THERE IS A BUG HERE, this should be an error
+      return ["error", "drop-before-define"];
     default:
       throw Error("Bug: invalid transfer in 'apply_drop'");
   }

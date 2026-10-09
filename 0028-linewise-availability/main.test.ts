@@ -97,6 +97,21 @@ describe("integer resources", () => {
     expect(result[0]).toEqual("error");
   });
 
+  it("must accept return of 'Available' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(1);
+    expect(result[1][0]).toEqual("Available");
+  });
+
   it("must reject return of 'Destroyed' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -119,6 +134,65 @@ describe("integer resources", () => {
       code,
       [[]],
       ["Ambiguous"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject drop of 'Undefined' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept drop of 'Available' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Available"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+  });
+
+  it("must reject drop of 'Destroyed' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Destroyed"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject drop of 'Ambiguous' variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Ambiguous"],
     );
     expect(result[0]).toEqual("error");
   });
