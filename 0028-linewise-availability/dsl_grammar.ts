@@ -29,7 +29,9 @@ export function translate(
 }
 
 function translate_let(line: IR.Let, points_to_set: IR.ResourceId[][]): Op[] {
-  return [["define", line[1]], ...translate_operation(line[2], points_to_set)];
+  const lhs: Op[] = [["define", line[1]]];
+  const rhs: Op[] = translate_operation(line[2], points_to_set);
+  return [...lhs, ...rhs];
 }
 
 function translate_drop(line: IR.Drop): Op[] {
@@ -76,7 +78,7 @@ function translate_operation(
 }
 
 function translate_arguments(args: IR.Arguments): Op[] {
-  const os: IR.Operand[] = [, ...args] as IR.Operand[];
+  const os: IR.Operand[] = [...args.slice(1)] as IR.Operand[];
   const ops: Op[][] = os.map((x) => translate_operand(x));
   return ops.flat(1);
 }
