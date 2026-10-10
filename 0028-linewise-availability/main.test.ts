@@ -849,7 +849,7 @@ describe("call", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it.skip("must reject call with peeked borrow to Unavailable variable", () => {
+  it("must reject call with peeked borrow to Unavailable variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],

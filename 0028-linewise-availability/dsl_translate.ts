@@ -113,10 +113,22 @@ function translate_operation(
 }
 
 function translate_call(
-  rhs: IR.Call,
+  call: IR.Call,
   points_to_set: IR.ResourceId[][],
 ): Op[] {
-  return translate_arguments(rhs[2], points_to_set);
+  const [, ...o] = call[2];
+  const operands: IR.Operand[] = o; // type check
+  const variables: (IR.Peek | IR.Move)[] = operands.filter((o) =>
+    o[0] !== "constant"
+  );
+  const pointee_uses: Op[][] = variables.map((v, i) =>
+    use_pointees(v[1], points_to_set)
+  );
+
+  return [
+    ...pointee_uses.flat(1),
+    ...translate_arguments(call[2], points_to_set),
+  ];
 }
 
 function translate_arguments(
