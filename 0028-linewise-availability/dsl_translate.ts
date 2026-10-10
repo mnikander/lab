@@ -161,8 +161,7 @@ function translate_operand(
 function translate_load(load: IR.Load, points_to_set: IR.ResourceId[][]): Op[] {
   const pointer: IR.Operand = load[1];
   const pointer_ops: Op[] = translate_operand(pointer, points_to_set);
-  const pointees: IR.ResourceId[] = points_to_set[IR.to_index(pointer[1])];
-  const pointee_ops: Op[] = pointees.map((p) => ["use", p]);
+  const pointee_ops: Op[] = use_pointees(pointer[1], points_to_set);
   return [...pointer_ops, ...pointee_ops];
 }
 

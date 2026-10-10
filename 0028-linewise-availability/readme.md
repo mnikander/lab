@@ -91,6 +91,7 @@ Specifically, this is whenever:
 1. a borrow is dropped
 2. a borrow is moved
 3. a borrow is passed into a function
+4. a borrow is loaded from
 
 The points-to set is needed for borrow-checking.
 A borrow is valid at a given point in the program when everything the borrow might point is Available.
