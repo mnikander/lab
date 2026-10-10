@@ -705,8 +705,8 @@ describe("load", () => {
       ["let", "%0", ["unary", ["constant", 42]]],
       ["let", "%1", ["borrow", ["peek", "%0"]]],
       ["let", "%2", ["borrow", ["peek", "%1"]]],
-      ["let", "%3", ["load", ["peek", "%2"]]],
-      ["let", "%4", ["load", ["peek", "%3"]]],
+      ["let", "%3", ["load", ["peek", "%2"]]], // this is a copy of %1
+      ["let", "%4", ["load", ["peek", "%3"]]], // this is a copy of %0
       ["drop", "%0"],
       ["return", "%4"],
     ]];
@@ -769,7 +769,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -794,7 +794,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -814,7 +814,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -839,7 +839,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -860,7 +860,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -881,7 +881,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["move", "%1"]],
       ]],
-      ["return", "%2"],
+      ["jump", "^1"],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
