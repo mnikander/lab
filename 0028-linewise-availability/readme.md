@@ -48,14 +48,14 @@ deno test
 - [x] return value must be used
 - [x] return value's points-to set must be used
 - [x] use of a pointer-type variable should also be a use of its pointee
-- [ ] test let, unary (with/without borrow)
-- [ ] test let, binary
+- [x] test let
+- [x] test unary (with/without borrow)
+- [x] test binary
 - [ ] test return (with/without borrow)
 - [ ] test drop
-- [ ] test let, borrow
-- [ ] test let, load
-- [ ] test let, call
-- [ ] test let, call (with/without borrows)
+- [ ] test borrow
+- [ ] test load
+- [ ] test call (with/without borrows)
 - [ ] test jump
 - [ ] test branch (with/without parameters, with/without borrows)
 - [ ] test binding of block parameters (with/without borrows)
@@ -63,7 +63,13 @@ deno test
 ## Findings
 <!-- What did I learn? -->
 
-1. It will require dozens, or probably over a hundred, test-cases to check the relevant cases
+### Needs lots of tests
+Various instructions, variable states, and move/peek access create a huge number of possible permutations.
+It would require hundreds of test-cases to check all the relevant cases.
+
+### 'Ambiguous' state may not be precise enough for drop-during-return
+I think there is a problem with the current handling of borrows which are cleared by a return. If a borrow is Undefined and Destroyed, then it is Ambiguous. Returning some other resource, should _not_ trigger an error for the Ambiguous borrow. It does not need to be dropped since it is Undefined and Destroyed. There is only one Ambiguous state, however. That ambiguous state is treated as if one of its constituent states is Available. This causes my analysis, specifically the `translate_return` function, to reject valid code. To solve this issue, I would probably need to switch to a power-state lattice. This would allow differentiating `Undefined`/`Destroyed` from `Undefined`/`Available`. In the first case there would be no need to check the points-to set of the borrow. In the second case, the point-to set must be used. 
+<!-- TODO: can I create a test-case which reproduces this issue? -->
 
 ## Future Work
 <!-- Are there follow-up questions? -->
