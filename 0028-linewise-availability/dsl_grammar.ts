@@ -59,13 +59,17 @@ function translate_return(
     _,
     i,
   ) => [i, state[i], points_to_set[i]]);
-  const non_destroyed: Triplet[] = zipped.filter((t) => t[1] !== "Destroyed");
-
-  // for all pointer-type variables which are not "Destroyed": use
-  const use_non_destroyed_borrows: Op[][] = non_destroyed.map((t) =>
+  const non_destroyed: Triplet[] = zipped.filter((t) =>
+    t[1] === "Available" || t[1] === "Ambiguous"
+  );  
+  
+  // for all pointer-type variables which are not "Destroyed": 
+  // use each variable in their points-to set
+  // note that only pointer-type variables, have a non-empty points-to-set
+  const use_available_borrows: Op[][] = non_destroyed.map((t) =>
     t[2].map((pointee) => ["use", pointee])
   );
-  const borrow_ops: Op[] = use_non_destroyed_borrows.flat(1);
+  const borrow_ops: Op[] = use_available_borrows.flat(1);
 
   // for the return value's points-to-set: use
   const result_triplet: Triplet = zipped[IR.to_index(line[1])];
