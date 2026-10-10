@@ -31,9 +31,6 @@ export function update(
         break;
       case "drop":
         result = apply_drop(s);
-        // TODO: a 'drop' MUST trigger a 'use' on the entire points-to set of a variable
-        // - the signature of apply drop must be modified to include the points-to set
-        // - in the 'Available' case, the 'apply_use' calls must be made, for the points-to set
         break;
       default: {
         const _o: never = op;

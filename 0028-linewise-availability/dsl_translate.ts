@@ -2,7 +2,7 @@
 
 import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
-import { Define, Drop, Op } from "./dsl_grammar.ts";
+import { Define, Drop, Op, Use } from "./dsl_grammar.ts";
 
 export function translate(
   line: IR.Line,
@@ -13,11 +13,11 @@ export function translate(
     case "let":
       return translate_let(line, points_to_set);
     case "drop":
-      return translate_drop(line);
+      return translate_drop(line, points_to_set);
     case "jump":
       return translate_jump(line);
     case "branch":
-      return translate_branch(line);
+      return translate_branch(line, points_to_set);
     case "return":
       return translate_return(line, points_to_set, state);
     default: {
@@ -33,18 +33,24 @@ function translate_let(line: IR.Let, points_to_set: IR.ResourceId[][]): Op[] {
   return [...rhs, ...lhs]; // we evaluate the right hand side BEFORE we define the variable on the left hand side
 }
 
-function translate_drop(line: IR.Drop): Drop[] {
-  return [["drop", line[1]]];
+function translate_drop(line: IR.Drop, points_to_set: IR.ResourceId[][]): Op[] {
+  return piggyback_drop(line[1], points_to_set);
 }
 
 function translate_jump(_: IR.Jump): Op[] {
   return [];
 }
 
-function translate_branch(line: IR.Branch): Op[] {
+function translate_branch(
+  line: IR.Branch,
+  points_to_set: IR.ResourceId[][],
+): Op[] {
   const cond: IR.Operand = line[1];
   const args: IR.Arguments = line[4];
-  return [...translate_operand(cond), ...translate_arguments(args)];
+  return [
+    ...translate_operand(cond, points_to_set),
+    ...translate_arguments(args, points_to_set),
+  ];
 }
 
 function translate_return(
@@ -87,15 +93,18 @@ function translate_operation(
 ): Op[] {
   switch (rhs[0]) {
     case "call":
-      return translate_arguments(rhs[2]);
+      return translate_arguments(rhs[2], points_to_set);
     case "borrow":
-      return translate_operand(rhs[1]);
+      return translate_operand(rhs[1], points_to_set);
     case "load":
       return translate_load(rhs, points_to_set);
     case "unary":
-      return translate_operand(rhs[1]);
+      return translate_operand(rhs[1], points_to_set);
     case "binary":
-      return [...translate_operand(rhs[1]), ...translate_operand(rhs[2])];
+      return [
+        ...translate_operand(rhs[1], points_to_set),
+        ...translate_operand(rhs[2], points_to_set),
+      ];
     default: {
       const _n: never = rhs;
       return [];
@@ -103,18 +112,24 @@ function translate_operation(
   }
 }
 
-function translate_arguments(args: IR.Arguments): Op[] {
+function translate_arguments(
+  args: IR.Arguments,
+  points_to_set: IR.ResourceId[][],
+): Op[] {
   const os: IR.Operand[] = [...args.slice(1)] as IR.Operand[];
-  const ops: Op[][] = os.map((x) => translate_operand(x));
+  const ops: Op[][] = os.map((x) => translate_operand(x, points_to_set));
   return ops.flat(1);
 }
 
-function translate_operand(o: IR.Operand): Op[] {
+function translate_operand(
+  o: IR.Operand,
+  points_to_set: IR.ResourceId[][],
+): Op[] {
   switch (o[0]) {
     case "peek":
       return [["use", o[1]]];
     case "move":
-      return [["drop", o[1]]];
+      return piggyback_drop(o[1], points_to_set);
     case "constant":
       return [];
     default: {
@@ -126,8 +141,19 @@ function translate_operand(o: IR.Operand): Op[] {
 
 function translate_load(load: IR.Load, points_to_set: IR.ResourceId[][]): Op[] {
   const pointer: IR.Operand = load[1];
-  const pointer_ops: Op[] = translate_operand(pointer);
+  const pointer_ops: Op[] = translate_operand(pointer, points_to_set);
   const pointees: IR.ResourceId[] = points_to_set[IR.to_index(pointer[1])];
   const pointee_ops: Op[] = pointees.map((p) => ["use", p]);
   return [...pointer_ops, ...pointee_ops];
+}
+
+// 'drop' of a variable MUST trigger a 'use' on the entire points-to set of that variable
+function piggyback_drop(
+  variable: IR.ResourceId,
+  points_to_set: IR.ResourceId[][],
+): Op[] {
+  const index = IR.to_index(variable);
+  const pointee_uses: Use[] = points_to_set[index].map((p) => ["use", p]);
+  const drop: Drop = ["drop", variable];
+  return [...pointee_uses, drop];
 }
