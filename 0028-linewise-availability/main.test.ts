@@ -692,6 +692,11 @@ describe("load", () => {
     );
     expect(result[0]).toEqual("ok");
     expect(result[1].length).toEqual(5);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+    expect(result[1][2]).toEqual("Available");
+    expect(result[1][3]).toEqual("Available");
+    expect(result[1][4]).toEqual("Available");
   });
 
   it("must reject load of a borrowed borrowed invalid resource", () => {
@@ -711,5 +716,44 @@ describe("load", () => {
       ["Undefined", "Undefined", "Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
+  });
+});
+
+describe("jump", () => {
+  it("must accept jump with any variable state", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], [], []],
+      ["Undefined", "Available", "Destroyed", "Ambiguous"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(4);
+    expect(result[1][0]).toEqual("Undefined");
+    expect(result[1][1]).toEqual("Available");
+    expect(result[1][2]).toEqual("Destroyed");
+    expect(result[1][3]).toEqual("Ambiguous");
+  });
+
+  it("must accept jump with borrow in any state", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%0"], ["%0"], ["%0"]],
+      ["Available", "Undefined", "Available", "Destroyed", "Ambiguous"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(5);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Undefined");
+    expect(result[1][2]).toEqual("Available");
+    expect(result[1][3]).toEqual("Destroyed");
+    expect(result[1][4]).toEqual("Ambiguous");
   });
 });

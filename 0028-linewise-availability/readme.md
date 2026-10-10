@@ -51,12 +51,12 @@ deno test
 - [x] test let
 - [x] test unary (with/without borrow)
 - [x] test binary
-- [ ] test return (with/without borrow)
-- [ ] test drop
-- [ ] test borrow
-- [ ] test load
+- [x] test return (with/without borrow)
+- [x] test drop
+- [x] test borrow
+- [x] test load
+- [x] test jump
 - [ ] test call (with/without borrows)
-- [ ] test jump
 - [ ] test branch (with/without parameters, with/without borrows)
 - [ ] test binding of block parameters (with/without borrows)
 
