@@ -93,7 +93,7 @@ function translate_operation(
 ): Op[] {
   switch (rhs[0]) {
     case "call":
-      return translate_arguments(rhs[2], points_to_set);
+      return translate_call(rhs, points_to_set);
     case "borrow":
       return translate_operand(rhs[1], points_to_set);
     case "load":
@@ -110,6 +110,13 @@ function translate_operation(
       return [];
     }
   }
+}
+
+function translate_call(
+  rhs: IR.Call,
+  points_to_set: IR.ResourceId[][],
+): Op[] {
+  return translate_arguments(rhs[2], points_to_set);
 }
 
 function translate_arguments(
