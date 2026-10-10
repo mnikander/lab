@@ -74,8 +74,10 @@ function update_one(
     case "drop":
       result = apply_drop(s);
       break;
-    default:
-      return op as never;
+    default: {
+      const _o: never = op;
+      return ["error", "unknown operation on variable state"];
+    }
   }
 
   if (is_ok<VariableState>(result)) {

@@ -24,8 +24,10 @@ export function translate(
       return translate_branch(line);
     case "return":
       return translate_return(line, points_to_set, state);
-    default:
-      return line as never;
+    default: {
+      const _l: never = line;
+      return [];
+    }
   }
 }
 
@@ -61,9 +63,9 @@ function translate_return(
   ) => [i, state[i], points_to_set[i]]);
   const non_destroyed: Triplet[] = zipped.filter((t) =>
     t[1] === "Available" || t[1] === "Ambiguous"
-  );  
-  
-  // for all pointer-type variables which are not "Destroyed": 
+  );
+
+  // for all pointer-type variables which are not "Destroyed":
   // use each variable in their points-to set
   // note that only pointer-type variables, have a non-empty points-to-set
   const use_available_borrows: Op[][] = non_destroyed.map((t) =>
@@ -103,8 +105,10 @@ function translate_operation(
       return translate_operand(rhs[1]);
     case "binary":
       return [...translate_operand(rhs[1]), ...translate_operand(rhs[2])];
-    default:
-      return rhs as never;
+    default: {
+      const _n: never = rhs;
+      return [];
+    }
   }
 }
 
@@ -122,7 +126,9 @@ function translate_operand(o: IR.Operand): Op[] {
       return [["drop", o[1]]];
     case "constant":
       return [];
-    default:
-      return o as never;
+    default: {
+      const _o: never = o[0];
+      return [];
+    }
   }
 }
