@@ -818,7 +818,7 @@ describe("call", () => {
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
-      [[], [], []],
+      [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("ok");
@@ -843,7 +843,7 @@ describe("call", () => {
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
-      [[], [], []],
+      [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
@@ -864,7 +864,7 @@ describe("call", () => {
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
-      [[], [], []],
+      [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
@@ -885,7 +885,7 @@ describe("call", () => {
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
-      [[], [], []],
+      [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
