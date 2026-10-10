@@ -56,6 +56,8 @@ deno test
 - [x] test borrow
 - [x] test load
 - [x] test jump
+- [ ] ensure that whenever a borrow is dropped, no matter how, the points-to set is used
+- [ ] replace `return` with `jump` in most test-cases, so that `return` is not accidentally catching issues which other commands should catch earlier on
 - [ ] test call (with/without borrows)
 - [ ] test branch (with/without parameters, with/without borrows)
 - [ ] test binding of block parameters (with/without borrows)
@@ -70,6 +72,13 @@ It would require hundreds of test-cases to check all the relevant cases.
 ### 'Ambiguous' state may not be precise enough for drop-during-return
 I think there is a problem with the current handling of borrows which are cleared by a return. If a borrow is Undefined and Destroyed, then it is Ambiguous. Returning some other resource, should _not_ trigger an error for the Ambiguous borrow. It does not need to be dropped since it is Undefined and Destroyed. There is only one Ambiguous state, however. That ambiguous state is treated as if one of its constituent states is Available. This causes my analysis, specifically the `translate_return` function, to reject valid code. To solve this issue, I would probably need to switch to a power-state lattice. This would allow differentiating `Undefined`/`Destroyed` from `Undefined`/`Available`. In the first case there would be no need to check the points-to set of the borrow. In the second case, the point-to set must be used. 
 <!-- TODO: can I create a test-case which reproduces this issue? -->
+
+### It's better to end a test-block with `jump` that `return`
+While writing tests for function calls, the analysis picked up an error which it does not know how to detect. It was detecting that function was called, where the argument is a dangling pointer. This is something I want to detect, but the code cannot do yet. It was mysterious that it was detecting those errors for some test-cases. On closer inspection, it turned out that the analysis was detecting an error for the code `let %2 = call @1 (peek %1)`. It was _not_ detecting an error for `let %2 = call @1 (move %1)`. This was very strange.
+
+Both test-cases ended with `return %2`. When doing `return %2`, any other variables such as `%1` are cleared. That cleanup involves a use of its points-to set. That is when the 'peek' version of the test was finding out that the pointer was dangling. The 'move' version of the test was not finding this problem, since the pointer was already destroyed anyway, so its points-to set was not being checked as part of return.
+
+To alleviate this issue, it is _highly recommended_ to write the tests for the line-by-line analysis in such a way that the block ends with a `jump`. A `jump` is a no-op from the perspective of variable availability. This ensures that any errors which are to be detected, are actually detected where they are caused, and not accidentally caught by the `return` statement.
 
 ## Future Work
 <!-- Are there follow-up questions? -->
