@@ -757,3 +757,137 @@ describe("jump", () => {
     expect(result[1][4]).toEqual("Ambiguous");
   });
 });
+
+describe("call", () => {
+  it("must accept call with Available arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      ["let", "%1", ["unary", ["constant", 1]]],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%0"], ["move", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+    expect(result[1][2]).toEqual("Available");
+  });
+
+  it("must reject call with Unavailable arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      ["drop", "%0"],
+      ["let", "%1", ["unary", ["constant", 1]]],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%0"], ["move", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept call with Available borrow arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%1"], ["move", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+    expect(result[1][2]).toEqual("Available");
+  });
+
+  it("must reject call with Unavailable borrow arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%1"],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%1"], ["move", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it.skip("must reject call with peeked borrow to Unavailable variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"], // now the borrow '%1' is dangling, i.e. it points at nothing
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it.skip("must reject call with moved borrow to Unavailable variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"], // now the borrow '%1' is dangling, i.e. it points at nothing
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["move", "%1"]],
+      ]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+});
