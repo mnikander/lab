@@ -67,8 +67,8 @@ describe("invalid input", () => {
   });
 });
 
-describe("integer resources", () => {
-  it("must accept valid define and use", () => {
+describe("unary and binary instructions on integers", () => {
+  it("must accept define and use of a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -84,6 +84,117 @@ describe("integer resources", () => {
     expect(result[1][0]).toEqual("Available");
   });
 
+  it("must accept unary instruction", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["unary", ["peek", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must accept unary instruction with move", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["unary", ["move", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Destroyed");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must accept binary instruction", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      ["let", "%1", ["unary", ["constant", 1]]],
+      ["let", "%2", ["binary", ["peek", "%0"], ["peek", "%1"]]],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+    expect(result[1][2]).toEqual("Available");
+  });
+
+  it("must accept binary instruction with the same variable twice", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      ["let", "%1", ["binary", ["peek", "%0"], ["peek", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must accept binary instruction with a peek and move of the same variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      // evaluation is left-to-right, so "let %1 = add (peek %0) (move %0)" is valid
+      ["let", "%1", ["binary", ["peek", "%0"], ["move", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Destroyed");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must reject binary instruction with a move and peek of the same variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      // evaluation is left-to-right, so "let %1 = add (move %0) (peek %0)" is a move-before-use error
+      ["let", "%1", ["binary", ["move", "%0"], ["peek", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+});
+
+describe("return", () => {
   it("must reject return of 'Undefined' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -125,7 +236,22 @@ describe("integer resources", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it("must reject return of 'Ambiguous' variable", () => {
+  it("must accept valid return of predefined variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(1);
+    expect(result[1][0]).toEqual("Available");
+  });
+
+  it("must reject return of ambiguous variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["return", "%0"],
@@ -137,7 +263,9 @@ describe("integer resources", () => {
     );
     expect(result[0]).toEqual("error");
   });
+});
 
+describe("drop", () => {
   it("must reject drop of 'Undefined' variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -229,34 +357,6 @@ describe("integer resources", () => {
       code,
       [[], []],
       ["Undefined", "Undefined"],
-    );
-    expect(result[0]).toEqual("error");
-  });
-
-  it("must accept valid return of predefined variable", () => {
-    const code: Block = ["block", ["bindings"], [
-      "instructions",
-      ["return", "%0"],
-    ]];
-    const result: Result<VariableState[]> = linewise_availability(
-      code,
-      [[]],
-      ["Available"],
-    );
-    expect(result[0]).toEqual("ok");
-    expect(result[1].length).toEqual(1);
-    expect(result[1][0]).toEqual("Available");
-  });
-
-  it("must reject return of ambiguous variable", () => {
-    const code: Block = ["block", ["bindings"], [
-      "instructions",
-      ["return", "%0"],
-    ]];
-    const result: Result<VariableState[]> = linewise_availability(
-      code,
-      [[]],
-      ["Ambiguous"],
     );
     expect(result[0]).toEqual("error");
   });
@@ -501,6 +601,39 @@ describe("loading from borrowed resources", () => {
       code,
       [[], ["%0"], []],
       ["Available", "Undefined", "Available"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept copy of a borrow", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["unary", ["peek", "%1"]]], // 'unary' instruction as a placeholder for 'copy'
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%0"]], // points-to sets are defined accordingly
+      ["Available", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+  });
+
+  it("must reject drop of a borrowed resource, where the borrow was copied", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["unary", ["peek", "%1"]]],
+      ["drop", "%0"],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%1"]],
+      ["Available", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
   });
