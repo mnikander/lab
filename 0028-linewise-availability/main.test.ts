@@ -485,6 +485,9 @@ describe("borrow", () => {
     );
     expect(result[0]).toEqual("ok");
     expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+    expect(result[1][2]).toEqual("Available");
   });
 
   it("must reject drop of a borrowed resource, where the borrow was copied", () => {
@@ -499,6 +502,40 @@ describe("borrow", () => {
       code,
       [[], ["%0"], ["%1"]],
       ["Available", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  // escape analysis must detect errors due to returning a pointer to a local
+  // this analysis must permit returning a pointer if it is available
+  it("must accept return of an available borrow", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Available", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must reject return of a dangling borrow", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Destroyed", "Available"],
     );
     expect(result[0]).toEqual("error");
   });
