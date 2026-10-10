@@ -2,7 +2,7 @@
 
 import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
-import { Define, Drop, Op, Use } from "./dsl_grammar.ts";
+import { Define, Drop, Op } from "./dsl_grammar.ts";
 
 export function translate(
   line: IR.Line,
