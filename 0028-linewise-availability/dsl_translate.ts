@@ -34,7 +34,7 @@ function translate_let(line: IR.Let, points_to_set: IR.ResourceId[][]): Op[] {
 }
 
 function translate_drop(line: IR.Drop, points_to_set: IR.ResourceId[][]): Op[] {
-  return piggyback_drop(line[1], points_to_set);
+  return [...use_pointees(line[1], points_to_set), ["drop", line[1]]];
 }
 
 function translate_jump(_: IR.Jump): Op[] {
@@ -136,7 +136,7 @@ function translate_operand(
     case "peek":
       return [["use", o[1]]];
     case "move":
-      return piggyback_drop(o[1], points_to_set);
+      return [...use_pointees(o[1], points_to_set), ["drop", o[1]]];
     case "constant":
       return [];
     default: {
@@ -155,12 +155,11 @@ function translate_load(load: IR.Load, points_to_set: IR.ResourceId[][]): Op[] {
 }
 
 // 'drop' of a variable MUST trigger a 'use' on the entire points-to set of that variable
-function piggyback_drop(
+function use_pointees(
   variable: IR.ResourceId,
   points_to_set: IR.ResourceId[][],
 ): Op[] {
   const index = IR.to_index(variable);
   const pointee_uses: Use[] = points_to_set[index].map((p) => ["use", p]);
-  const drop: Drop = ["drop", variable];
-  return [...pointee_uses, drop];
+  return pointee_uses;
 }
