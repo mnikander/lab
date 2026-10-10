@@ -457,7 +457,7 @@ describe("loading from borrowed resources", () => {
     expect(result[0]).toEqual("error");
   });
 
-  it("must reject load of borrow to a resource already dropped in the block", () => {
+  it("must reject load of dangling borrow", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -486,6 +486,59 @@ describe("loading from borrowed resources", () => {
       code,
       [[], ["%0"], []],
       ["Available", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must reject dangling borrow on return", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Available", "Undefined", "Available"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept load of a borrowed borrowed resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["borrow", ["peek", "%1"]]],
+      ["let", "%3", ["load", ["peek", "%2"]]],
+      ["let", "%4", ["load", ["peek", "%3"]]],
+      ["return", "%4"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%1"], ["%0"], []],
+      ["Undefined", "Undefined", "Undefined", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(5);
+  });
+
+  it("must reject load of a borrowed borrowed invalid resource", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["borrow", ["peek", "%1"]]],
+      ["let", "%3", ["load", ["peek", "%2"]]],
+      ["let", "%4", ["load", ["peek", "%3"]]],
+      ["drop", "%0"],
+      ["return", "%4"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%1"], ["%0"], []],
+      ["Undefined", "Undefined", "Undefined", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
   });
