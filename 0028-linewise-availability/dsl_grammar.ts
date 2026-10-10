@@ -94,13 +94,8 @@ function translate_operation(
       return translate_arguments(rhs[2]);
     case "borrow":
       return translate_operand(rhs[1]);
-    case "load": {
-      const pointer: IR.Operand = rhs[1];
-      const pointer_ops: Op[] = translate_operand(pointer);
-      const pointees: IR.ResourceId[] = points_to_set[IR.to_index(pointer[1])];
-      const pointee_ops: Op[] = pointees.map((p) => ["use", p]);
-      return [...pointer_ops, ...pointee_ops];
-    }
+    case "load":
+      return translate_load(rhs, points_to_set);
     case "unary":
       return translate_operand(rhs[1]);
     case "binary":
@@ -131,4 +126,12 @@ function translate_operand(o: IR.Operand): Op[] {
       return [];
     }
   }
+}
+
+function translate_load(load: IR.Load, points_to_set: IR.ResourceId[][]): Op[] {
+  const pointer: IR.Operand = load[1];
+  const pointer_ops: Op[] = translate_operand(pointer);
+  const pointees: IR.ResourceId[] = points_to_set[IR.to_index(pointer[1])];
+  const pointee_ops: Op[] = pointees.map((p) => ["use", p]);
+  return [...pointer_ops, ...pointee_ops];
 }
