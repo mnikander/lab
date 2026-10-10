@@ -56,9 +56,9 @@ deno test
 - [x] test borrow
 - [x] test load
 - [x] test jump
-- [ ] ensure that whenever a borrow is dropped, no matter how, the points-to set is used
+- [x] ensure that whenever a borrow is dropped, no matter how, the points-to set is used
+- [x] test call (with/without borrows)
 - [ ] replace `return` with `jump` in most test-cases, so that `return` is not accidentally catching issues which other commands should catch earlier on
-- [ ] test call (with/without borrows)
 - [ ] test branch (with/without parameters, with/without borrows)
 - [ ] test binding of block parameters (with/without borrows)
 

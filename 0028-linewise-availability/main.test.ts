@@ -759,6 +759,26 @@ describe("jump", () => {
 });
 
 describe("call", () => {
+  it("must accept call with a constant", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", [
+        "call",
+        "@1",
+        ["arguments", ["constant", 1], ["constant", 2]],
+      ]],
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(1);
+    expect(result[1][0]).toEqual("Available");
+  });
+
   it("must accept call with Available arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
