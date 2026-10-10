@@ -11,50 +11,43 @@ export function update(
   ops: Op[],
 ): Result<VariableState[]> {
   for (const op of ops) {
-    const result: Result<VariableState[]> = update_one(state, op);
+    const i: number = to_index(op[1]);
+    const s: VariableState = state[i];
+    assert(
+      s !== undefined,
+      `Variable #${i} does not have a valid input state.`,
+    );
+    let result: Result<VariableState> = [
+      "error",
+      "Bug: no DSL operation was applied",
+    ];
+
+    switch (op[0]) {
+      case "define":
+        result = apply_define(s);
+        break;
+      case "use":
+        result = apply_use(s);
+        break;
+      case "drop":
+        result = apply_drop(s);
+        // TODO: a 'drop' MUST trigger a 'use' on the entire points-to set of a variable
+        // - the signature of apply drop must be modified to include the points-to set
+        // - in the 'Available' case, the 'apply_use' calls must be made, for the points-to set
+        break;
+      default: {
+        const _o: never = op;
+        return ["error", "unknown operation on variable state"];
+      }
+    }
+
     if (is_ok(result)) {
-      state = result[1];
+      state[i] = result[1];
     } else {
-      return result;
+      return ["error", op[1] + ": " + result[1]];
     }
   }
   return ["ok", state];
-}
-
-function update_one(
-  state: VariableState[],
-  op: Op,
-): Result<VariableState[]> {
-  const i: number = to_index(op[1]);
-  const s: VariableState = state[i];
-  assert(s !== undefined, `Variable #${i} does not have a valid input state.`);
-  let result: Result<VariableState> = [
-    "error",
-    "Bug: no DSL operation was applied",
-  ];
-
-  switch (op[0]) {
-    case "define":
-      result = apply_define(s);
-      break;
-    case "use":
-      result = apply_use(s);
-      break;
-    case "drop":
-      result = apply_drop(s);
-      break;
-    default: {
-      const _o: never = op;
-      return ["error", "unknown operation on variable state"];
-    }
-  }
-
-  if (is_ok<VariableState>(result)) {
-    state[i] = result[1];
-    return ["ok", state];
-  } else {
-    return ["error", op[1] + ": " + result[1]];
-  }
 }
 
 function apply_define(state: VariableState): Result<VariableState> {
