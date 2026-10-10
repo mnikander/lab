@@ -1,7 +1,5 @@
 // Copyright (c) 2026 Marco Nikander
 
-import { Result } from "./result.ts";
-
 // State of a variable:
 //
 //              Ambiguous

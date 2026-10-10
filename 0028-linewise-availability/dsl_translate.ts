@@ -2,7 +2,7 @@
 
 import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
-import { Define, Drop, Op, Use } from "./dsl_grammar.ts";
+import { Define, Op, Use } from "./dsl_grammar.ts";
 
 export function translate(
   line: IR.Line,
@@ -121,7 +121,7 @@ function translate_call(
   const variables: (IR.Peek | IR.Move)[] = operands.filter((o) =>
     o[0] !== "constant"
   );
-  const pointee_uses: Op[][] = variables.map((v, i) =>
+  const pointee_uses: Op[][] = variables.map((v) =>
     use_pointees(v[1], points_to_set)
   );
 
