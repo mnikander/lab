@@ -362,7 +362,7 @@ describe("drop", () => {
   });
 });
 
-describe("returning with borrowed resources", () => {
+describe("borrow", () => {
   it("must reject a borrow to Undefined resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -454,9 +454,57 @@ describe("returning with borrowed resources", () => {
     );
     expect(result[0]).toEqual("error");
   });
+
+  it("must reject dangling borrow on return", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["drop", "%0"],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Available", "Undefined", "Available"],
+    );
+    expect(result[0]).toEqual("error");
+  });
+
+  it("must accept copy of a borrow", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["unary", ["peek", "%1"]]], // 'unary' instruction as a placeholder for 'copy'
+      ["drop", "%1"],
+      ["return", "%0"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%0"]], // points-to sets are defined accordingly
+      ["Available", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("ok");
+    expect(result[1].length).toEqual(3);
+  });
+
+  it("must reject drop of a borrowed resource, where the borrow was copied", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", ["unary", ["peek", "%1"]]],
+      ["drop", "%0"],
+      ["return", "%2"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], ["%1"]],
+      ["Available", "Undefined", "Undefined"],
+    );
+    expect(result[0]).toEqual("error");
+  });
 });
 
-describe("loading from borrowed resources", () => {
+describe("load", () => {
   it("must reject load of borrow to Undefined resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -585,54 +633,6 @@ describe("loading from borrowed resources", () => {
     const result: Result<VariableState[]> = linewise_availability(
       code,
       [[], ["%0"], []],
-      ["Available", "Undefined", "Undefined"],
-    );
-    expect(result[0]).toEqual("error");
-  });
-
-  it("must reject dangling borrow on return", () => {
-    const code: Block = ["block", ["bindings"], [
-      "instructions",
-      ["let", "%1", ["borrow", ["peek", "%0"]]],
-      ["drop", "%0"],
-      ["return", "%2"],
-    ]];
-    const result: Result<VariableState[]> = linewise_availability(
-      code,
-      [[], ["%0"], []],
-      ["Available", "Undefined", "Available"],
-    );
-    expect(result[0]).toEqual("error");
-  });
-
-  it("must accept copy of a borrow", () => {
-    const code: Block = ["block", ["bindings"], [
-      "instructions",
-      ["let", "%1", ["borrow", ["peek", "%0"]]],
-      ["let", "%2", ["unary", ["peek", "%1"]]], // 'unary' instruction as a placeholder for 'copy'
-      ["drop", "%1"],
-      ["return", "%0"],
-    ]];
-    const result: Result<VariableState[]> = linewise_availability(
-      code,
-      [[], ["%0"], ["%0"]], // points-to sets are defined accordingly
-      ["Available", "Undefined", "Undefined"],
-    );
-    expect(result[0]).toEqual("ok");
-    expect(result[1].length).toEqual(3);
-  });
-
-  it("must reject drop of a borrowed resource, where the borrow was copied", () => {
-    const code: Block = ["block", ["bindings"], [
-      "instructions",
-      ["let", "%1", ["borrow", ["peek", "%0"]]],
-      ["let", "%2", ["unary", ["peek", "%1"]]],
-      ["drop", "%0"],
-      ["return", "%2"],
-    ]];
-    const result: Result<VariableState[]> = linewise_availability(
-      code,
-      [[], ["%0"], ["%1"]],
       ["Available", "Undefined", "Undefined"],
     );
     expect(result[0]).toEqual("error");
