@@ -2,8 +2,8 @@
 
 <!-- What am I figuring out? -->
 
-How can an availability analysis be implemented? How can block-wise transfer
-functions be expressed in a simple way?
+How can an availability analysis be implemented on the control flow graph?
+How can block-wise transfer functions be expressed in a simple way?
 
 Date: 2026-10-02
 

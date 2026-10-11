@@ -16,14 +16,14 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0027 |        | 2026-10-02 | memory               | How can an availability analysis be implemented? |
-|      | 0027   | 2026-10-02 | memory               | How can block-wise transfer functions be expressed in a simple way? |
 |      |        | 2026-0- | | |
 
 ## Resolved
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0027 |        | 2026-10-02 | memory               | How can an availability analysis be implemented on the control flow graph? |
+|      | 0027   | 2026-10-02 | memory               | How can block-wise transfer functions be expressed in a simple way? |
 | 0025 |        | 2026-08-10 | ast                  | How can simple symbolic expressions be encoded in JSON? |
 | 0023 |        | 2026-05-15 | memory               | Can ownership be modelled within functions and across function boundaries with a small DSL? |
 | 0022 |        | 2026-05-14 | web                  | How can the content and structure of an HTML page be edited in place? |
