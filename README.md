@@ -16,6 +16,7 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0028 |        | 2026-10-08 | memory               | How can a line-by-line availability analysis, inside a single basic block, be implemented? |
 |      |        | 2026-0- | | |
 
 ## Resolved

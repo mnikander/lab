@@ -1,7 +1,7 @@
 # Question
 <!-- What am I figuring out? -->
 
-How can the availability be checked inside a basic block, line-by-line?
+How can a line-by-line availability analysis, inside a single basic block, be implemented?
 
 Date:   2026-10-08
 Status: In progress
