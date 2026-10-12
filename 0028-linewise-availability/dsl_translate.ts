@@ -53,6 +53,11 @@ function translate_branch(
   ];
 }
 
+// Currently does not actually 'drop' the variables, because computing a valid
+// destruction order is non-trivial. The state of the variables after a return
+// is always 'dropped'. Since 'return' is always a leaf-node in the control flow
+// graph, we don't need this information for our analyses. It is sufficient to
+// 'use' the entire points-to set of any borrows which are still available.
 function translate_return(
   line: IR.Return,
   points_to_set: IR.ResourceId[][],
@@ -68,20 +73,20 @@ function translate_return(
   );
 
   // for all pointer-type variables which are not "Destroyed":
-  // use each variable in their points-to set
+  // 'use' each variable in their points-to set
   // note that only pointer-type variables, have a non-empty points-to-set
   const use_available_borrows: Op[][] = non_destroyed.map((t) =>
     t[2].map((pointee) => ["use", pointee])
   );
   const borrow_ops: Op[] = use_available_borrows.flat(1);
 
-  // for the return value's points-to-set: use
+  // for the return value's points-to-set: 'use'
   const result_triplet: Triplet = zipped[IR.to_index(line[1])];
   const result_points_to_set_ops: Op[] = result_triplet[2].map(
     (pointee) => ["use", pointee],
   );
 
-  // for the return value: use
+  // for the return value: 'use'
   const result_ops: Op = ["use", line[1]];
 
   return [...borrow_ops, ...result_points_to_set_ops, result_ops];
