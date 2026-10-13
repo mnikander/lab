@@ -5,13 +5,14 @@ import { Op } from "./dsl_grammar.ts";
 import { translate } from "./dsl_translate.ts";
 import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
+import { fail, ok, Result } from "./result.ts";
 
 export type BlockOperations = [defined: boolean, dropped: boolean][];
 
 export function extract_transfers(
   block: IR.Block,
   variable_count: number,
-): BlockOperations {
+): Result<BlockOperations> {
   const instructions: IR.Instructions = block[2];
   const [, ...lines] = instructions;
 
@@ -40,6 +41,10 @@ export function extract_transfers(
         } inclusive`,
       );
       if (o[0] === "define") {
+        // when we encounter a define, check if we've already dropped that variable in this block:
+        if (result[index][1] === true) {
+          return fail(o[1] + ": drop-before-define");
+        }
         result[index][0] = true;
       } else if (o[0] === "drop") {
         result[index][1] = true;
@@ -47,5 +52,5 @@ export function extract_transfers(
     }
   }
 
-  return result;
+  return ok(result);
 }
