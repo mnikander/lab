@@ -542,7 +542,7 @@ describe("borrow", () => {
 });
 
 describe("load", () => {
-  it("must reject load of borrow to Undefined resource", () => {
+  it("must reject borrow to Undefined resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -557,7 +557,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept load of borrow to Available resource", () => {
+  it("must accept borrow to Available resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -576,7 +576,7 @@ describe("load", () => {
     expect(result[1][2]).toEqual("Available");
   });
 
-  it("must reject load of borrow to Destroyed resource", () => {
+  it("must reject borrow to Destroyed resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -591,7 +591,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject load of borrow to Ambiguous resource", () => {
+  it("must reject borrow to Ambiguous resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -606,7 +606,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept load of borrow to resource defined in the block", () => {
+  it("must accept borrow to resource defined in the block", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -626,7 +626,7 @@ describe("load", () => {
     expect(result[1][2]).toEqual("Available");
   });
 
-  it("must reject load of borrow to a resource not-yet defined in the block", () => {
+  it("must reject borrow to a resource not-yet defined in the block", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -642,7 +642,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject load of dangling borrow", () => {
+  it("must reject dangling borrow", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -659,7 +659,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject load of a dropped borrow", () => {
+  it("must reject dropped borrow", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%1", ["borrow", ["peek", "%0"]]],
@@ -675,7 +675,7 @@ describe("load", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept load of a borrowed borrowed resource", () => {
+  it("must accept borrowed borrowed resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -699,7 +699,7 @@ describe("load", () => {
     expect(result[1][4]).toEqual("Available");
   });
 
-  it("must reject load of a borrowed borrowed invalid resource", () => {
+  it("must reject borrowed borrowed invalid resource", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -816,7 +816,7 @@ describe("branch", () => {
 });
 
 describe("branch with arguments", () => {
-  it("must accept branch with a constant argument", () => {
+  it("must accept a constant argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["constant", 42]]],
@@ -829,7 +829,7 @@ describe("branch with arguments", () => {
     expect(is_ok(result)).toBe(true);
   });
 
-  it("must accept branch with a Defined argument", () => {
+  it("must accept Defined argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
@@ -843,7 +843,7 @@ describe("branch with arguments", () => {
     expect(result[1][0]).toEqual("Available");
   });
 
-  it("must reject branch with a Destroyed argument", () => {
+  it("must reject Destroyed argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
@@ -856,7 +856,7 @@ describe("branch with arguments", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept branch with a Defined moved argument", () => {
+  it("must accept Defined moved argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["move", "%0"]]],
@@ -870,7 +870,7 @@ describe("branch with arguments", () => {
     expect(result[1][0]).toEqual("Destroyed");
   });
 
-  it("must accept branch with multiple arguments", () => {
+  it("must accept multiple arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       [
@@ -891,7 +891,7 @@ describe("branch with arguments", () => {
     expect(result[1][1]).toEqual("Destroyed");
   });
 
-  it.skip("must reject branch with borrow to moved argument", () => {
+  it.skip("must reject borrow to moved argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       [
@@ -912,7 +912,7 @@ describe("branch with arguments", () => {
 });
 
 describe("call", () => {
-  it("must accept call with a constant", () => {
+  it("must accept a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", [
@@ -932,7 +932,7 @@ describe("call", () => {
     expect(result[1][0]).toEqual("Available");
   });
 
-  it("must accept call with Available arguments", () => {
+  it("must accept Available arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 0]]],
@@ -956,7 +956,7 @@ describe("call", () => {
     expect(result[1][2]).toEqual("Available");
   });
 
-  it("must reject call with Unavailable arguments", () => {
+  it("must reject Unavailable arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 0]]],
@@ -977,7 +977,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept call with Available borrow arguments", () => {
+  it("must accept Available borrow arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1001,7 +1001,7 @@ describe("call", () => {
     expect(result[1][2]).toEqual("Available");
   });
 
-  it("must reject call with Unavailable borrow arguments", () => {
+  it("must reject Unavailable borrow arguments", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1022,7 +1022,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject call with borrow to Unavailable variable", () => {
+  it("must reject borrow to Unavailable variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1043,7 +1043,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject call with moved borrow to Unavailable variable", () => {
+  it("must reject moved borrow to Unavailable variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1064,7 +1064,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject call with moved argument and a borrow to that argument", () => {
+  it.skip("must reject moved argument and a borrow to that argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1084,7 +1084,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject call with a borrow the second moved argument", () => {
+  it.skip("must reject a borrow the second moved argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
