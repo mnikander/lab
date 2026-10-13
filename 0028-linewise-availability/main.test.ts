@@ -917,7 +917,7 @@ describe("branch with arguments", () => {
     expect(result[1][1]).toEqual("Destroyed");
   });
 
-  it.skip("must reject borrow to moved argument", () => {
+  it.skip("must reject borrows invalidated during the branch instruction", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       [
@@ -1127,7 +1127,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject moved argument and a borrow to that argument", () => {
+  it.skip("must reject borrow which is invalidated during the call (left-to-right)", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1147,7 +1147,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject a borrow the second moved argument", () => {
+  it.skip("must reject borrow which is invalidated during the call (right-to-left)", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],

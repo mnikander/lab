@@ -117,7 +117,9 @@ The following code snippet _must_ be rejected by the analysis:
 The variable `%b` points at `%a`.
 Even though `%a` is Available before the function call, it is dropped during the function call.
 This means that `%a` is not available and that `%b` is a dangling reference during the execution of the function `@foo`.
-The same thing applies to block parameters.
+
+The same thing applies to any AST node which takes two or more operands, of which at least one can be of a borrowed type.
+In particular, this applies to **function calls and branching to a block with parameters**.
 The desired semantics are as if they are all passed simultaneously.
 One way to enforce valid semantics woud be to modify the translation to the define-use-drop DSL of arguments.
 The validity of the points-to set must be tested _after_ all moves have been done.
@@ -129,7 +131,7 @@ This would allow taking a set of operations and sorting them such that all the `
 From an analysis standpoint they would still be treated exactly like a 'use'.
 
 Perhaps there is also another way to do this.
-The uses needed to check the availaibility of every member of the points-to set, needs to happen after the other operations.
+The uses needed to check the availability of every member of the points-to set, needs to happen after the other operations.
 
 ### Number and type of block parameters must be checked
 
