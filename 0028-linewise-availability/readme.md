@@ -118,20 +118,31 @@ The variable `%b` points at `%a`.
 Even though `%a` is Available before the function call, it is dropped during the function call.
 This means that `%a` is not available and that `%b` is a dangling reference during the execution of the function `@foo`.
 
-The same thing applies to any AST node which takes two or more operands, of which at least one can be of a borrowed type.
-In particular, this applies to **function calls and branching to a block with parameters**.
-The desired semantics are as if they are all passed simultaneously.
-One way to enforce valid semantics woud be to modify the translation to the define-use-drop DSL of arguments.
-The validity of the points-to set must be tested _after_ all moves have been done.
-The 'piggyback' trick must be applied at the very end, after all other operations.
+On the flip side, the following is actually useful:
+```
+%a = 42
+%r = add (peek %a) (move %a)
+```
+Here, `%a` is not a borrowed type.
 
-One way to do this might be to distinguish those availability checks of the points-to set.
-Instead of `["use", %1]` they could have their own tag, i.e. `["check", %1]`.
-This would allow taking a set of operations and sorting them such that all the `check` commands are at the end.
-From an analysis standpoint they would still be treated exactly like a 'use'.
+In general, **when an AST node takes two or more operands, and at least one of them is a borrowed type, there is a danger of inconsistencies**.
+This risk is most obvious with function calls and branching to a block with parameters.
+There are several ways of resolving this:
 
-Perhaps there is also another way to do this.
-The uses needed to check the availability of every member of the points-to set, needs to happen after the other operations.
+1. simultaneous ownership transfer of all operands
+2. check the validity of the points-to set for each borrow-type argument, after all the define-use-drop operations have been done
+3. analysis which checks specifically for inconsistencies when borrowed type operands are present
+
+#1. The **simultaneous ownership transfer of all arguments** can be implemented by:
+- Making every use of a borrow, a use of its points-to set
+- Sorting the define-use-drop operations for a line of code, into a drop-use-define order, which is conservative and safe
+Simultaneous ownership transfer breaks the `add` example from above.
+This was the approach chosen for now, because it's simple, safe, and the code stays clean.
+Other approaches seem to require more corner cases or more finesse.
+
+#2. **Checking of validity of borrows after all moves** can be implemented by:
+- Modifying the translation to the define-use-drop DSL of arguments
+- One way to do this might be to distinguish the validity checks of the points-to set. Instead of `["use", %1]` any borrow type argument could have their own tag, i.e. `["check", %1]`. The 'piggyback' trick is only applied at the very end, after all other operations. This is done by sorting all of the "check" ops to the back, and then expanding them to "use" of the points-to set.
 
 ### Number and type of block parameters must be checked
 
