@@ -67,7 +67,7 @@ describe("invalid input", () => {
   });
 });
 
-describe("unary and binary instructions on integers", () => {
+describe("unary and binary with intergers", () => {
   it("must accept define and use of a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -755,6 +755,60 @@ describe("jump", () => {
     expect(result[1][2]).toEqual("Available");
     expect(result[1][3]).toEqual("Destroyed");
     expect(result[1][4]).toEqual("Ambiguous");
+  });
+});
+
+describe("branch, without arguments", () => {
+  it("must accept branch via a constant", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments"]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [],
+      [],
+    );
+    expect(is_ok(result)).toBe(true);
+  });
+
+  it("must accept branch via a peeked Available variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["peek", "%0"], "^1", "^2", ["arguments"]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+  });
+
+  it("must accept branch via a moved Available variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["move", "%0"], "^1", "^2", ["arguments"]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+  });
+
+  it("must reject branch via an Undefined variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["move", "%0"], "^1", "^2", ["arguments"]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
   });
 });
 
