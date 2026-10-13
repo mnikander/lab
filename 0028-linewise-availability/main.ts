@@ -2,14 +2,7 @@
 
 import { assert } from "@std/assert";
 import { VariableState } from "./lattice.ts";
-import {
-  Bindings,
-  Block,
-  Instructions,
-  Line,
-  ResourceId,
-  to_index,
-} from "./grammar.ts";
+import { Block, ResourceId, to_index } from "./grammar.ts";
 import { is_ok, Result } from "./result.ts";
 import * as DSL from "./dsl_grammar.ts";
 import { update } from "./dsl_evaluator.ts";
