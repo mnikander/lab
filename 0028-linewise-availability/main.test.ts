@@ -758,7 +758,7 @@ describe("jump", () => {
   });
 });
 
-describe("branch, without arguments", () => {
+describe("branch, simple", () => {
   it("must accept branch via a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -770,6 +770,7 @@ describe("branch, without arguments", () => {
       [],
     );
     expect(is_ok(result)).toBe(true);
+    expect(result[1].length).toEqual(0);
   });
 
   it("must accept branch via a peeked Available variable", () => {
@@ -783,6 +784,7 @@ describe("branch, without arguments", () => {
       ["Available"],
     );
     expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Available");
   });
 
   it("must accept branch via a moved Available variable", () => {
@@ -796,6 +798,7 @@ describe("branch, without arguments", () => {
       ["Available"],
     );
     expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Destroyed");
   });
 
   it("must reject branch via an Undefined variable", () => {
@@ -809,6 +812,62 @@ describe("branch, without arguments", () => {
       ["Undefined"],
     );
     expect(is_failure(result)).toBe(true);
+  });
+});
+
+describe("branch, with arguments", () => {
+  it("must accept branch with a constant argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["constant", 42]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [],
+      [],
+    );
+    expect(is_ok(result)).toBe(true);
+  });
+
+  it("must accept branch with a Defined argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Available");
+  });
+
+  it("must reject branch with a Destroyed argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Destroyed"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it("must accept branch with a Defined moved argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["move", "%0"]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Destroyed");
   });
 });
 
