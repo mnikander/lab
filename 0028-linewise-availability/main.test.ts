@@ -937,6 +937,43 @@ describe("branch with arguments", () => {
   });
 });
 
+describe("block bindings", () => {
+  it("must accept single binding", () => {
+    const code: Block = ["block", ["bindings", "%0"], [
+      "instructions",
+      ["let", "%1", ["unary", ["peek", "%0"]]],
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"], // block bindings become available once the block is entered, not before
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1].length).toEqual(2);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Available");
+  });
+
+  it("must accept multiple bindings", () => {
+    const code: Block = ["block", ["bindings", "%0", "%1"], [
+      "instructions",
+      ["let", "%2", ["binary", ["peek", "%0"], ["move", "%1"]]],
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], [], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1].length).toEqual(3);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+    expect(result[1][2]).toEqual("Available");
+  });
+});
+
 describe("call", () => {
   it("must accept a constant", () => {
     const code: Block = ["block", ["bindings"], [

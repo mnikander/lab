@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Marco Nikander
 
 export type Block        = [ tag: "block", Bindings, Instructions];
-export type Bindings     = [ tag: "bindings",     ...number[]];
+export type Bindings     = [ tag: "bindings",     ...ResourceId[]];
 export type Instructions = [ tag: "instructions", ...Line[] ];
 
 export type Line         = Let | Drop | Terminator;

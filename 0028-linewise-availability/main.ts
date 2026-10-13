@@ -2,7 +2,14 @@
 
 import { assert } from "@std/assert";
 import { VariableState } from "./lattice.ts";
-import { Block, Instructions, Line, ResourceId } from "./grammar.ts";
+import {
+  Bindings,
+  Block,
+  Instructions,
+  Line,
+  ResourceId,
+  to_index,
+} from "./grammar.ts";
 import { is_ok, Result } from "./result.ts";
 import * as DSL from "./dsl_grammar.ts";
 import { update } from "./dsl_evaluator.ts";
@@ -17,8 +24,12 @@ export function linewise_availability(
     state.length === points_to_set.length,
     `Pre-condition: the number of variable states and points-to sets must be equal. ${state.length} != ${points_to_set.length}`,
   );
-  const instructions: Instructions = code[2];
-  const lines: Line[] = [...instructions.slice(1)] as Line[];
+  const [, tagged_bindings, tagged_instructions] = code;
+  const [, ...bindings] = tagged_bindings;
+  const [, ...lines] = tagged_instructions;
+
+  bindings.forEach((b) => (state[to_index(b)] = "Available"));
+
   for (const l of lines) {
     const ops: DSL.Op[] = translate(l, points_to_set, state);
     const result: Result<VariableState[]> = update(
