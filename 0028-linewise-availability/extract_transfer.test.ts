@@ -21,7 +21,7 @@ describe("extraction of variable-transfer tables", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     expect(() =>
       extract_transfers(
@@ -35,7 +35,7 @@ describe("extraction of variable-transfer tables", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,
@@ -51,7 +51,7 @@ describe("extraction of variable-transfer tables", () => {
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
       ["drop", "%0"],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,
@@ -67,7 +67,7 @@ describe("extraction of variable-transfer tables", () => {
       "instructions",
       ["drop", "%0"],
       ["let", "%0", ["unary", ["constant", 42]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,
@@ -85,7 +85,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%2", ["unary", ["constant", 2]]],
       ["let", "%3", ["unary", ["constant", 3]]],
       ["drop", "%3"],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,
@@ -104,7 +104,7 @@ describe("extraction of variable-transfer tables", () => {
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
       ["let", "%1", ["unary", ["move", "%0"]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,
@@ -121,7 +121,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%0", ["unary", ["constant", 0]]],
       ["let", "%1", ["unary", ["constant", 1]]],
       ["let", "%2", ["binary", ["peek", "%0"], ["move", "%1"]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<BlockOperations> = extract_transfers(
       code,

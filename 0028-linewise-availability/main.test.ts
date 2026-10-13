@@ -741,7 +741,7 @@ describe("jump", () => {
   it("must accept jump with any variable state", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -759,7 +759,7 @@ describe("jump", () => {
   it("must accept jump with borrow in any state", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -960,7 +960,7 @@ describe("block bindings", () => {
     const code: Block = ["block", ["bindings", "%0"], [
       "instructions",
       ["let", "%1", ["unary", ["peek", "%0"]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -977,7 +977,7 @@ describe("block bindings", () => {
     const code: Block = ["block", ["bindings", "%0", "%1"], [
       "instructions",
       ["let", "%2", ["binary", ["peek", "%0"], ["move", "%1"]]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1001,7 +1001,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["constant", 1], ["constant", 2]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1023,7 +1023,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1048,7 +1048,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1068,7 +1068,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1093,7 +1093,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1114,7 +1114,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1135,7 +1135,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["move", "%1"]],
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1155,7 +1155,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["move", "%0"], ["peek", "%1"]], // %1 becomes dangling due to this call
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1175,7 +1175,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%0"]], // %1 becomes dangling due to this call
       ]],
-      ["jump", "^1"],
+      ["jump", "^1", ["arguments"]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,

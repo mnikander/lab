@@ -16,7 +16,7 @@ export type Unary        = [ tag: "unary",        Operand ];
 export type Binary       = [ tag: "binary",       Operand, Operand ];
 
 export type Terminator   = Return | Jump | Branch;
-export type Jump         = [ tag: "jump",         targetBlock: BlockId ];
+export type Jump         = [ tag: "jump",         targetBlock: BlockId, Arguments ];
 export type Branch       = [ tag: "branch",       condition: Operand, thenBlock: BlockId, elseBlock: BlockId, Arguments ];
 export type Return       = [ tag: "return",       ResourceId ];
 
