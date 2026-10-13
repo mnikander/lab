@@ -8,7 +8,7 @@ import { BlockOperations, extract_transfers } from "./extract_transfer.ts";
 
 const empty_block: Block = ["block", ["bindings"], ["instructions"]];
 
-describe("empty block", () => {
+describe("extraction of variable-transfer tables", () => {
   it("must accept empty input", () => {
     const result: BlockOperations = extract_transfers(
       empty_block,
@@ -16,11 +16,7 @@ describe("empty block", () => {
     );
     expect(result.length).toEqual(0);
   });
-});
 
-// "must throw when variable count is smaller than"
-
-describe("unary and binary instructions on integers", () => {
   it("must throw when there are more variables than the specified variable count", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
