@@ -930,7 +930,7 @@ describe("branch with arguments", () => {
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
-      [[], []],
+      [[], ["%0"]],
       ["Available", "Available"],
     );
     expect(is_failure(result)).toBe(true);
