@@ -860,7 +860,7 @@ describe("branch with arguments", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept Defined argument", () => {
+  it("must accept Available argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
@@ -900,7 +900,7 @@ describe("branch with arguments", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must accept Defined moved argument", () => {
+  it("must accept Available moved argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["branch", ["constant", 1], "^1", "^2", ["arguments", ["move", "%0"]]],
