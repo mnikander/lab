@@ -18,7 +18,7 @@ export function update(
       `Variable #${i} does not have a valid input state.`,
     );
     let result: Result<VariableState> = [
-      "error",
+      "fail",
       "Bug: no DSL operation was applied",
     ];
 
@@ -34,14 +34,14 @@ export function update(
         break;
       default: {
         const _o: never = op;
-        return ["error", "unknown operation on variable state"];
+        return ["fail", "unknown operation on variable state"];
       }
     }
 
     if (is_ok(result)) {
       state[i] = result[1];
     } else {
-      return ["error", op[1] + ": " + result[1]];
+      return ["fail", op[1] + ": " + result[1]];
     }
   }
   return ["ok", state];
@@ -68,13 +68,13 @@ function apply_use(state: VariableState): Result<VariableState> {
   // Thus, we just treat 'define' as a reset of the variable item.
   switch (state) {
     case "Ambiguous":
-      return ["error", "unsafe use"];
+      return ["fail", "unsafe use"];
     case "Destroyed":
-      return ["error", "use-after-drop"];
+      return ["fail", "use-after-drop"];
     case "Available":
       return ["ok", "Available"];
     case "Undefined":
-      return ["error", "use-before-define"];
+      return ["fail", "use-before-define"];
     default:
       throw Error("Bug: invalid variable state in 'apply_define'");
   }
@@ -83,13 +83,13 @@ function apply_use(state: VariableState): Result<VariableState> {
 function apply_drop(state: VariableState): Result<VariableState> {
   switch (state) {
     case "Ambiguous":
-      return ["error", "unsafe drop"];
+      return ["fail", "unsafe drop"];
     case "Destroyed":
-      return ["error", "double-drop"];
+      return ["fail", "double-drop"];
     case "Available":
       return ["ok", "Destroyed"];
     case "Undefined":
-      return ["error", "drop-before-define"];
+      return ["fail", "drop-before-define"];
     default:
       throw Error("Bug: invalid variable state in 'apply_drop'");
   }

@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { linewise_availability } from "./main.ts";
-import { Result } from "./result.ts";
+import { is_failure, is_ok, Result } from "./result.ts";
 import { Block } from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
 
@@ -14,7 +14,7 @@ describe("empty block", () => {
       [],
       [],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(0);
   });
 
@@ -24,7 +24,7 @@ describe("empty block", () => {
       [[], [], [], []],
       ["Undefined", "Available", "Destroyed", "Ambiguous"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(4);
     expect(result[1][0]).toEqual("Undefined");
     expect(result[1][1]).toEqual("Available");
@@ -79,7 +79,7 @@ describe("unary and binary instructions on integers", () => {
       [[]],
       ["Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(1);
     expect(result[1][0]).toEqual("Available");
   });
@@ -96,7 +96,7 @@ describe("unary and binary instructions on integers", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -114,7 +114,7 @@ describe("unary and binary instructions on integers", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Destroyed");
     expect(result[1][1]).toEqual("Available");
@@ -133,7 +133,7 @@ describe("unary and binary instructions on integers", () => {
       [[], [], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -152,7 +152,7 @@ describe("unary and binary instructions on integers", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -171,7 +171,7 @@ describe("unary and binary instructions on integers", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Destroyed");
     expect(result[1][1]).toEqual("Available");
@@ -190,7 +190,7 @@ describe("unary and binary instructions on integers", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -205,7 +205,7 @@ describe("return", () => {
       [[]],
       ["Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept return of 'Available' variable", () => {
@@ -218,7 +218,7 @@ describe("return", () => {
       [[]],
       ["Available"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(1);
     expect(result[1][0]).toEqual("Available");
   });
@@ -233,7 +233,7 @@ describe("return", () => {
       [[]],
       ["Destroyed"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept valid return of predefined variable", () => {
@@ -246,7 +246,7 @@ describe("return", () => {
       [[]],
       ["Available"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(1);
     expect(result[1][0]).toEqual("Available");
   });
@@ -261,7 +261,7 @@ describe("return", () => {
       [[]],
       ["Ambiguous"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -277,7 +277,7 @@ describe("drop", () => {
       [[], []],
       ["Available", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept drop of 'Available' variable", () => {
@@ -291,7 +291,7 @@ describe("drop", () => {
       [[], []],
       ["Available", "Available"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Destroyed");
@@ -308,7 +308,7 @@ describe("drop", () => {
       [[], []],
       ["Available", "Destroyed"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject drop of 'Ambiguous' variable", () => {
@@ -322,7 +322,7 @@ describe("drop", () => {
       [[], []],
       ["Available", "Ambiguous"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept valid define-use-drop", () => {
@@ -338,7 +338,7 @@ describe("drop", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Destroyed");
@@ -358,7 +358,7 @@ describe("drop", () => {
       [[], []],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -374,7 +374,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept borrow to Available resource", () => {
@@ -388,7 +388,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Available", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -405,7 +405,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Destroyed", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject borrow to Ambiguous resource", () => {
@@ -419,7 +419,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Ambiguous", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept borrow to resource defined in block", () => {
@@ -434,7 +434,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -452,7 +452,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject dangling borrow on return", () => {
@@ -467,7 +467,7 @@ describe("borrow", () => {
       [[], ["%0"], []],
       ["Available", "Undefined", "Available"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept copy of a borrow", () => {
@@ -483,7 +483,7 @@ describe("borrow", () => {
       [[], ["%0"], ["%0"]], // points-to sets are defined accordingly
       ["Available", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Destroyed");
@@ -503,7 +503,7 @@ describe("borrow", () => {
       [[], ["%0"], ["%1"]],
       ["Available", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   // escape analysis must detect errors due to returning a pointer to a local
@@ -519,7 +519,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Available", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(2);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -537,7 +537,7 @@ describe("borrow", () => {
       [[], ["%0"]],
       ["Destroyed", "Available"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -554,7 +554,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept load of borrow to Available resource", () => {
@@ -569,7 +569,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Available", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -588,7 +588,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Destroyed", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject load of borrow to Ambiguous resource", () => {
@@ -603,7 +603,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Ambiguous", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept load of borrow to resource defined in the block", () => {
@@ -619,7 +619,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -639,7 +639,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject load of dangling borrow", () => {
@@ -656,7 +656,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject load of a dropped borrow", () => {
@@ -672,7 +672,7 @@ describe("load", () => {
       [[], ["%0"], []],
       ["Available", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept load of a borrowed borrowed resource", () => {
@@ -690,7 +690,7 @@ describe("load", () => {
       [[], ["%0"], ["%1"], ["%0"], []],
       ["Undefined", "Undefined", "Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(5);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Available");
@@ -715,7 +715,7 @@ describe("load", () => {
       [[], ["%0"], ["%1"], ["%0"], []],
       ["Undefined", "Undefined", "Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -730,7 +730,7 @@ describe("jump", () => {
       [[], [], [], []],
       ["Undefined", "Available", "Destroyed", "Ambiguous"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(4);
     expect(result[1][0]).toEqual("Undefined");
     expect(result[1][1]).toEqual("Available");
@@ -748,7 +748,7 @@ describe("jump", () => {
       [[], ["%0"], ["%0"], ["%0"], ["%0"]],
       ["Available", "Undefined", "Available", "Destroyed", "Ambiguous"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(5);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Undefined");
@@ -774,7 +774,7 @@ describe("call", () => {
       [[]],
       ["Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(1);
     expect(result[1][0]).toEqual("Available");
   });
@@ -796,7 +796,7 @@ describe("call", () => {
       [[], [], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Destroyed");
@@ -821,7 +821,7 @@ describe("call", () => {
       [[], [], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must accept call with Available borrow arguments", () => {
@@ -841,7 +841,7 @@ describe("call", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("ok");
+    expect(is_ok(result)).toBe(true);
     expect(result[1].length).toEqual(3);
     expect(result[1][0]).toEqual("Available");
     expect(result[1][1]).toEqual("Destroyed");
@@ -866,7 +866,7 @@ describe("call", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject call with peeked borrow to Unavailable variable", () => {
@@ -887,7 +887,7 @@ describe("call", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 
   it("must reject call with moved borrow to Unavailable variable", () => {
@@ -908,6 +908,6 @@ describe("call", () => {
       [[], ["%0"], []],
       ["Undefined", "Undefined", "Undefined"],
     );
-    expect(result[0]).toEqual("error");
+    expect(is_failure(result)).toBe(true);
   });
 });
