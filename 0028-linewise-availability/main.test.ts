@@ -158,6 +158,7 @@ describe("unary and binary with intergers", () => {
     expect(result[1][1]).toEqual("Available");
   });
 
+  // also see the test-case below this one, the inverse
   it.skip("may accept binary instruction with a peek and move of the same variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -177,6 +178,7 @@ describe("unary and binary with intergers", () => {
     expect(result[1][1]).toEqual("Available");
   });
 
+  // also see the test-case above this one, the inverse
   it("may reject binary instruction with a peek and move of the same variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
