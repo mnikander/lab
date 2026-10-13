@@ -15,7 +15,7 @@ export function linewise_availability(
 ): Result<VariableState[]> {
   assert(
     state.length === points_to_set.length,
-    `The number of variable states and points-to sets must be equal. ${state.length} != ${points_to_set.length}`,
+    `Pre-condition: the number of variable states and points-to sets must be equal. ${state.length} != ${points_to_set.length}`,
   );
   const instructions: Instructions = code[2];
   const lines: Line[] = [...instructions.slice(1)] as Line[];
@@ -31,5 +31,11 @@ export function linewise_availability(
       return result; // error detected
     }
   }
+
+  assert(
+    state.length === points_to_set.length,
+    `Post-condition: the number of variable states and points-to sets must be equal. ${state.length} != ${points_to_set.length}`,
+  );
+
   return ["ok", state];
 }
