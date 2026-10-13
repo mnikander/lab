@@ -829,6 +829,19 @@ describe("branch with arguments", () => {
     expect(is_ok(result)).toBe(true);
   });
 
+  it("must reject Undefined argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
   it("must accept Defined argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -852,6 +865,19 @@ describe("branch with arguments", () => {
       code,
       [[]],
       ["Destroyed"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it("must reject Ambiguous argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Ambiguous"],
     );
     expect(is_failure(result)).toBe(true);
   });
