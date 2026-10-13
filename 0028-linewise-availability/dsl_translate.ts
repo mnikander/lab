@@ -11,15 +11,15 @@ export function translate(
 ): Op[] {
   switch (line[0]) {
     case "let":
-      return translate_let(line, points_to_set);
+      return sort_ops(translate_let(line, points_to_set));
     case "drop":
-      return translate_drop(line, points_to_set);
+      return sort_ops(translate_drop(line, points_to_set));
     case "jump":
-      return translate_jump(line);
+      return sort_ops(translate_jump(line));
     case "branch":
-      return translate_branch(line, points_to_set);
+      return sort_ops(translate_branch(line, points_to_set));
     case "return":
-      return translate_return(line, points_to_set, state);
+      return sort_ops(translate_return(line, points_to_set, state));
     default: {
       const _l: never = line;
       return [];
@@ -151,7 +151,7 @@ function translate_operand(
 ): Op[] {
   switch (o[0]) {
     case "peek":
-      return [["use", o[1]]];
+      return [...use_pointees(o[1], points_to_set), ["use", o[1]]];
     case "move":
       return [...use_pointees(o[1], points_to_set), ["drop", o[1]]];
     case "constant":
@@ -178,4 +178,11 @@ function use_pointees(
   const index = IR.to_index(variable);
   const pointee_uses: Use[] = points_to_set[index].map((p) => ["use", p]);
   return pointee_uses;
+}
+
+function sort_ops(ops: Op[]): Op[] {
+  const o_define: Define[] = ops.filter((o) => (o[0] === "define"));
+  const o_use: Use[] = ops.filter((o) => (o[0] === "use"));
+  const o_drop: IR.Drop[] = ops.filter((o) => (o[0] === "drop"));
+  return [...o_drop, ...o_use, ...o_define];
 }

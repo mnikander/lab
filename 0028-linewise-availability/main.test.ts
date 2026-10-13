@@ -158,11 +158,11 @@ describe("unary and binary with intergers", () => {
     expect(result[1][1]).toEqual("Available");
   });
 
-  it("must accept binary instruction with a peek and move of the same variable", () => {
+  it.skip("may accept binary instruction with a peek and move of the same variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 0]]],
-      // evaluation is left-to-right, so "let %1 = add (peek %0) (move %0)" is valid
+      // evaluation could be left-to-right, so "let %1 = add (peek %0) (move %0)" is valid
       ["let", "%1", ["binary", ["peek", "%0"], ["move", "%0"]]],
       ["return", "%1"],
     ]];
@@ -177,11 +177,27 @@ describe("unary and binary with intergers", () => {
     expect(result[1][1]).toEqual("Available");
   });
 
+  it("may reject binary instruction with a peek and move of the same variable", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 0]]],
+      // evaluation could be simultaneous, so "let %1 = add (peek %0) (move %0)" is a move-before-use error
+      ["let", "%1", ["binary", ["peek", "%0"], ["move", "%0"]]],
+      ["return", "%1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Undefined", "Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
   it("must reject binary instruction with a move and peek of the same variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 0]]],
-      // evaluation is left-to-right, so "let %1 = add (move %0) (peek %0)" is a move-before-use error
+      // evaluation is left-to-right OR simultaneous, either way "let %1 = add (move %0) (peek %0)" is a move-before-use error
       ["let", "%1", ["binary", ["move", "%0"], ["peek", "%0"]]],
       ["return", "%1"],
     ]];
@@ -917,7 +933,7 @@ describe("branch with arguments", () => {
     expect(result[1][1]).toEqual("Destroyed");
   });
 
-  it.skip("must reject borrows invalidated during the branch instruction", () => {
+  it("must reject borrows invalidated during the branch instruction", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       [
@@ -1048,7 +1064,7 @@ describe("call", () => {
       ["let", "%2", [
         "call",
         "@1",
-        ["arguments", ["peek", "%1"], ["move", "%1"]],
+        ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
       ["jump", "^1"],
     ]];
@@ -1127,7 +1143,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject borrow which is invalidated during the call (left-to-right)", () => {
+  it("must reject borrow which is invalidated during the call (left-to-right)", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
@@ -1147,7 +1163,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it.skip("must reject borrow which is invalidated during the call (right-to-left)", () => {
+  it("must reject borrow which is invalidated during the call (right-to-left)", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
