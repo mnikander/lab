@@ -106,6 +106,40 @@ This ensures that the entire points-to set is still alive, at the time when `b` 
 There are a lot of places where drop, move, or function calls can occur.
 Thus, the points-to set is needed in almost all of the functions which translate the IR to the DSL.
 
+### Arguments are all passed simultaneously
+
+The following code snippet _must_ be rejected by the analysis:
+```
+%a = 42
+%b = borrow a
+%r = call @foo (peek %b) (move %a)
+```
+The variable `%b` points at `%a`.
+Even though `%a` is Available before the function call, it is dropped during the function call.
+This means that `%a` is not available and that `%b` is a dangling reference during the execution of the function `@foo`.
+The same thing applies to block parameters.
+The desired semantics are as if they are all passed simultaneously.
+One way to enforce valid semantics woud be to modify the translation to the define-use-drop DSL of arguments.
+The validity of the points-to set must be tested _after_ all moves have been done.
+The 'piggyback' trick must be applied at the very end, after all other operations.
+
+One way to do this might be to distinguish those availability checks of the points-to set.
+Instead of `["use", %1]` they could have their own tag, i.e. `["check", %1]`.
+This would allow taking a set of operations and sorting them such that all the `check` commands are at the end.
+From an analysis standpoint they would still be treated exactly like a 'use'.
+
+Perhaps there is also another way to do this.
+The uses needed to check the availaibility of every member of the points-to set, needs to happen after the other operations.
+
+### Number and type of block parameters must be checked
+
+Just like for a function call, the number and type of block parameters need to be checked.
+At every `branch` instruction, they need to be checked against the block definition.
+
+### Block bindings are like let-bindings before the first line
+
+Prior to analyzing the lines in a block, the bindings must be evaluated in the define-use-drop DSL.
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
