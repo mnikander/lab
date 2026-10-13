@@ -1063,4 +1063,44 @@ describe("call", () => {
     );
     expect(is_failure(result)).toBe(true);
   });
+
+  it.skip("must reject call with moved argument and a borrow to that argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["move", "%0"], ["peek", "%1"]], // %1 becomes dangling due to this call
+      ]],
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it.skip("must reject call with a borrow the second moved argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["let", "%0", ["unary", ["constant", 42]]],
+      ["let", "%1", ["borrow", ["peek", "%0"]]],
+      ["let", "%2", [
+        "call",
+        "@1",
+        ["arguments", ["peek", "%1"], ["move", "%0"]], // %1 becomes dangling due to this call
+      ]],
+      ["jump", "^1"],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"], []],
+      ["Undefined", "Undefined", "Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
 });
