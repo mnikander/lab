@@ -758,7 +758,7 @@ describe("jump", () => {
   });
 });
 
-describe("branch, simple", () => {
+describe("branch", () => {
   it("must accept branch via a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -815,7 +815,7 @@ describe("branch, simple", () => {
   });
 });
 
-describe("branch, with arguments", () => {
+describe("branch with arguments", () => {
   it("must accept branch with a constant argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
@@ -868,6 +868,46 @@ describe("branch, with arguments", () => {
     );
     expect(is_ok(result)).toBe(true);
     expect(result[1][0]).toEqual("Destroyed");
+  });
+
+  it("must accept branch with multiple arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      [
+        "branch",
+        ["constant", 1],
+        "^1",
+        "^2",
+        ["arguments", ["constant", 42], ["peek", "%0"], ["move", "%1"]],
+      ],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+  });
+
+  it.skip("must reject branch with borrow to moved argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      [
+        "branch",
+        ["constant", 1],
+        "^1",
+        "^2",
+        ["arguments", ["peek", "%1"], ["move", "%0"]], // %0 is moved so %1 becomes dangling
+      ],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Available"],
+    );
+    expect(is_failure(result)).toBe(true);
   });
 });
 
@@ -982,7 +1022,7 @@ describe("call", () => {
     expect(is_failure(result)).toBe(true);
   });
 
-  it("must reject call with peeked borrow to Unavailable variable", () => {
+  it("must reject call with borrow to Unavailable variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
       ["let", "%0", ["unary", ["constant", 42]]],
