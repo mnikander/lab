@@ -15,7 +15,7 @@ export function translate(
     case "drop":
       return sort_ops(translate_drop(line, points_to_set));
     case "jump":
-      return sort_ops(translate_jump(line));
+      return sort_ops(translate_jump(line, points_to_set));
     case "branch":
       return sort_ops(translate_branch(line, points_to_set));
     case "return":
@@ -37,8 +37,11 @@ function translate_drop(line: IR.Drop, points_to_set: IR.ResourceId[][]): Op[] {
   return [...use_pointees(line[1], points_to_set), ["drop", line[1]]];
 }
 
-function translate_jump(_: IR.Jump): Op[] {
-  return [];
+function translate_jump(line: IR.Jump, points_to_set: IR.ResourceId[][]): Op[] {
+  const args: IR.Arguments = line[1][2];
+  return [
+    ...translate_arguments(args, points_to_set),
+  ];
 }
 
 function translate_branch(
@@ -46,10 +49,13 @@ function translate_branch(
   points_to_set: IR.ResourceId[][],
 ): Op[] {
   const cond: IR.Operand = line[1];
-  const args: IR.Arguments = line[4];
+  const left_args: IR.Arguments = line[2][2];
+  const right_args: IR.Arguments = line[3][2];
   return [
     ...translate_operand(cond, points_to_set),
-    ...translate_arguments(args, points_to_set),
+    // TODO: The following code is incorrect, since only one of the two argument translations is ever actually executed. These transfers do not happen as part of this CFG block, they happen along the edge to the successor block or upon entry into the successor block.
+    ...translate_arguments(left_args, points_to_set),
+    ...translate_arguments(right_args, points_to_set),
   ];
 }
 

@@ -741,7 +741,7 @@ describe("jump", () => {
   it("must accept jump with any variable state", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -759,7 +759,7 @@ describe("jump", () => {
   it("must accept jump with borrow in any state", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -776,11 +776,135 @@ describe("jump", () => {
   });
 });
 
+describe("jump with arguments", () => {
+  it("must accept a constant argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["constant", 42]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [],
+      [],
+    );
+    expect(is_ok(result)).toBe(true);
+  });
+
+  it("must reject Undefined argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["peek", "%0"]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Undefined"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it("must accept Available argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["peek", "%0"]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Available");
+  });
+
+  it("must reject Destroyed argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["peek", "%0"]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Destroyed"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it("must reject Ambiguous argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["peek", "%0"]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Ambiguous"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+
+  it("must accept Available moved argument", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      ["jump", ["target", "^1", ["arguments", ["move", "%0"]]]],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[]],
+      ["Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Destroyed");
+  });
+
+  it("must accept multiple arguments", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      [
+        "jump",
+        ["target", "^1", ["arguments", ["constant", 42], ["peek", "%0"], [
+          "move",
+          "%1",
+        ]]],
+      ],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], []],
+      ["Available", "Available"],
+    );
+    expect(is_ok(result)).toBe(true);
+    expect(result[1][0]).toEqual("Available");
+    expect(result[1][1]).toEqual("Destroyed");
+  });
+
+  it("must reject borrows invalidated during the jump instruction", () => {
+    const code: Block = ["block", ["bindings"], [
+      "instructions",
+      [
+        "jump",
+        ["target", "^1", ["arguments", ["peek", "%1"], ["move", "%0"]] // %0 is moved so %1 becomes dangling
+        ],
+      ],
+    ]];
+    const result: Result<VariableState[]> = linewise_availability(
+      code,
+      [[], ["%0"]],
+      ["Available", "Available"],
+    );
+    expect(is_failure(result)).toBe(true);
+  });
+});
+
 describe("branch", () => {
   it("must accept branch via a constant", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments"]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments"]], [
+        "target",
+        "^2",
+        ["arguments"],
+      ]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -794,7 +918,11 @@ describe("branch", () => {
   it("must accept branch via a peeked Available variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["peek", "%0"], "^1", "^2", ["arguments"]],
+      ["branch", ["peek", "%0"], ["target", "^1", ["arguments"]], [
+        "target",
+        "^2",
+        ["arguments"],
+      ]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -808,7 +936,11 @@ describe("branch", () => {
   it("must accept branch via a moved Available variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["move", "%0"], "^1", "^2", ["arguments"]],
+      ["branch", ["move", "%0"], ["target", "^1", ["arguments"]], [
+        "target",
+        "^2",
+        ["arguments"],
+      ]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -822,7 +954,11 @@ describe("branch", () => {
   it("must reject branch via an Undefined variable", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["move", "%0"], "^1", "^2", ["arguments"]],
+      ["branch", ["move", "%0"], ["target", "^1", ["arguments"]], [
+        "target",
+        "^2",
+        ["arguments"],
+      ]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -837,7 +973,10 @@ describe("branch with arguments", () => {
   it("must accept a constant argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["constant", 42]]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments", [
+        "constant",
+        42,
+      ]]], ["target", "^2", ["arguments", ["constant", 42]]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -850,7 +989,10 @@ describe("branch with arguments", () => {
   it("must reject Undefined argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments", [
+        "peek",
+        "%0",
+      ]]], ["target", "^2", ["arguments", ["peek", "%0"]]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -863,7 +1005,10 @@ describe("branch with arguments", () => {
   it("must accept Available argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments", [
+        "peek",
+        "%0",
+      ]]], ["target", "^2", ["arguments", ["peek", "%0"]]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -877,7 +1022,10 @@ describe("branch with arguments", () => {
   it("must reject Destroyed argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments", [
+        "peek",
+        "%0",
+      ]]], ["target", "^2", ["arguments", ["peek", "%0"]]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -890,7 +1038,10 @@ describe("branch with arguments", () => {
   it("must reject Ambiguous argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["peek", "%0"]]],
+      ["branch", ["constant", 1], ["target", "^1", ["arguments", [
+        "peek",
+        "%0",
+      ]]], ["target", "^2", ["arguments", ["peek", "%0"]]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -903,7 +1054,14 @@ describe("branch with arguments", () => {
   it("must accept Available moved argument", () => {
     const code: Block = ["block", ["bindings"], [
       "instructions",
-      ["branch", ["constant", 1], "^1", "^2", ["arguments", ["move", "%0"]]],
+      [
+        "branch",
+        ["constant", 1],
+        // Doing a 'move %0' in both targets is legal, because we only execute
+        // one of them. No double-drop takes place.
+        ["target", "^1", ["arguments", ["move", "%0"]]],
+        ["target", "^2", ["arguments", ["move", "%0"]]],
+      ],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -920,9 +1078,16 @@ describe("branch with arguments", () => {
       [
         "branch",
         ["constant", 1],
-        "^1",
-        "^2",
-        ["arguments", ["constant", 42], ["peek", "%0"], ["move", "%1"]],
+        [
+          "target",
+          "^1",
+          ["arguments", ["constant", 42], ["peek", "%0"], ["move", "%1"]],
+        ],
+        [
+          "target",
+          "^2",
+          ["arguments", ["constant", 42], ["peek", "%0"], ["move", "%1"]],
+        ],
       ],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
@@ -941,9 +1106,9 @@ describe("branch with arguments", () => {
       [
         "branch",
         ["constant", 1],
-        "^1",
-        "^2",
-        ["arguments", ["peek", "%1"], ["move", "%0"]], // %0 is moved so %1 becomes dangling
+        // %0 is moved so %1 becomes dangling
+        ["target", "^1", ["arguments", ["peek", "%1"], ["move", "%0"]]],
+        ["target", "^2", ["arguments", ["peek", "%1"], ["move", "%0"]]],
       ],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
@@ -960,7 +1125,7 @@ describe("block bindings", () => {
     const code: Block = ["block", ["bindings", "%0"], [
       "instructions",
       ["let", "%1", ["unary", ["peek", "%0"]]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -977,7 +1142,7 @@ describe("block bindings", () => {
     const code: Block = ["block", ["bindings", "%0", "%1"], [
       "instructions",
       ["let", "%2", ["binary", ["peek", "%0"], ["move", "%1"]]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1001,7 +1166,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["constant", 1], ["constant", 2]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1023,7 +1188,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1048,7 +1213,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1068,7 +1233,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%0"], ["move", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1093,7 +1258,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1114,7 +1279,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1135,7 +1300,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["move", "%1"]],
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1155,7 +1320,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["move", "%0"], ["peek", "%1"]], // %1 becomes dangling due to this call
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,
@@ -1175,7 +1340,7 @@ describe("call", () => {
         "@1",
         ["arguments", ["peek", "%1"], ["move", "%0"]], // %1 becomes dangling due to this call
       ]],
-      ["jump", "^1", ["arguments"]],
+      ["jump", ["target", "^1", ["arguments"]]],
     ]];
     const result: Result<VariableState[]> = linewise_availability(
       code,

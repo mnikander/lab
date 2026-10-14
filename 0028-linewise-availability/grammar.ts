@@ -16,14 +16,15 @@ export type Unary        = [ tag: "unary",        Operand ];
 export type Binary       = [ tag: "binary",       Operand, Operand ];
 
 export type Terminator   = Return | Jump | Branch;
-export type Jump         = [ tag: "jump",         targetBlock: BlockId, Arguments ];
-export type Branch       = [ tag: "branch",       condition: Operand, thenBlock: BlockId, elseBlock: BlockId, Arguments ];
+export type Jump         = [ tag: "jump",         targetBlock: Target ];
+export type Branch       = [ tag: "branch",       condition: Operand, thenBlock: Target, elseBlock: Target ];
 export type Return       = [ tag: "return",       ResourceId ];
 
 export type Operand      = Peek | Move | Constant;
 export type Peek         = [ tag: "peek",         ResourceId ]; // access a Resource
 export type Move         = [ tag: "move",         ResourceId ]; // access and destroy a Resource
 export type Constant     = [ tag: "constant",     value: number ];
+export type Target       = [ tag: "target",       block: BlockId, Arguments ]
 export type Arguments    = [ tag: "arguments",    ...Operand[]];
 export type ResourceId   = `%${number}`;
 export type FunctionId   = `@${number}`;
