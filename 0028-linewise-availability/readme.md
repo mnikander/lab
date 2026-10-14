@@ -153,6 +153,47 @@ At every `branch` instruction, they need to be checked against the block definit
 
 Prior to analyzing the lines in a block, the bindings must be evaluated in the define-use-drop DSL.
 
+### Branch with arguments is tricky for the translation to DSL
+
+Take this example:
+```
+(branch 
+  (constant 1)
+  (target ^1 (arguments (move %0)))
+  (target ^2 (arguments (move %0))))
+```
+If the translate function just translates the condition line and the two target lines into the DSL, and executes them, then there is a double-drop error.
+This happens because it looks like `(move %0)` happens twice.
+In reality, only one of those two branches is chosen, so only one of those two moves is actually executed.
+If they agree, then valid variable states can be computed.
+If they disagree, then ambigous states are the result.
+So do I need to compute the superposition of the two transfers?
+
+Ah, that is actually only the case if the branch targets are the same:
+```
+(branch 
+  (constant 1)
+  (target ^1 (arguments (peek %0)))
+  (target ^1 (arguments (move %0))))
+```
+In this case, `%0` must be ambiguous at the entry to block `^1`.
+
+I need to think about this in terms of the CFG edges, and not the state at the end of the block.
+The operations in the `target`-term, happen on the CFG-edge to that specific successor, and _not_ in the last line of the block.
+I probably need a way to express Ops along a CFG edge.
+One possibility is to introduce additional edge-blocks.
+These edge blocks are necessary exactly if one or more arguments are moved.
+Then all of the ops, even the uses, must be delegated to a special edge-block and computed there.
+
+Does it make sense to restrict the language so that only graphs can be built which follow this rule?
+One way to do this might be to allow a Jump to `{peek,move}` its arguments, and to allow a branch to only `{peek}` its arguments.
+That would enforce that the IR code has extra edge blocks when they are needed.
+
+The alternative is that I expand the analysis, to check things as if those edge-blocks are there.
+That would mean that the line-by-line analysis ignores the Terminator statement, and outputs the state at the end of the block.
+The CFG analysis would have to look at the terminators, and process those accordingly.
+That's an OK option actually, but it would require me to change the API and semantics of the CFG analysis.
+
 ## Future Work
 <!-- Are there follow-up questions? -->
 <!-- Can I create a concrete ticket/issue from this? -->
