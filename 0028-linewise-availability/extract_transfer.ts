@@ -7,17 +7,17 @@ import * as IR from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
 import { fail, ok, Result } from "./result.ts";
 
-export type BlockOperations = [defined: boolean, dropped: boolean][];
+export type BlockFlags = [defined: boolean, dropped: boolean][];
 
 export function extract_transfers(
   block: IR.Block,
   variable_count: number,
-): Result<BlockOperations> {
+): Result<BlockFlags> {
   const instructions: IR.Instructions = block[2];
   const [, ...lines] = instructions;
 
   // initialize results array, ensuring that each array entry is it's own javascript object
-  const result: BlockOperations = [...Array(variable_count)].map(
+  const result: BlockFlags = [...Array(variable_count)].map(
     () => [false, false],
   );
 
