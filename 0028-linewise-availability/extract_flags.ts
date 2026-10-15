@@ -9,7 +9,7 @@ import { fail, ok, Result } from "./result.ts";
 
 export type BlockFlags = [defined: boolean, dropped: boolean][];
 
-export function extract_transfers(
+export function extract_flags(
   block: IR.Block,
   variable_count: number,
 ): Result<BlockFlags> {

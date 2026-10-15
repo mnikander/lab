@@ -2,14 +2,14 @@ import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { is_ok, Result } from "./result.ts";
 import { Block } from "./grammar.ts";
-import { BlockFlags, extract_transfers } from "./extract_transfer.ts";
+import { BlockFlags, extract_flags } from "./extract_flags.ts";
 import { is_failure } from "./result.ts";
 
 const empty_block: Block = ["block", ["bindings"], ["instructions"]];
 
 describe("extraction of variable-transfer tables", () => {
   it("must accept empty input", () => {
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       empty_block,
       0,
     );
@@ -24,7 +24,7 @@ describe("extraction of variable-transfer tables", () => {
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
     expect(() =>
-      extract_transfers(
+      extract_flags(
         code,
         0,
       )
@@ -37,7 +37,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%0", ["unary", ["constant", 42]]],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       1,
     );
@@ -53,7 +53,7 @@ describe("extraction of variable-transfer tables", () => {
       ["drop", "%0"],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       1,
     );
@@ -69,7 +69,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%0", ["unary", ["constant", 42]]],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       1,
     );
@@ -87,7 +87,7 @@ describe("extraction of variable-transfer tables", () => {
       ["drop", "%3"],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       4,
     );
@@ -106,7 +106,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%1", ["unary", ["move", "%0"]]],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       2,
     );
@@ -123,7 +123,7 @@ describe("extraction of variable-transfer tables", () => {
       ["let", "%2", ["binary", ["peek", "%0"], ["move", "%1"]]],
       ["jump", ["target", "^1", ["arguments"]]],
     ]];
-    const result: Result<BlockFlags> = extract_transfers(
+    const result: Result<BlockFlags> = extract_flags(
       code,
       3,
     );
