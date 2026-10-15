@@ -1,6 +1,6 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
-import { linewise_availability } from "./main.ts";
+import { linewise_availability } from "./linewise_availability.ts";
 import { is_failure, is_ok, Result } from "./result.ts";
 import { Block } from "./grammar.ts";
 import { VariableState } from "./lattice.ts";
