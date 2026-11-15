@@ -16,13 +16,13 @@ If a question is marked with ~~strikethrough~~ it was either aborted or done as 
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
-| 0028 |        | 2026-10-08 | memory               | How can a line-by-line availability analysis, inside a single basic block, be implemented? |
 |      |        | 2026-0- | | |
 
 ## Resolved
 
 | Num  | Parent | Created    | Tags                 | Question |
 | ---  | ---    | ---        | ---                  | ---      |
+| 0028 |        | 2026-10-08 | memory               | How can a line-by-line availability analysis, inside a single basic block, be implemented? |
 | 0027 |        | 2026-10-02 | memory               | How can an availability analysis be implemented on the control flow graph? |
 |      | 0027   | 2026-10-02 | memory               | How can block-wise transfer functions be expressed in a simple way? |
 | 0025 |        | 2026-08-10 | ast                  | How can simple symbolic expressions be encoded in JSON? |
